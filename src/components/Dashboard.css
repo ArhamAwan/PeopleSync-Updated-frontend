@@ -1,34 +1,275 @@
-.container {
-    display: flex;
-    flex-direction: row;
-    width: 100%;  /* Default, but can be omitted */
-  }
-  .row{
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-    padding: 2%;
-  }
-  .item {
-    margin-top: 40px;
-    width:50%;
-    height:200px;
-    padding: 20px;
-    margin: 10px;
-    background-color: rgb(250, 201, 201);
-  }
-  .statimage{
-    display: flex;
-    flex-direction: row;
-    column-gap: 60px;
-    
-
-  }
-.image{
-width: 100%;
+/* Dashboard Container */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background: #f0f0f0; /* Light Grey Background */
 }
-  .totalemployees{
-    font-size: 30px;
-    font-weight: 300;
+
+/* Row - Graph and Online Employees */
+.row {
+  gap: 20px;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.col-md-6{
+  display: flex;
+  flex-direction: row;
+}
+th {
+  background: #000000;
+}
+.graph-section,.online-section{
+  width:45%;
+padding-inline: 30px;
+}
+/* Online Employees Section */
+.online-section {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.online-section:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.online-section h2 {
+  margin-bottom: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  color: black; /* Updated to Black */
+}
+
+.online-count {
+  font-size: 28px;
+  font-weight: bold;
+  color: black; /* Updated to Black */
+  background: #f0f0f0;
+  padding: 10px 15px;
+  border-radius: 8px;
+  display: inline-block;
+  margin-top: 10px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .online-section {
+    padding: 15px;
+  }
+
+  .online-section h2 {
+    font-size: 20px;
+  }
+
+  .online-count {
+    font-size: 24px;
+    padding: 8px 12px;
+  }
+}
+
+/* Graph Card */
+.graph-container {
+  flex: 2;
+  background: #dbdbdb00;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.graph-container img {
+  width: 80%;
+  max-width: 400px;
+}
+
+/* Online Employees Card */
+.online-section {
+  background: #dbdbdb00;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.online-employees h2 {
+  margin-bottom: 10px;
+  color: black; /* Updated to Black */
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.online-count {
+  font-size: 20px;
+  font-weight: bold;
+  color: black; /* Updated to Black */
+}
+
+/* Table Section */
+.table-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Styling */
+table {
+  width: 100%;
+  border-collapse: separate; /* Allow row spacing */
+  border-spacing: 0 10px; /* Adds gap between rows */
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Header Row */
+tr {
+  background: #111; /* Dark background for header */
+  color: rgb(0, 0, 0); /* White text */
+}
+
+/* Table Headers */
+th {
+  padding: 15px;
+  text-align: left;
+  font-size: 16px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Table Rows */
+tr {
+  background: #fff;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Add margin between rows */
+tr:not(:first-child) {
+  margin-top: 10px;
+  border-radius: 8px; /* Rounded corners */
+  display: table-row;
+}
+
+/* Alternate Row Coloring */
+tr:nth-child(even) {
+  background: #f8f8f8;
+}
+
+tr:nth-child(odd) {
+  background: #eaeaea;
+}
+
+/* Table Borders */
+th, td {
+  border-bottom: 1px solid #ffffff;
+  padding: 12px;
+}
+th{
+  color:black
+}
+/* Responsive Table */
+@media (max-width: 768px) {
+  th {
+    font-size: 14px;
+    padding: 10px;
+  }
+}
+
+
+.status {
+  
+  border-radius: 5px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.active {
+  background: #006eff;
+  color: white;
+  height: 10px;
+}
+
+.inactive {
+  background: #ef4444;
+  color: white;
+}
+
+/* Timer Section */
+.timer-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.timer-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.timer-controls button {
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background: black;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.timer-controls button:hover {
+  background: #333;
+}
+
+.timer-report {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+
+.timer-report textarea {
+  width: 100%;
+  max-width: 400px;
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  color: black;
+  resize: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
   }
   
+  .timer-controls {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .timer-controls button {
+    width: 100%;
+  }
+}

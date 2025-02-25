@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; // Use Routes instead of Switch
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; 
 
 // Import your components
 import Dashboard from './components/Dashboard';
@@ -39,7 +39,12 @@ function App() {
         <div className="right-container">
           <div className="Nav-header-top">
             <h1>Abdullah Hassan</h1>
-            <img id="employee-picture" src={logo} alt="Employee" />
+            <img 
+  src={`${process.env.PUBLIC_URL}/pexels-mart-production-7709149.jpg`} 
+  alt="Employee" 
+  className="profile-image" 
+/>
+
           </div>
 
           {/* Dynamic Content Area */}

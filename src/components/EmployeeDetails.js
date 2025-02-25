@@ -33,7 +33,6 @@ const EmployeeDetails = () => {
       netSalary: 77500,
       image: 'https://via.placeholder.com/150',
     },
-    // Add more employees as needed
   ]);
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -56,13 +55,15 @@ const EmployeeDetails = () => {
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
-    setEditForm({ ...editForm, [name]: value });
+    setEditForm((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = () => {
     setEmployees((prevEmployees) =>
       prevEmployees.map((employee) =>
-        employee.id === editForm.id ? { ...editForm, netSalary: calculateNetSalary(editForm) } : employee
+        employee.id === editForm.id
+          ? { ...editForm, netSalary: calculateNetSalary(editForm) }
+          : employee
       )
     );
     setIsEditing(false);
@@ -77,9 +78,14 @@ const EmployeeDetails = () => {
   };
 
   return (
-    <div className="employee-details-container">
-      <h2>Employee Details</h2>
+    <div>
 
+      
+      <div className='search-row'>
+        <div className='heading-em'>
+        <h2>Employee Details</h2>
+        </div>
+      
       {/* Search Bar */}
       <div className="search-bar">
         <input
@@ -90,6 +96,10 @@ const EmployeeDetails = () => {
         />
       </div>
 
+      </div>
+
+
+
       {/* List of Employee Profiles */}
       <div className="employee-cards">
         {filteredEmployees.map((employee) => (
@@ -98,7 +108,12 @@ const EmployeeDetails = () => {
             className="employee-card"
             onClick={() => setSelectedEmployee(employee)}
           >
-            <img src={employee.image} alt={employee.name} className="employee-image" />
+           <img 
+  src={`${process.env.PUBLIC_URL}/pexels-mart-production-7709149.jpg`} 
+  alt="Employee" 
+  className="profile-image" 
+/>
+
             <h3>{employee.name}</h3>
             <p>{employee.position}</p>
           </div>
