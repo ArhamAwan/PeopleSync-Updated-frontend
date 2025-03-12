@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./RequestLeave.css";
+import axios from "axios";
 
 const RequestLeave = ({ employeeId }) => {
   const [leaveRequests, setLeaveRequests] = useState([]);
@@ -10,39 +11,71 @@ const RequestLeave = ({ employeeId }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch employee leave history (Replace with actual API)
-    fetch(`/api/leave-requests?employeeId=${employeeId}`)
-      .then((res) => res.json())
-      .then((data) => {
+    const fetchLeaveRequests = async () => {
+      try {
+        const res = await axios.get(
+          "https://people-sync-33225-default-rtdb.firebaseio.com/leaves.json"
+        );
+        const data = res.data
+        ? Object.entries(res.data)
+            .map(([id, obj]) => ({ id, ...obj }))
+            // .filter((leave) => leave.employeeEmail === email)
+            .filter((leave) => leave.employeeEmail === "aasaish@gmail.com")
+        : [];
         setLeaveRequests(data);
         setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching leave data:", error);
-        setLoading(false);
-      });
-  }, [employeeId]);
+      } catch (error) {
+        console.error("Error fetching leave requests:", error);
+      }
+    };
+    fetchLeaveRequests();
+  }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newLeaveRequest = { employeeId, leaveType, startDate, endDate, reason, status: "PENDING" };
-
-    // Submit leave request (Replace with actual API)
-    fetch("/api/leave-requests", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newLeaveRequest),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setLeaveRequests([...leaveRequests, data]); // Add new request to table
-        setLeaveType("");
-        setStartDate("");
-        setEndDate("");
-        setReason("");
-      })
-      .catch((error) => console.error("Error submitting leave request:", error));
+    
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const totalLeaves = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+  
+    // const newLeaveRequest = {
+    //   employeeName,
+    //   employeeEmail,
+    //   leaveType,
+    //   startDate,
+    //   endDate,
+    //   reason,
+    //   totalLeaves,
+    //   status: "PENDING"
+    // };
+    const newLeaveRequest = {
+      employeeName:"Aasaish Ali",
+      employeeEmail:"aasaish@gmail.com",
+      leaveType,
+      startDate,
+      endDate,
+      reason,
+      totalLeaves,
+      status: "PENDING"
+    };
+  
+    try {
+      await axios.post(
+        "https://people-sync-33225-default-rtdb.firebaseio.com/leaves.json",
+        newLeaveRequest
+      );
+      console.log("Leave request submitted:", newLeaveRequest);
+  
+      setLeaveType("");
+      setStartDate("");
+      setEndDate("");
+      setReason("");
+      alert("Leave Request Submitted Successsfully !.");
+    } catch (error) {
+      console.error("Error submitting leave request:", error);
+    }
   };
+  
 
   return (
     <div className="request-leave">

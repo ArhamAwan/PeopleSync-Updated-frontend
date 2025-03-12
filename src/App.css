@@ -8,10 +8,13 @@
 /* Left Sidebar Styling */
 .left-container {
   flex: 1; /* Takes the remaining width */
-  background-color: #f0f0f0; /* Light gray background */
+  background-color: #ffffff; /* Light gray background */
   padding-top: 50px;
   justify-items: center;
+  border-top-right-radius: 40px;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Fixed box-shadow */
+  z-index: 2;
+  border-right: 1px solid #c5d0ff;
 }
 
 /* Right Content Styling */
@@ -72,6 +75,8 @@ nav ul li a:hover {
   height: 80px;
   align-items: center; /* Center items vertically */
   padding: 0 20px;
+  width: 100%;
+  margin-left: -3%;
   color: white;
   justify-content: flex-end; /* Move content to the right */
 }
@@ -92,7 +97,7 @@ nav ul li a:hover {
 
 /* Main Content Styling */
 .container-main {
-  background-color: #d0d0d0; /* Match .right-container color */
+  background-color: #f0f0f0; /* Match .right-container color */
   height: calc(100vh - 80px); /* Subtract the header height */
   overflow-y: auto; /* Enable scrolling for the main content */
   padding: 20px;

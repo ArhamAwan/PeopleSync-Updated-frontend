@@ -1,40 +1,52 @@
 import React, { useState, useEffect } from "react";
 import "./LeaveManagement.css";
+import axios from "axios";
 
 const LeaveManagement = () => {
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Fetch leave requests from API (Replace with actual API)
-    fetch("/api/leave-requests")
-      .then((res) => res.json())
-      .then((data) => {
+    const fetchLeaveRequests = async () => {
+      try {
+        const res = await axios.get(
+          "https://people-sync-33225-default-rtdb.firebaseio.com/leaves.json"
+        );
+        const data = res.data
+          ? Object.entries(res.data).map(([id, obj]) => ({ id, ...obj }))
+          : [];
         setLeaveRequests(data);
         setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      });
+      } catch (error) {
+        console.error("Error fetching leave requests:", error);
+      }
+    };
+    fetchLeaveRequests();
   }, []);
 
-  const handleApproval = (id, status) => {
-    fetch(`/api/leave-requests/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status }),
-    })
-      .then((res) => res.json())
-      .then((updatedRequest) => {
-        setLeaveRequests((prevRequests) =>
-          prevRequests.map((req) =>
-            req.id === id ? { ...req, status: updatedRequest.status } : req
-          )
-        );
-      })
-      .catch((error) => console.error("Error updating leave status:", error));
+  const handleApproval = async (id, action) => {
+    try {
+      const status = action === "APPROVED" ? "APPROVED" : "REJECTED";
+  
+      await axios.patch(
+        `https://people-sync-33225-default-rtdb.firebaseio.com/leaves/${id}.json`,
+        { status }
+      );
+      console.log(`Leave request ${status.toLowerCase()}`);
+  
+      // Fetch fresh leave data after approval/rejection
+      const res = await axios.get(
+        "https://people-sync-33225-default-rtdb.firebaseio.com/leaves.json"
+      );
+      const data = res.data
+        ? Object.entries(res.data).map(([id, obj]) => ({ id, ...obj }))
+        : [];
+      setLeaveRequests(data); // Update the state with fresh data
+    } catch (error) {
+      console.error(`Error ${action === "approve" ? "approving" : "rejecting"} leave request:`, error);
+    }
   };
+  
 
   return (
     <div className="leave-management">
@@ -46,7 +58,7 @@ const LeaveManagement = () => {
             <th>Employee</th>
             <th>Leave Type</th>
             <th>Dates</th>
-            <th>Balance</th>
+            <th>Days</th>
             <th>Status</th>
             <th>Actions</th>
           </tr>
@@ -66,7 +78,10 @@ const LeaveManagement = () => {
                 <td>{request.employeeName}</td>
                 <td>{request.leaveType}</td>
                 <td>{request.startDate} - {request.endDate}</td>
-                <td>{request.leaveBalance} days</td>
+                <td>
+                  {request.totalLeaves}
+                </td>
+                {/* <td>{request.leaveBalance} days</td> */}
                 <td className={`status ${request.status.toLowerCase()}`}>
                   {request.status}
                 </td>
