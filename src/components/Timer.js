@@ -15,15 +15,19 @@ const Timer = () => {
       localStorage.removeItem("isPaused");
 
       // const timerData = {
-      //   name: selectedEmployee.name,
-      //   email: selectedEmployee.email,
-      //   dateTime: new Date().toISOString(),
-      //   start: true
+      //   name: "Aasaish Ali",
+      //   email: "aasaish@gmail.com",
+      //   dateTime: now.toLocaleString(),
+      //   timestamp: now.getTime(),
+      //   start: true,
+      //   pause: false
       // };
+      const now = new Date();
       const timerData = {
         name: "Aasaish Ali",
         email: "aasaish@gmail.com",
-        dateTime: new Date().toLocaleString(),
+        dateTime: now.toLocaleString(),
+        timestamp: now.getTime(),
         start: true,
         pause: false
       };
@@ -61,9 +65,9 @@ const Timer = () => {
         const latestEntry = timerEntries
           // .filter((entry) => entry.email === selectedEmployee.email)
           .filter((entry) => entry.email === "aasaish@gmail.com")
-          .sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime))[0];
-  
-        if (latestEntry) {
+          .pop();
+
+          if (latestEntry) {
           await axios.patch(
             `https://people-sync-33225-default-rtdb.firebaseio.com/timerdata/${latestEntry.id}.json`,
             { pause: true }
@@ -98,7 +102,7 @@ const Timer = () => {
         const latestEntry = timerEntries
           // .filter((entry) => entry.email === selectedEmployee.email)
           .filter((entry) => entry.email === "aasaish@gmail.com")
-          .sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime))[0];
+          .pop();
         if (latestEntry) {
           await axios.patch(
             `https://people-sync-33225-default-rtdb.firebaseio.com/timerdata/${latestEntry.id}.json`,
@@ -131,7 +135,7 @@ const Timer = () => {
         const latestEntry = timerEntries
           // .filter((entry) => entry.email === selectedEmployee.email)
           .filter((entry) => entry.email === "aasaish@gmail.com")
-          .sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime))[0];
+          .pop();
 
         if (latestEntry) {
           await axios.patch(
