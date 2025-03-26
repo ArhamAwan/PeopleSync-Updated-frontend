@@ -1,14 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./PersonalDetails.css";
-
+import axios from "axios";
 
 const PersonalDetails = () => {
-  // Sample Employee Data (This would typically come from a database)
+  const [user, setUser] = useState({});
+  const [employee, setEmployee] = useState({});
+
+  useEffect(() => {
+    const u = localStorage.getItem("user");
+
+    if (u) {
+      const user = JSON.parse(u);
+      setUser(user);
+
+      const fetchEmployeeData = async () => {
+        try {
+          const response = await axios.get(
+            `https://people-sync-33225-default-rtdb.firebaseio.com/employees.json`
+          );
+          const employees = response.data;
+
+          // Find the employee matching the user (you can adjust based on what unique info you have, like email or id)
+          const currentEmployee = Object.values(employees).find(
+            (employee) => employee.email === user.email
+          );
+
+          if (currentEmployee) {
+            setEmployee(currentEmployee);
+            console.log("Employee data:", currentEmployee);
+          }
+        } catch (error) {
+          console.error("Error fetching employee data:", error);
+        }
+      };
+
+      fetchEmployeeData();
+    }
+  }, []);
+
   const initialData = {
-    name: "John Doe",
-    position: "Software Engineer",
+    name: user?.name,
+    position: user.role,
     department: "Development",
-    email: "johndoe@example.com",
+    email: user.email,
     phone: "+1 234 567 890",
     address: "1234 Main St, New York, NY",
     image: "public/pexels-mart-production-7709149.jpg", // Replace with actual image
@@ -19,8 +53,6 @@ const PersonalDetails = () => {
     ],
   };
 
-  // State for Employee Data & Editing
-  const [employee, setEmployee] = useState(initialData);
   const [isEditing, setIsEditing] = useState(false);
   const [updatedData, setUpdatedData] = useState(initialData);
   const [requestStatus, setRequestStatus] = useState(null); // Pending | Approved | Rejected
@@ -52,20 +84,25 @@ const PersonalDetails = () => {
   return (
     <div className="personal-details-container">
       {/* Profile Section */}
-     
+
       <div className="profile-section">
-      <img 
-  src={`${process.env.PUBLIC_URL}/pexels-mart-production-7709149.jpg`} 
-  alt="Employee" 
-  className="profile-image" 
-/>
+        <div>
+          <div
+            className="profile-circle"
+            style={{ margin: "auto", marginTop: "20px" }}
+          >
+            {employee.name?.charAt(0).toUpperCase()}
+          </div>
+        </div>
 
         <h2>{employee.name}</h2>
-        <p className="position">{employee.position} - {employee.department}</p>
+        <p className="position">
+          {employee.role} - {employee.department}
+        </p>
       </div>
 
       {/* Personal Information */}
-      <div className="info-section">
+      {/* <div className="info-section">
         <h3>Personal Information</h3>
         {isEditing ? (
           <>
@@ -86,10 +123,64 @@ const PersonalDetails = () => {
             )}
           </>
         )}
+      </div> */}
+
+      <div>
+        <div className="popup-header">
+          <h2 style={{ color: "red" }}>Personal Information</h2>
+          {/* <button
+                className="edit-icon"
+                onClick={() => handleEdit(employee)}
+              >
+                ✎
+              </button> */}
+        </div>
+
+        <div className="employee-details">
+          <p>
+            <strong>Full Name:</strong> {employee.name}
+          </p>
+          <p>
+            <strong>Phone:</strong> {employee.phone}
+          </p>
+          <p>
+            <strong>Date of Birth:</strong> {employee.dob}
+          </p>
+          <p>
+            <strong>Gender:</strong> {employee.gender}
+          </p>
+          <p>
+            <strong>ID Card:</strong> {employee.idCard}
+          </p>
+          <p>
+            <strong>Job Role:</strong> {employee.role}
+          </p>
+          <p>
+            <strong>Department:</strong> {employee.department}
+          </p>
+          <p>
+            <strong>Employee Type:</strong> {employee.employeeType}
+          </p>
+          <p>
+            <strong>Joining Date:</strong> {employee.joiningDate}
+          </p>
+          <p>
+            <strong>Salary:</strong> {employee.salary}
+          </p>
+          <p>
+            <strong>Bank Details:</strong> {employee.bankDetails}
+          </p>
+          <p>
+            <strong>Email:</strong> {employee.email}
+          </p>
+          <p>
+            <strong>Password:</strong> {employee.password}
+          </p>
+        </div>
       </div>
 
       {/* Documents Section */}
-      <div className="documents-section">
+      {/* <div className="documents-section">
         <h3>Uploaded Documents</h3>
         <ul>
           {employee.documents.map((doc, index) => (
@@ -98,13 +189,23 @@ const PersonalDetails = () => {
             </li>
           ))}
         </ul>
-      </div>
+      </div> */}
 
       {/* HR Approval Buttons (Simulated) */}
       {requestStatus === "Pending" && (
         <div className="hr-actions">
-          <button className="approve-btn" onClick={() => handleHRAction("Approved")}>Approve</button>
-          <button className="reject-btn" onClick={() => handleHRAction("Rejected")}>Reject</button>
+          <button
+            className="approve-btn"
+            onClick={() => handleHRAction("Approved")}
+          >
+            Approve
+          </button>
+          <button
+            className="reject-btn"
+            onClick={() => handleHRAction("Rejected")}
+          >
+            Reject
+          </button>
         </div>
       )}
     </div>

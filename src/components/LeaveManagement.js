@@ -73,7 +73,7 @@ const LeaveManagement = () => {
               <td colSpan="6">No leave requests found</td>
             </tr>
           ) : (
-            leaveRequests.map((request) => (
+            [...leaveRequests].reverse().map((request) => (
               <tr key={request.id}>
                 <td>{request.employeeName}</td>
                 <td>{request.leaveType}</td>

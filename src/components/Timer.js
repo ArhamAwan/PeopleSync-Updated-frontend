@@ -3,10 +3,21 @@ import "./Timer.css"; // Keep the CSS file
 import axios from "axios";
 
 const Timer = () => {
+  const [user, setUser] = useState({});
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [report, setReport] = useState("");
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const u = localStorage.getItem("user");
+      if (u != null) {
+        setUser(JSON.parse(u));
+        clearInterval(interval);
+      }
+    }, 500);
+  }, []);
 
   const startTimer = async () => {
     if (!isRunning) {
@@ -14,22 +25,14 @@ const Timer = () => {
       setIsPaused(false);
       localStorage.removeItem("isPaused");
 
-      // const timerData = {
-      //   name: "Aasaish Ali",
-      //   email: "aasaish@gmail.com",
-      //   dateTime: now.toLocaleString(),
-      //   timestamp: now.getTime(),
-      //   start: true,
-      //   pause: false
-      // };
       const now = new Date();
       const timerData = {
-        name: "Aasaish Ali",
-        email: "aasaish@gmail.com",
+        name: user.name,
+        email: user.email,
         dateTime: now.toLocaleString(),
         timestamp: now.getTime(),
         start: true,
-        pause: false
+        pause: false,
       };
 
       try {
@@ -46,7 +49,7 @@ const Timer = () => {
 
   const pauseTimer = async () => {
     if (!isRunning) return;
-  
+
     setIsPaused(true);
     setIsRunning(false);
     localStorage.setItem("isPaused", "true");
@@ -59,15 +62,14 @@ const Timer = () => {
       if (res.data) {
         const timerEntries = Object.entries(res.data).map(([id, obj]) => ({
           id,
-          ...obj
+          ...obj,
         }));
-  
+
         const latestEntry = timerEntries
-          // .filter((entry) => entry.email === selectedEmployee.email)
-          .filter((entry) => entry.email === "aasaish@gmail.com")
+          .filter((entry) => entry.email === user.email)
           .pop();
 
-          if (latestEntry) {
+        if (latestEntry) {
           await axios.patch(
             `https://people-sync-33225-default-rtdb.firebaseio.com/timerdata/${latestEntry.id}.json`,
             { pause: true }
@@ -79,29 +81,26 @@ const Timer = () => {
       console.error("Error pausing the timer:", error);
     }
   };
-  
 
   const resumeTimer = async () => {
     if (isRunning || !isPaused) return; // Prevent if already running or not paused
-  
+
     setIsRunning(true);
     setIsPaused(false);
     localStorage.removeItem("isPaused");
 
-  
     try {
       const res = await axios.get(
         "https://people-sync-33225-default-rtdb.firebaseio.com/timerdata.json"
       );
-  
+
       if (res.data) {
         const timerEntries = Object.entries(res.data).map(([id, obj]) => ({
           id,
-          ...obj
+          ...obj,
         }));
         const latestEntry = timerEntries
-          // .filter((entry) => entry.email === selectedEmployee.email)
-          .filter((entry) => entry.email === "aasaish@gmail.com")
+          .filter((entry) => entry.email === user.email)
           .pop();
         if (latestEntry) {
           await axios.patch(
@@ -115,7 +114,6 @@ const Timer = () => {
       console.error("Error resuming the timer:", error);
     }
   };
-  
 
   const stopTimer = async () => {
     if (report.trim() === "") {
@@ -133,8 +131,7 @@ const Timer = () => {
         }));
 
         const latestEntry = timerEntries
-          // .filter((entry) => entry.email === selectedEmployee.email)
-          .filter((entry) => entry.email === "aasaish@gmail.com")
+          .filter((entry) => entry.email === user.email)
           .pop();
 
         if (latestEntry) {
@@ -143,16 +140,9 @@ const Timer = () => {
             { start: false }
           );
 
-          // Store report
-          // const reportData = {
-          //   name: selectedEmployee.name,
-          //   email: selectedEmployee.email,
-          //   report: report,
-          //   dateTime: new Date().toLocaleString()
-          // };
           const reportData = {
-            name: "Aasaish Ali",
-            email: "aasaish@gmail.com",
+            name: user.name,
+            email: user.email,
             report: report,
             dateTime: new Date().toLocaleString(),
           };
@@ -170,7 +160,6 @@ const Timer = () => {
           localStorage.removeItem("timerStart");
           localStorage.removeItem("isRunning");
           localStorage.removeItem("isPaused");
-
         }
       }
     } catch (error) {
@@ -183,21 +172,23 @@ const Timer = () => {
     const savedStartTime = localStorage.getItem("timerStart");
     const savedRunning = localStorage.getItem("isRunning");
     const savedPaused = localStorage.getItem("isPaused");
-  
+
     if (savedTime) setTime(parseInt(savedTime));
     if (savedRunning === "true") setIsRunning(true);
     if (savedPaused === "true") setIsPaused(true);
-  
+
     if (savedRunning === "true" && savedStartTime && savedPaused !== "true") {
-      const elapsedTime = Math.floor((Date.now() - parseInt(savedStartTime)) / 1000);
+      const elapsedTime = Math.floor(
+        (Date.now() - parseInt(savedStartTime)) / 1000
+      );
       setTime((prev) => prev + elapsedTime);
     }
-  
+
     let timerInterval;
     if (isRunning && !isPaused) {
       localStorage.setItem("timerStart", Date.now());
       localStorage.setItem("isRunning", "true");
-  
+
       timerInterval = setInterval(() => {
         setTime((prev) => {
           localStorage.setItem("timer", prev + 1);
@@ -205,11 +196,9 @@ const Timer = () => {
         });
       }, 1000);
     }
-  
+
     return () => clearInterval(timerInterval);
   }, [isRunning, isPaused]);
-  
-  
 
   const formatTime = (seconds) => {
     const hrs = Math.floor(seconds / 3600)

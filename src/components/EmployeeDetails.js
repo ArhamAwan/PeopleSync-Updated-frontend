@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./EmployeeDetails.css";
 import axios from "axios";
+import { Button } from "@mui/material";
 
 const EmployeeDetails = () => {
   const [employeesD, setEmployeesD] = useState([
@@ -41,6 +42,57 @@ const EmployeeDetails = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState(null);
 
+  const [editField, setEditField] = useState(null);
+  const [editValue, setEditValue] = useState("");
+
+  const fields = [
+    "name",
+    "phone",
+    "dob",
+    "gender",
+    "idCard",
+    "role",
+    "department",
+    "employeeType",
+    "joiningDate",
+    "salary",
+    "bankDetails",
+    "email",
+  ];
+
+  const handleEdit = (field) => {
+    setEditField(field);
+    setEditValue(selectedEmployee[field]);
+  };
+
+  const updateHandler = async () => {
+    if (!selectedEmployee || !editField) return;
+    try {
+      const { email } = selectedEmployee;
+      const response = await axios.get(
+        `https://people-sync-33225-default-rtdb.firebaseio.com/employees.json`
+      );
+      const employees = response.data;
+      const employeeKey = Object.keys(employees).find(
+        (key) => employees[key].email === email
+      );
+
+      if (employeeKey) {
+        await axios.patch(
+          `https://people-sync-33225-default-rtdb.firebaseio.com/employees/${employeeKey}.json`,
+          { [editField]: editValue }
+        );
+        setSelectedEmployee({ ...selectedEmployee, [editField]: editValue });
+        setEditField(null);
+        setEditValue("");
+      } else {
+        console.error("Employee not found");
+      }
+    } catch (error) {
+      console.error("Error updating employee:", error);
+    }
+  };
+
   const handleSearch = (e) => {
     setSearchTerm(e.target.value.toLowerCase());
   };
@@ -49,10 +101,10 @@ const EmployeeDetails = () => {
     employee.name.toLowerCase().includes(searchTerm)
   );
 
-  const handleEdit = (employee) => {
-    setEditForm({ ...employee });
-    setIsEditing(true);
-  };
+  // const handleEdit = (employee) => {
+  //   setEditForm({ ...employee });
+  //   setIsEditing(true);
+  // };
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
@@ -145,72 +197,53 @@ const EmployeeDetails = () => {
           className="popup-overlay"
           onClick={() => setSelectedEmployee(null)}
         >
-          <div
-            className="popup-content"
-            onClick={(e) => e.stopPropagation()} // Prevent closing popup on click inside
-          >
+          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+            <button
+              onClick={() => setSelectedEmployee(null)}
+              style={{
+                backgroundColor: "transparent",
+                color: "red",
+                padding: "15px",
+                border: "none",
+                cursor: "pointer",
+                width: "min-content",
+                position: "absolute",
+                right: "10px",
+                top: "0",
+              }}
+            >
+              X
+            </button>
             <div className="popup-header">
               <h3>{selectedEmployee.name}</h3>
-              <button
-                className="edit-icon"
-                onClick={() => handleEdit(selectedEmployee)}
-              >
-                ✎
-              </button>
             </div>
-            {/* <img
-              src={selectedEmployee.image}
-              alt={selectedEmployee.name}
-              className="popup-image"
-            /> */}
             <div className="profile-container">
               <div className="profile-circle">
                 {selectedEmployee.name?.charAt(0).toUpperCase()}
               </div>
             </div>
             <div className="employee-details">
-              <p>
-                <strong>Full Name:</strong> {selectedEmployee.name}
-              </p>
-              <p>
-                <strong>Phone:</strong> {selectedEmployee.phone}
-              </p>
-              <p>
-                <strong>Date of Birth:</strong> {selectedEmployee.dob}
-              </p>
-              <p>
-                <strong>Gender:</strong> {selectedEmployee.gender}
-              </p>
-              <p>
-                <strong>ID Card:</strong> {selectedEmployee.idCard}
-              </p>
-              <p>
-                <strong>Job Role:</strong> {selectedEmployee.role}
-              </p>
-              <p>
-                <strong>Department:</strong> {selectedEmployee.department}
-              </p>
-              <p>
-                <strong>Employee Type:</strong> {selectedEmployee.employeeType}
-              </p>
-              <p>
-                <strong>Joining Date:</strong> {selectedEmployee.joiningDate}
-              </p>
-              <p>
-                <strong>Salary:</strong> {selectedEmployee.salary}
-              </p>
-              <p>
-                <strong>Bank Details:</strong> {selectedEmployee.bankDetails}
-              </p>
-              <p>
-                <strong>Email:</strong> {selectedEmployee.email}
-              </p>
-              <p>
-                <strong>Password:</strong> {selectedEmployee.password}
-              </p>
+              {fields.map((field) => (
+                <p key={field}>
+                  <strong>{field.replace(/([A-Z])/g, " $1").trim()}:</strong>
+                  {editField === field ? (
+                    <>
+                      <input
+                        type="text"
+                        value={editValue}
+                        onChange={(e) => setEditValue(e.target.value)}
+                      />
+                      <button onClick={updateHandler}>✔</button>
+                    </>
+                  ) : (
+                    <>
+                      {selectedEmployee[field]}{" "}
+                      <button onClick={() => handleEdit(field)}>✎</button>
+                    </>
+                  )}
+                </p>
+              ))}
             </div>
-
-            <button onClick={() => setSelectedEmployee(null)}>Close</button>
           </div>
         </div>
       )}

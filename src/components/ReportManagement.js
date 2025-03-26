@@ -1,11 +1,84 @@
-import React from 'react'
+import React, { useState, useEffect } from "react";
+import "./ReportManagement.css";
+import axios from "axios";
 
 const ReportManagement = () => {
-  return (
-    <div>
-      
-    </div>
-  )
-}
+  const [reports, setReports] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedReport, setSelectedReport] = useState(null);
 
-export default ReportManagement
+  useEffect(() => {
+    const fetchReports = async () => {
+      try {
+        const res = await axios.get(
+          "https://people-sync-33225-default-rtdb.firebaseio.com/reports.json"
+        );
+        const data = res.data
+          ? Object.entries(res.data).map(([id, obj]) => ({ id, ...obj }))
+          : [];
+        setReports(data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching reports:", error);
+      }
+    };
+    fetchReports();
+  }, []);
+
+  return (
+    <div className="report-management">
+      <h2>Report Management</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Employee</th>
+            <th>Email</th>
+            <th>Date & Time</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan="4">Loading reports...</td>
+            </tr>
+          ) : reports.length === 0 ? (
+            <tr>
+              <td colSpan="4">No reports found</td>
+            </tr>
+          ) : (
+            [...reports].reverse().map((report) => (
+              <tr key={report.id}>
+                <td>{report.name}</td>
+                <td>{report.email}</td>
+                <td>{report.dateTime}</td>
+                <td>
+                  <button onClick={() => setSelectedReport(report)}>
+                    View Report
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+
+      {/* Report Popup */}
+      {selectedReport && (
+        <div className="popup">
+          <div className="popup-content">
+            <h3>Report Details</h3>
+            <p><strong>Name:</strong> {selectedReport.name}</p>
+            <p><strong>Email:</strong> {selectedReport.email}</p>
+            <p><strong>Date & Time:</strong> {selectedReport.dateTime}</p>
+            <p><strong>Report:</strong> {selectedReport.report}</p>
+            <button onClick={() => setSelectedReport(null)}>Close</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ReportManagement;

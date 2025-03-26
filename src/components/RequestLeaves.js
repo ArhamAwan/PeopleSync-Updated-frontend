@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import "./RequestLeave.css";
 import axios from "axios";
 
-const RequestLeave = ({ employeeId }) => {
+const RequestLeave = () => {
+  const [user, setUser] = useState({});
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [leaveType, setLeaveType] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -10,34 +11,30 @@ const RequestLeave = ({ employeeId }) => {
   const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchLeaveRequests = async () => {
-      try {
-        const res = await axios.get(
-          "https://people-sync-33225-default-rtdb.firebaseio.com/leaves.json"
-        );
-        const data = res.data
+  const fetchLeaveRequests = async (email) => {
+    try {
+      const res = await axios.get(
+        "https://people-sync-33225-default-rtdb.firebaseio.com/leaves.json"
+      );
+      const data = res.data
         ? Object.entries(res.data)
             .map(([id, obj]) => ({ id, ...obj }))
-            // .filter((leave) => leave.employeeEmail === email)
-            .filter((leave) => leave.employeeEmail === "aasaish@gmail.com")
+            .filter((leave) => leave.employeeEmail === email)
         : [];
-        setLeaveRequests(data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching leave requests:", error);
-      }
-    };
-    fetchLeaveRequests();
-  }, []);
+      setLeaveRequests(data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching leave requests:", error);
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const start = new Date(startDate);
     const end = new Date(endDate);
     const totalLeaves = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
-  
+
     // const newLeaveRequest = {
     //   employeeName,
     //   employeeEmail,
@@ -49,23 +46,23 @@ const RequestLeave = ({ employeeId }) => {
     //   status: "PENDING"
     // };
     const newLeaveRequest = {
-      employeeName:"Aasaish Ali",
-      employeeEmail:"aasaish@gmail.com",
+      employeeName: user.name,
+      employeeEmail: user.email,
       leaveType,
       startDate,
       endDate,
       reason,
       totalLeaves,
-      status: "PENDING"
+      status: "PENDING",
     };
-  
+
     try {
       await axios.post(
         "https://people-sync-33225-default-rtdb.firebaseio.com/leaves.json",
         newLeaveRequest
       );
       console.log("Leave request submitted:", newLeaveRequest);
-  
+
       setLeaveType("");
       setStartDate("");
       setEndDate("");
@@ -75,15 +72,30 @@ const RequestLeave = ({ employeeId }) => {
       console.error("Error submitting leave request:", error);
     }
   };
-  
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const u = localStorage.getItem("user");
+      if (u != null) {
+        const userObject = JSON.parse(u);
+        setUser(userObject);
+        fetchLeaveRequests(userObject?.email);
+        clearInterval(interval);
+      }
+    }, 500);
+  }, []);
 
   return (
     <div className="request-leave">
       <h2>Request Leave</h2>
 
-      <form className='requestleaveform' onSubmit={handleSubmit}>
+      <form className="requestleaveform" onSubmit={handleSubmit}>
         <label>Leave Type:</label>
-        <select value={leaveType} onChange={(e) => setLeaveType(e.target.value)} required>
+        <select
+          value={leaveType}
+          onChange={(e) => setLeaveType(e.target.value)}
+          required
+        >
           <option value="">Select Leave Type</option>
           <option value="Sick Leave">Sick Leave</option>
           <option value="Annual Leave">Annual Leave</option>
@@ -92,13 +104,27 @@ const RequestLeave = ({ employeeId }) => {
         </select>
 
         <label>Start Date:</label>
-        <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} required />
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          required
+        />
 
         <label>End Date:</label>
-        <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} required />
+        <input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+          required
+        />
 
         <label>Reason:</label>
-        <textarea value={reason} onChange={(e) => setReason(e.target.value)} required />
+        <textarea
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+          required
+        />
 
         <button type="submit">Submit Request</button>
       </form>
@@ -116,9 +142,13 @@ const RequestLeave = ({ employeeId }) => {
         </thead>
         <tbody>
           {loading ? (
-            <tr><td colSpan="5">Loading leave history...</td></tr>
+            <tr>
+              <td colSpan="5">Loading leave history...</td>
+            </tr>
           ) : leaveRequests.length === 0 ? (
-            <tr><td colSpan="5">No leave requests found.</td></tr>
+            <tr>
+              <td colSpan="5">No leave requests found.</td>
+            </tr>
           ) : (
             leaveRequests.map((request) => (
               <tr key={request.id}>
@@ -126,7 +156,9 @@ const RequestLeave = ({ employeeId }) => {
                 <td>{request.startDate}</td>
                 <td>{request.endDate}</td>
                 <td>{request.reason}</td>
-                <td className={`status ${request.status.toLowerCase()}`}>{request.status}</td>
+                <td className={`status ${request.status.toLowerCase()}`}>
+                  {request.status}
+                </td>
               </tr>
             ))
           )}

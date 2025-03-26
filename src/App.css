@@ -20,7 +20,7 @@
 /* Right Content Styling */
 .right-container {
   width: 80%; /* Fixed width of 80% */
-  background-color: #d0d0d0; /* Slightly darker gray background */
+  background-color: #f0f0f0; /* Slightly darker gray background */
   display: flex;
   flex-direction: column;
 }
@@ -58,7 +58,7 @@ nav ul li a {
 }
 
 nav ul li a:active {
-  background-color: #ccc; /* Style when the link is clicked */
+  background-color: #f0f0f0; /* Style when the link is clicked */
   color: #fff;
 }
 
@@ -89,10 +89,11 @@ nav ul li a:hover {
 }
 
 .Nav-header-top img {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border-radius: 50%;
   border: 2px solid white;
+  margin-top: 10px;
 }
 
 /* Main Content Styling */
@@ -102,4 +103,9 @@ nav ul li a:hover {
   overflow-y: auto; /* Enable scrolling for the main content */
   padding: 20px;
   box-sizing: border-box; /* Include padding in height calculation */
+}
+
+.full-width {
+  width: 100%;
+  margin-left: 0;
 }

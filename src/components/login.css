@@ -1,0 +1,39 @@
+.gradient-custom-2 {
+    background: #ffad3d; 
+  
+
+}
+.gradient-custom-3 {
+    background: #2c3874; 
+    height: 100vh;
+    overflow: hidden;
+}
+
+.sign-in-btn {
+  border-radius: 50px !important;
+  color: black;
+}
+
+#input-group-dropdown-1 {
+  width: -webkit-fill-available !important;
+}
+.heading1{
+  padding-top: 15px;
+  margin-bottom: -15px;
+  color:red;
+}
+
+  
+  @media (min-width: 768px) {
+    .gradient-form {
+      height: 100vh !important;
+    }
+  }
+  /* @media (min-width: 769px) {
+    .gradient-custom-2 {
+      border-top-right-radius: .3rem;
+      border-bottom-right-radius: .3rem;
+    }
+  } */
+
+  
