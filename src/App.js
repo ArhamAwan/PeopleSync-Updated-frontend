@@ -82,7 +82,7 @@ function Layout() {
                 </li>
               </ul>
             </nav>
-          ) : user?.role !== "hr" ? (
+          ) : user?.role === "marketing team" || user?.role === "development team" || user?.role === "sales team" || user?.role === "ai specialist"? (
             <nav>
               <ul>
                 <li>

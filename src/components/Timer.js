@@ -75,6 +75,8 @@ const Timer = () => {
             { pause: true }
           );
           console.log("Timer paused successfully");
+          alert("Timer paused successfully.");
+
         }
       }
     } catch (error) {
@@ -108,6 +110,8 @@ const Timer = () => {
             { pause: false }
           );
           console.log("Timer resumed successfully");
+          alert("Timer resumed successfully.");
+
         }
       }
     } catch (error) {
@@ -221,7 +225,7 @@ const Timer = () => {
           <button
             className="start-btn"
             onClick={startTimer}
-            disabled={isRunning && !isPaused}
+            disabled={isRunning || isPaused}
           >
             Start
           </button>

@@ -13,7 +13,7 @@ const AddEmployee = () => {
   const [bankDetails, setBankDetails] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [department, setDepartment] = useState("");
+  const [designation, setDesignation] = useState("");
   const [role, setRole] = useState("");
   const [joiningDate, setJoiningDate] = useState("");
   const [employeeType, setEmployeeType] = useState("");
@@ -40,6 +40,7 @@ const AddEmployee = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const randomPassword = Math.floor(1000 + Math.random() * 9000);
     const formData = {
       name: name,
       phone: phone,
@@ -49,8 +50,8 @@ const AddEmployee = () => {
       salary: salary,
       bankDetails: bankDetails,
       email: email,
-      password: password,
-      department: department,
+      password: randomPassword,
+      designation: designation,
       role: role,
       joiningDate: joiningDate,
       employeeType: employeeType,
@@ -87,7 +88,7 @@ const AddEmployee = () => {
       setBankDetails("");
       setEmail("");
       setPassword("");
-      setDepartment("");
+      setDesignation("");
       setRole("");
       setJoiningDate("");
       setEmployeeType("");
@@ -125,6 +126,8 @@ const AddEmployee = () => {
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="Enter phone number"
                 required
+                pattern="^0\d{10}$"
+                title="Please use PK Phone number format,start swith 0 and have 11 digits."
               />
             </div>
           </div>
@@ -162,10 +165,13 @@ const AddEmployee = () => {
                 id="national-id"
                 value={idCard}
                 onChange={(e) => setIdCard(e.target.value)}
-                placeholder="Enter ID/SSN"
+                placeholder="Enter National ID Number"
                 required
+                pattern="^\d{5}-\d{7}-\d{1}$"
+                title="National ID Number must be in the format: XXXXX-XXXXXXX-X"
               />
             </div>
+
             <div className="form-group">
               <label htmlFor="salary">Salary</label>
               <input
@@ -210,8 +216,8 @@ const AddEmployee = () => {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter password"
-                required
+                placeholder="Auto Generated.."
+                disabled
               />
             </div>
           </div>
@@ -222,29 +228,29 @@ const AddEmployee = () => {
           <h3>Job Details</h3>
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="role">Job Role</label>
+              <label htmlFor="role">Department</label>
               <select
                 id="role"
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
                 required
               >
-                <option value="">Select role</option>
-                <option value="manager">Manager</option>
-                <option value="developer">Developer</option>
-                <option value="designer">Designer</option>
+                <option value="">Select Department</option>
+                <option value="manager">Marketing Team</option>
+                <option value="developer">Development Team</option>
+                <option value="designer">AI Specialist</option>
+                <option value="sales">Sales Team</option>
                 <option value="hr">HR</option>
-                <option value="sales">Sales</option>
               </select>
             </div>
             <div className="form-group">
-              <label htmlFor="department">Department</label>
+              <label htmlFor="designation">Designation</label>
               <input
                 type="text"
-                id="department"
-                value={department}
-                onChange={(e) => setDepartment(e.target.value)}
-                placeholder="Enter department name"
+                id="designation"
+                value={designation}
+                onChange={(e) => setDesignation(e.target.value)}
+                placeholder="Enter Designation"
                 required
               />
             </div>
