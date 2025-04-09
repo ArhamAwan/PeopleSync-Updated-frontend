@@ -1,13 +1,12 @@
 /* Container */
 .personal-details-container {
-    max-width: 600px;
-    margin: 40px auto;
+    max-width: 900px;
+    margin: 0px auto;
     padding: 20px;
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding-top: 0px;
+    background: transparent;
     text-align: center;
-    transition: box-shadow 0.3s ease-in-out;
+    box-shadow: none !important;
 }
 
 .personal-details-container:hover {
@@ -17,7 +16,7 @@
 /* Profile Section */
 .profile-section {
     padding: 20px;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid #7a7a7a;
 }
 
 .profile-image {
@@ -117,3 +116,14 @@ button {
 .reject-btn:hover {
     background: #c82333;
 }
+
+.employee-details {
+    text-align: left;
+      max-width: 700px;
+      margin: auto;
+      padding: 20px;
+      border-radius: 10px;
+      background: #f8f9fa;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      font-family: Arial, sans-serif;
+    }

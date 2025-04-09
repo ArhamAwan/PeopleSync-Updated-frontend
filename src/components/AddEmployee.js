@@ -236,10 +236,10 @@ const AddEmployee = () => {
                 required
               >
                 <option value="">Select Department</option>
-                <option value="manager">Marketing Team</option>
-                <option value="developer">Development Team</option>
-                <option value="designer">AI Specialist</option>
-                <option value="sales">Sales Team</option>
+                <option value="marketing team">Marketing Team</option>
+                <option value="development team">Development Team</option>
+                <option value="ai specialist">AI Specialist</option>
+                <option value="sales team">Sales Team</option>
                 <option value="hr">HR</option>
               </select>
             </div>

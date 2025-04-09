@@ -97,7 +97,8 @@ const PersonalDetails = () => {
 
         <h2>{employee.name}</h2>
         <p className="position">
-          {employee.role} - {employee.department}
+          {employee?.role !== "hr" &&
+            `${employee?.role?.toUpperCase()} - ( ${employee.department})`}
         </p>
       </div>
 
@@ -153,10 +154,10 @@ const PersonalDetails = () => {
             <strong>ID Card:</strong> {employee.idCard}
           </p>
           <p>
-            <strong>Job Role:</strong> {employee.role}
+            <strong>Job Role:</strong> {employee.department}
           </p>
           <p>
-            <strong>Department:</strong> {employee.department}
+            <strong>Department:</strong>  {employee?.role?.toUpperCase()}
           </p>
           <p>
             <strong>Employee Type:</strong> {employee.employeeType}

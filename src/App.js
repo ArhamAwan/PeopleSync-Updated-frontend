@@ -45,7 +45,7 @@ function Layout() {
         clearInterval(interval);
       }
     }, 200);
-  }, []);
+  });
 
   return (
     <div className="container">
