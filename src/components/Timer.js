@@ -251,8 +251,10 @@ const Timer = () => {
             Stop
           </button>
         </div>
+        <h1 style={{textAlign:'left'}}>Your Report</h1>
 
         <div className="report-container">
+
           <textarea
             placeholder="Write your report here..."
             value={report}

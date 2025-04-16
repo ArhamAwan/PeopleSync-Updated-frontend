@@ -2,17 +2,16 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   background-color: #f9f9f9;
   color: #333;
 }
-.search-row{
+.search-row {
   display: flex;
   flex-direction: row;
   width: 100%;
-  
 }
-.heading-em{
+.heading-em {
   width: 100%;
 }
 
@@ -36,8 +35,7 @@ h2 {
 .search-bar {
   margin-bottom: 20px;
   text-align: right;
- width: 50%;
-
+  width: 50%;
 }
 
 .search-bar input {
@@ -160,7 +158,6 @@ h2 {
   text-transform: uppercase;
 }
 
-
 button {
   margin-top: 15px;
   padding: 10px 20px;
@@ -188,7 +185,7 @@ button:hover {
 }
 
 .employee-details {
-text-align: left;
+  text-align: left;
   max-width: 600px;
   margin: auto;
   padding: 20px;
@@ -202,6 +199,20 @@ text-align: left;
   margin: 10px 0;
   padding: 8px;
   border-bottom: 1px solid #ddd;
+  display: flex; 
+  flex-direction: row;
+   justify-content: space-between;
+}
+.employee-details button {
+  margin: 10px 0;
+  padding: 10px 15px;
+  width: 45px !important;
+  max-width: 45px !important;
+}
+.employee-details input {
+  /* padding: 10px 15px; */
+  width: auto !important;
+  max-width: auto !important;
 }
 
 .employee-details p:last-child {

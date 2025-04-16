@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./EmployeeDetails.css";
 import axios from "axios";
-import { Button } from "@mui/material";
+import { Button, Dialog, DialogTitle, DialogActions } from "@mui/material";
 
 const EmployeeDetails = () => {
   const [employeesD, setEmployeesD] = useState([
@@ -44,6 +44,7 @@ const EmployeeDetails = () => {
 
   const [editField, setEditField] = useState(null);
   const [editValue, setEditValue] = useState("");
+  const [openConfirm, setOpenConfirm] = useState(false);
 
   const fields = [
     "name",
@@ -51,13 +52,14 @@ const EmployeeDetails = () => {
     "dob",
     "gender",
     "idCard",
+    "designation",
     "role",
-    "department",
     "employeeType",
     "joiningDate",
     "salary",
     "bankDetails",
     "email",
+    "password",
   ];
 
   const handleEdit = (field) => {
@@ -91,6 +93,48 @@ const EmployeeDetails = () => {
     } catch (error) {
       console.error("Error updating employee:", error);
     }
+  };
+  const deleteHandler = async (email) => {
+    try {
+      // 1. Delete from employees
+      const empRes = await axios.get(
+        "https://people-sync-33225-default-rtdb.firebaseio.com/employees.json"
+      );
+      const empData = empRes.data;
+      const empKey = Object.keys(empData).find(
+        (key) => empData[key].email === email
+      );
+
+      if (empKey) {
+        await axios.delete(
+          `https://people-sync-33225-default-rtdb.firebaseio.com/employees/${empKey}.json`
+        );
+        console.log("Employee deleted");
+      } else {
+        console.log("Employee not found");
+      }
+
+      // 2. Delete from users
+      const userRes = await axios.get(
+        "https://people-sync-33225-default-rtdb.firebaseio.com/users.json"
+      );
+      const userData = userRes.data;
+      const userKey = Object.keys(userData).find(
+        (key) => userData[key].email === email
+      );
+
+      if (userKey) {
+        await axios.delete(
+          `https://people-sync-33225-default-rtdb.firebaseio.com/users/${userKey}.json`
+        );
+        console.log("User deleted");
+      } else {
+        console.log("User not found");
+      }
+    } catch (error) {
+      console.error("Error deleting data:", error);
+    }
+    window.location.reload();
   };
 
   const handleSearch = (e) => {
@@ -128,6 +172,14 @@ const EmployeeDetails = () => {
     const benefits = parseFloat(employee.benefits) || 0;
     const deductions = parseFloat(employee.deductions) || 0;
     return salary + benefits - deductions;
+  };
+  const handleDeleteClick = () => {
+    setOpenConfirm(true);
+  };
+
+  const handleConfirm = (email) => {
+    deleteHandler(email);
+    setOpenConfirm(false);
   };
 
   useEffect(() => {
@@ -222,33 +274,74 @@ const EmployeeDetails = () => {
                 {selectedEmployee.name?.charAt(0).toUpperCase()}
               </div>
             </div>
-            <div className="employee-details">
-              {fields.map((field) => (
-                <p key={field}>
-                  <strong>{field.replace(/([A-Z])/g, " $1").trim()}:</strong>
-                  {editField === field ? (
-                    <>
-                      <input
-                        type="text"
-                        value={editValue}
-                        onChange={(e) => setEditValue(e.target.value)}
-                      />
-                      <button onClick={updateHandler}>✔</button>
-                    </>
-                  ) : (
-                    <>
-                      {selectedEmployee[field]}{" "}
-                      <button onClick={() => handleEdit(field)}>✎</button>
-                    </>
-                  )}
-                </p>
-              ))}
-            </div>
+            <table className="employee-details">
+              <thead>
+                <tr>
+                  <th>Field</th>
+                  <th>Value</th>
+                  <th>Edit</th>
+                </tr>
+              </thead>
+              <tbody>
+                {fields.map((field) => (
+                  <tr key={field}>
+                    <td>
+                      {field === "role" ? (
+                        <strong>Department</strong>
+                      ) : (
+                        <strong>
+                          {field.replace(/([A-Z])/g, " $1").trim()}
+                        </strong>
+                      )}
+                    </td>
+                    <td>
+                      {editField === field ? (
+                        <input
+                          type="text"
+                          value={editValue}
+                          onChange={(e) => setEditValue(e.target.value)}
+                        />
+                      ) : (
+                        selectedEmployee[field]
+                      )}
+                    </td>
+                    <td>
+                      {editField === field ? (
+                        <button onClick={updateHandler}>✔</button>
+                      ) : (
+                        <button onClick={() => handleEdit(field)}>✎</button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <Button
+              variant="contained"
+              color="error"
+              onClick={handleDeleteClick}
+              style={{ marginTop: "20px" }}
+            >
+              Delete
+            </Button>
+
+            <Dialog open={openConfirm} onClose={() => setOpenConfirm(false)}>
+              <DialogTitle>Are you sure you want to delete?</DialogTitle>
+              <DialogActions>
+                <Button onClick={() => setOpenConfirm(false)}>Cancel</Button>
+                <Button
+                  onClick={() => handleConfirm(selectedEmployee.email)}
+                  color="error"
+                  variant="contained"
+                >
+                  Confirm
+                </Button>
+              </DialogActions>
+            </Dialog>
           </div>
         </div>
       )}
 
-      {/* Edit Employee Form */}
       {isEditing && (
         <div className="popup-overlay" onClick={() => setIsEditing(false)}>
           <div className="popup-content" onClick={(e) => e.stopPropagation()}>

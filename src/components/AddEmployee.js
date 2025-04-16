@@ -115,8 +115,11 @@ const AddEmployee = () => {
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter full name"
                 required
+                pattern="^[A-Za-z\s]+$"
+                title="Name should only contain Alphabets and Spaces.."
               />
             </div>
+
             <div className="form-group">
               <label htmlFor="phone">Phone Number</label>
               <input

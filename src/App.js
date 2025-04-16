@@ -8,6 +8,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import "./App.css";
+import axios from "axios";
 
 // Import your components
 import Dashboard from "./components/Dashboard";
@@ -20,11 +21,14 @@ import RequestLeaves from "./components/RequestLeaves";
 import PersonalDetails from "./components/PersonalDetails";
 import Login from "./components/login";
 import { Button } from "@mui/material";
+import RequestedChanges from "./components/RequestedChanges";
 
 const logo = "/assets/gg.png";
 
 function Layout() {
   const [user, setUser] = useState({});
+  const [pendingCount, setPendingCount] = useState(0);
+  const [pendingCount2, setPendingCount2] = useState(0);
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,7 +40,26 @@ function Layout() {
     setUser(null);
     setTimeout(() => navigate("/login"), 0); // Ensures navigation happens after state update
   };
-
+  const fetchLeaves = async () => {
+    const res = await axios.get(
+      "https://people-sync-33225-default-rtdb.firebaseio.com/leaves.json"
+    );
+    const data = res.data || {};
+    const pending = Object.values(data).filter(
+      (leave) => leave.status === "PENDING"
+    );
+    setPendingCount(pending.length);
+  };
+  const fetchRequests = async () => {
+    const res = await axios.get(
+      "https://people-sync-33225-default-rtdb.firebaseio.com/requests.json"
+    );
+    const data2 = res.data || {};
+    const pending2 = Object.values(data2).filter(
+      (reqq) => reqq.status === "pending"
+    );
+    setPendingCount2(pending2.length);
+  };
   useEffect(() => {
     const interval = setInterval(() => {
       const u = localStorage.getItem("user");
@@ -46,6 +69,18 @@ function Layout() {
       }
     }, 200);
   });
+
+  useEffect(() => {
+    fetchLeaves();
+    fetchRequests();
+    const interval = setInterval(fetchLeaves, 5000);
+    const interval2 = setInterval(fetchRequests, 5000);
+
+    return () => {
+      clearInterval(interval);
+      clearInterval(interval2);
+    };
+  }, []);
 
   return (
     <div className="container">
@@ -65,8 +100,45 @@ function Layout() {
                 <li>
                   <a href="/report-management">Report Management</a>
                 </li>
-                <li>
+                <li style={{ position: "relative" }}>
                   <a href="/leave-management">Leave Management</a>
+                  {pendingCount > 0 && (
+                    <span
+                      style={{
+                        position: "absolute",
+                        top: "1px",
+                        right: "-20px",
+                        background: "pink",
+                        color: "blue",
+                        borderRadius: "50%",
+                        padding: "2px 10px",
+                        fontSize: "14px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {pendingCount}
+                    </span>
+                  )}
+                </li>
+                <li style={{ position: "relative" }}>
+                  <a href="/requested-changes">Requested Changes</a>
+                  {pendingCount2 > 0 && (
+                    <span
+                      style={{
+                        position: "absolute",
+                        top: "1px",
+                        right: "-20px",
+                        background: "pink",
+                        color: "blue",
+                        borderRadius: "50%",
+                        padding: "2px 10px",
+                        fontSize: "14px",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {pendingCount2}
+                    </span>
+                  )}
                 </li>
                 <li>
                   <a href="/employee-details">Employee Details</a>
@@ -82,7 +154,10 @@ function Layout() {
                 </li>
               </ul>
             </nav>
-          ) : user?.role === "marketing team" || user?.role === "development team" || user?.role === "sales team" || user?.role === "ai specialist"? (
+          ) : user?.role === "marketing team" ||
+            user?.role === "development team" ||
+            user?.role === "sales team" ||
+            user?.role === "ai specialist" ? (
             <nav>
               <ul>
                 <li>
@@ -143,6 +218,10 @@ function Layout() {
             <Route
               path="/leave-management"
               element={<ProtectedRoute element={<LeaveManagement />} />}
+            />
+            <Route
+              path="/requested-changes"
+              element={<ProtectedRoute element={<RequestedChanges />} />}
             />
             <Route
               path="/employee-details"

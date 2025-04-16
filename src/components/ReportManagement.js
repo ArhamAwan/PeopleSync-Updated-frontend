@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./ReportManagement.css";
 import axios from "axios";
+import { TextField } from "@mui/material";
 
 const ReportManagement = () => {
   const [reports, setReports] = useState([]);
@@ -69,11 +70,31 @@ const ReportManagement = () => {
         <div className="popup">
           <div className="popup-content">
             <h3>Report Details</h3>
-            <p><strong>Name:</strong> {selectedReport.name}</p>
-            <p><strong>Email:</strong> {selectedReport.email}</p>
-            <p><strong>Date & Time:</strong> {selectedReport.dateTime}</p>
-            <p><strong>Report:</strong> {selectedReport.report}</p>
-            <button onClick={() => setSelectedReport(null)}>Close</button>
+            <p>
+              <strong>Name:</strong> {selectedReport.name}
+            </p>
+            <p>
+              <strong>Email:</strong> {selectedReport.email}
+            </p>
+            <p>
+              <strong>Date & Time:</strong> {selectedReport.dateTime}
+            </p>
+            <p>
+              <strong>Report:</strong>
+            </p>
+            <TextField
+              value={selectedReport.report}
+              multiline
+              rows={4}
+              fullWidth
+              size="small"
+              variant="outlined"
+              inputProps={{ readOnly: true }}
+            />
+            {/* <button onClick={() => setSelectedReport(null)}>Close</button> */}
+            <div className="close-icon" onClick={() => setSelectedReport(null)}>
+              &#x2715; {/* Unicode for the 'X' symbol */}
+            </div>
           </div>
         </div>
       )}

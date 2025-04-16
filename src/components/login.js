@@ -55,14 +55,18 @@ const Login = (props) => {
 
     try {
       const res = await axios.get(
-        "https://people-sync-33225-default-rtdb.firebaseio.com/users.json"
+        "https://people-sync-33225-default-rtdb.firebaseio.com/employees.json"
       );
 
       const users = res.data
-        ? Object.values(res.data).filter(
-            (user) => user.email === email && user.password === pass
-          )
-        : [];
+  ? Object.values(res.data).filter(
+      (user) =>
+        user.email?.trim().toLowerCase() == email.trim().toLowerCase() &&
+        user.password == pass 
+    )
+  : [];
+
+console.log(users);
 
       if (users.length > 0) {
         const { password, ...userWithoutPassword } = users[0];
