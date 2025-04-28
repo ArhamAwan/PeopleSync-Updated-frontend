@@ -98,77 +98,76 @@ const AddEmployee = () => {
   };
 
   return (
-    <div>
+    <div className="main-cont">
       <form className="add-employee-form" onSubmit={handleSubmit}>
-        <h2>Add Employee</h2>
+        <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
+          Add Employee Details
+        </h4>
 
         {/* Personal Information */}
         <div className="section">
           <h3>Personal Information</h3>
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="name">Full Name</label>
               <input
                 type="text"
                 id="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="Enter full name"
+                placeholder="Full Name"
                 required
                 pattern="^[A-Za-z\s]+$"
                 title="Name should only contain Alphabets and Spaces.."
               />
             </div>
-
             <div className="form-group">
-              <label htmlFor="phone">Phone Number</label>
               <input
                 type="tel"
                 id="phone"
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
-                placeholder="Enter phone number"
+                placeholder="Phone Number (e.g. 03XXXXXXXXX)"
                 required
                 pattern="^0\d{10}$"
-                title="Please use PK Phone number format,start swith 0 and have 11 digits."
+                title="Please use PK Phone number format, start with 0 and have 11 digits."
               />
             </div>
           </div>
+
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="dob">Date of Birth</label>
               <input
                 type="date"
                 id="dob"
                 value={dob}
                 onChange={(e) => setDob(e.target.value)}
                 required
+                placeholder="Date of Birth"
               />
             </div>
             <div className="form-group">
-              <label htmlFor="gender">Gender</label>
               <select
                 id="gender"
                 value={gender}
                 onChange={(e) => setGender(e.target.value)}
                 required
               >
-                <option value="">Select gender</option>
+                <option value="">Select Gender</option>
                 <option value="male">Male</option>
                 <option value="female">Female</option>
                 <option value="other">Other</option>
               </select>
             </div>
           </div>
+
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="national-id">National ID / SSN</label>
               <input
                 type="text"
                 id="national-id"
                 value={idCard}
                 onChange={(e) => setIdCard(e.target.value)}
-                placeholder="Enter National ID Number"
+                placeholder="National ID / SSN (XXXXX-XXXXXXX-X)"
                 required
                 pattern="^\d{5}-\d{7}-\d{1}$"
                 title="National ID Number must be in the format: XXXXX-XXXXXXX-X"
@@ -176,50 +175,48 @@ const AddEmployee = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="salary">Salary</label>
               <input
                 type="number"
                 id="salary"
                 value={salary}
                 onChange={(e) => setSalary(e.target.value)}
-                placeholder="Enter salary amount"
+                placeholder="Salary"
                 required
               />
             </div>
           </div>
+
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="bank-details">Bank Details</label>
               <input
                 type="text"
                 id="bank-details"
                 value={bankDetails}
                 onChange={(e) => setBankDetails(e.target.value)}
-                placeholder="Enter bank account details"
+                placeholder="Bank Account Details"
                 required
               />
             </div>
           </div>
+
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="email">Email Address</label>
               <input
                 type="email"
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter email"
+                placeholder="Email Address"
                 required
               />
             </div>
             <div className="form-group">
-              <label htmlFor="password">Password</label>
               <input
                 type="password"
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Auto Generated.."
+                placeholder="Auto Generated Password"
                 disabled
               />
             </div>
@@ -231,7 +228,6 @@ const AddEmployee = () => {
           <h3>Job Details</h3>
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="role">Department</label>
               <select
                 id="role"
                 value={role}
@@ -247,37 +243,36 @@ const AddEmployee = () => {
               </select>
             </div>
             <div className="form-group">
-              <label htmlFor="designation">Designation</label>
               <input
                 type="text"
                 id="designation"
                 value={designation}
                 onChange={(e) => setDesignation(e.target.value)}
-                placeholder="Enter Designation"
+                placeholder="Designation"
                 required
               />
             </div>
           </div>
+
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="joining-date">Joining Date</label>
               <input
                 type="date"
                 id="joining-date"
                 value={joiningDate}
                 onChange={(e) => setJoiningDate(e.target.value)}
                 required
+                placeholder="Joining Date"
               />
             </div>
             <div className="form-group">
-              <label htmlFor="employee-type">Employee Type</label>
               <select
                 id="employee-type"
                 value={employeeType}
                 onChange={(e) => setEmployeeType(e.target.value)}
                 required
               >
-                <option value="">Select type</option>
+                <option value="">Select Employee Type</option>
                 <option value="full-time">Full-Time</option>
                 <option value="part-time">Part-Time</option>
                 <option value="contractor">Contractor</option>
@@ -288,7 +283,7 @@ const AddEmployee = () => {
         </div>
 
         {/* Submit Button */}
-        <button type="submit">Submit</button>
+        <button type="submit">Add Employee</button>
       </form>
     </div>
   );

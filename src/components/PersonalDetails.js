@@ -152,7 +152,8 @@ const PersonalDetails = () => {
 
       <div>
         <div className="popup-header">
-          <h2 style={{ color: "red" }}>Personal Information</h2>
+        <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
+        Personal Information</h4>
         </div>
 
         <table className="employee-details-table">

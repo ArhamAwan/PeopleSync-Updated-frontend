@@ -9,6 +9,8 @@ import {
 } from "react-router-dom";
 import "./App.css";
 import axios from "axios";
+import "animate.css";
+import LogoutIcon from '@mui/icons-material/Logout';
 
 // Import your components
 import Dashboard from "./components/Dashboard";
@@ -191,8 +193,9 @@ function Layout() {
               variant="contained"
               style={{ maxWidth: "min-content", marginLeft: "20px" }}
               onClick={logoutHandler}
+              className="logout"
             >
-              Logout
+              Logout&nbsp; <LogoutIcon fontSize="small"/>
             </Button>
           </div>
         )}

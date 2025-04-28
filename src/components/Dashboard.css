@@ -1,10 +1,11 @@
 /* Dashboard Container */
-.dashboard {
+.dashboard-container {
   display: flex;
   flex-direction: column;
   gap: 20px;
   padding: 20px;
-  background: #f0f0f0; /* Light Grey Background */
+  /* background: #f0f0f0; */
+  /* background: linear-gradient(135deg, #e7c0be, #e0e3fa); */
 }
 
 /* Row - Graph and Online Employees */
@@ -24,18 +25,22 @@ th {
 .graph-section,.online-section{
   width:45%;
 padding-inline: 30px;
+display: flex;
+flex-direction: column;
+justify-content: center;
 }
 /* Online Employees Section */
-.online-section {
-  background: white;
+.online-section , .graph-section{
+  background: white !important;
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin: 20px;
 }
 
-.online-section:hover {
+.online-section:hover, .graph-section:hover {
   transform: translateY(-5px);
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
 }
@@ -126,18 +131,21 @@ padding-inline: 30px;
 /* Table Styling */
 table {
   width: 100%;
-  border-collapse: separate; /* Allow row spacing */
+  border-collapse: separate;
   border-spacing: 0 10px; /* Adds gap between rows */
   background: white;
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: none;
 }
 
 /* Table Header Row */
 tr {
   background: #111; /* Dark background for header */
   color: rgb(0, 0, 0); /* White text */
+  border: none;
+
 }
 
 /* Table Headers */
@@ -175,6 +183,7 @@ tr:nth-child(odd) {
 th, td {
   border-bottom: 1px solid #ffffff;
   padding: 12px;
+  border: none;
 }
 th{
   color:black
@@ -189,20 +198,24 @@ th{
 
 
 .status {
-  
   border-radius: 5px;
   font-weight: bold;
   text-align: center;
 }
 
-.active {
+.active span{
   background: #006eff;
+  padding: 10px 20px;
+  border-radius: 20px;
   color: white;
-  height: 10px;
+  /* height: 10px; */
 }
 
-.inactive {
+
+.inactive span{
   background: #ef4444;
+  padding: 10px 20px;
+  border-radius: 20px;
   color: white;
 }
 
@@ -272,4 +285,51 @@ th{
   .timer-controls button {
     width: 100%;
   }
+}
+
+.employee-count, .online-count {
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  color: #fff;
+  padding: 0.4em 1em;
+  border-radius: 2em;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: inline-block;
+  letter-spacing: 0.5px;
+  transition: transform 0.2s ease;
+  width: max-content;
+  margin: auto;
+}
+
+.employee-count:hover {
+  transform: scale(1.05);
+}
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500&display=swap');
+
+.online-count{
+  border-radius: 5px;
+  font-size: 2rem;
+  font-family: 'Space Grotesk', sans-serif;
+
+}
+/* .online-count {
+  background: #6e8efb;
+  padding: 0.2em 0.6em;
+  font-size: x-large !important;
+  border-radius: 3px;
+  font-weight: bold;
+  margin-left: 0.5em;
+  font-size: 1.1rem;
+  transition: transform 0.2s ease;
+} */
+
+.myTableHeader {
+  text-align: left;
+  font-size: xx-large;
+  font-weight: bold;
+  letter-spacing: 6px;
+  word-spacing: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid black;
 }

@@ -81,7 +81,9 @@ const RequestedChanges = () => {
 
   return (
     <div className="leave-management">
-      <h2>Requested Changes</h2>
+      <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
+        Requested Changes
+      </h4>
 
       <table>
         <thead>

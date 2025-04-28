@@ -204,14 +204,15 @@ const EmployeeDetails = () => {
     <div>
       <div className="search-row">
         <div className="heading-em">
-          <h2>Employee Details</h2>
+        <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
+        Employee Details</h4>
         </div>
 
         {/* Search Bar */}
         <div className="search-bar">
           <input
             type="text"
-            placeholder="Search employee by name..."
+            placeholder="Search Employee"
             onChange={handleSearch}
             value={searchTerm}
           />
@@ -290,7 +291,7 @@ const EmployeeDetails = () => {
                         <strong>Department</strong>
                       ) : (
                         <strong>
-                          {field.replace(/([A-Z])/g, " $1").trim()}
+                          {field.toUpperCase()}
                         </strong>
                       )}
                     </td>

@@ -28,7 +28,9 @@ const ReportManagement = () => {
 
   return (
     <div className="report-management">
-      <h2>Report Management</h2>
+      <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
+        Report Management
+      </h4>
 
       <table>
         <thead>
@@ -69,28 +71,36 @@ const ReportManagement = () => {
       {selectedReport && (
         <div className="popup">
           <div className="popup-content">
-            <h3>Report Details</h3>
-            <p>
-              <strong>Name:</strong> {selectedReport.name}
-            </p>
-            <p>
-              <strong>Email:</strong> {selectedReport.email}
-            </p>
-            <p>
-              <strong>Date & Time:</strong> {selectedReport.dateTime}
-            </p>
-            <p>
-              <strong>Report:</strong>
-            </p>
-            <TextField
-              value={selectedReport.report}
-              multiline
-              rows={4}
-              fullWidth
-              size="small"
-              variant="outlined"
-              inputProps={{ readOnly: true }}
-            />
+            <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
+              Report Details
+            </h4>
+            <div className="report-details">
+              <div className="report-field">
+                <h3>Name</h3>
+                <p>{selectedReport.name}</p>
+              </div>
+              <div className="report-field">
+                <h3>Email</h3>
+                <p>{selectedReport.email}</p>
+              </div>
+              <div className="report-field">
+                <h3>Date & Time</h3>
+                <p>{selectedReport.dateTime}</p>
+              </div>
+              <div className="report-field">
+                <h3>Report</h3>
+                <TextField
+                  value={selectedReport.report}
+                  multiline
+                  rows={4}
+                  fullWidth
+                  size="small"
+                  variant="outlined"
+                  inputProps={{ readOnly: true }}
+                />
+              </div>
+            </div>
+
             {/* <button onClick={() => setSelectedReport(null)}>Close</button> */}
             <div className="close-icon" onClick={() => setSelectedReport(null)}>
               &#x2715; {/* Unicode for the 'X' symbol */}

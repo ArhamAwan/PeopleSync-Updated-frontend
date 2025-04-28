@@ -51,9 +51,10 @@ button:hover {
   padding: 20px;
   border-radius: 5px;
   text-align: left;
-  width: 300px;
+  width: 550px;
   overflow: hidden;
   box-sizing: border-box;
+  z-index: 200000;
 }
 
 .popup-content h3 {
@@ -70,4 +71,10 @@ button:hover {
 
 .close-icon:hover {
   color: red; /* Optional hover effect */
+}
+
+.report-field h3{
+ text-align: left;
+ color: #007bff;
+
 }

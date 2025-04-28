@@ -27,13 +27,13 @@ const LeaveManagement = () => {
   const handleApproval = async (id, action) => {
     try {
       const status = action === "APPROVED" ? "APPROVED" : "REJECTED";
-  
+
       await axios.patch(
         `https://people-sync-33225-default-rtdb.firebaseio.com/leaves/${id}.json`,
         { status }
       );
       console.log(`Leave request ${status.toLowerCase()}`);
-  
+
       // Fetch fresh leave data after approval/rejection
       const res = await axios.get(
         "https://people-sync-33225-default-rtdb.firebaseio.com/leaves.json"
@@ -43,14 +43,20 @@ const LeaveManagement = () => {
         : [];
       setLeaveRequests(data); // Update the state with fresh data
     } catch (error) {
-      console.error(`Error ${action === "approve" ? "approving" : "rejecting"} leave request:`, error);
+      console.error(
+        `Error ${
+          action === "approve" ? "approving" : "rejecting"
+        } leave request:`,
+        error
+      );
     }
   };
-  
 
   return (
     <div className="leave-management">
-      <h2>Leave Management</h2>
+      <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
+        Leave Management
+      </h4>
 
       <table>
         <thead>
@@ -77,10 +83,10 @@ const LeaveManagement = () => {
               <tr key={request.id}>
                 <td>{request.employeeName}</td>
                 <td>{request.leaveType}</td>
-                <td>{request.startDate} - {request.endDate}</td>
                 <td>
-                  {request.totalLeaves}
+                  {request.startDate} - {request.endDate}
                 </td>
+                <td>{request.totalLeaves}</td>
                 {/* <td>{request.leaveBalance} days</td> */}
                 <td className={`status ${request.status.toLowerCase()}`}>
                   {request.status}

@@ -1,9 +1,8 @@
 /* Import Poppins font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
 
-body {
+.main-cont {
   font-family: 'Poppins', sans-serif;
-  background-color: #f4f7fc;
   margin: 0;
   padding: 0;
   color: #2d3748;
@@ -12,8 +11,8 @@ body {
 
 /* Unique Form Container */
 .add-employee-form {
-  width: 90%;
-  max-width: 900px;
+  /* width: 90%; */
+  /* max-width: 900px; */
   margin: 20px auto;
   padding: 40px;
   background: transparent;
@@ -30,10 +29,10 @@ h2 {
 
 /* Section Headers */
 .section h3 {
-  font-size: 20px;
-  color: #333;
+  font-size: 22px;
+  color: #000000;
   margin-bottom: 10px;
-  border-bottom: 2px solid #2563eb;
+  border-bottom: 4px solid #3b82f6;
   padding-bottom: 5px;
 }
 
@@ -49,6 +48,7 @@ h2 {
   display: flex;
   flex-direction: column;
   width: 100%;
+  padding: 0px 20px;
 }
 
 /* Labels */
@@ -60,7 +60,7 @@ label {
 }
 
 /* Input Fields */
-input,
+/* input,
 select {
   padding: 10px;
   border: 2px solid #d1d5db;
@@ -77,13 +77,15 @@ select:focus {
   background-color: #ffffff;
   outline: none;
   box-shadow: 0 0 8px rgba(37, 99, 235, 0.3);
-}
+} */
 
 /* Submit Button */
-button {
-  width: 100%;
+form button {
+  width: 300px;
+  max-width: 100%;
   padding: 12px;
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  /* background: linear-gradient(135deg, #2563eb, #3b82f6); */
+  background: linear-gradient(135deg, #6e8efb, #a777e3);
   color: #ffffff;
   font-size: 16px;
   font-weight: 600;
@@ -91,11 +93,14 @@ button {
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  margin: auto;
   margin-top: 20px;
+display: flex;
+justify-content: center;
 }
 
-button:hover {
-  background: linear-gradient(135deg, #1e40af, #2563eb);
+form button:hover {
+  background: linear-gradient(135deg, #00d2ff, #3a47d5);
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
 }
@@ -105,4 +110,23 @@ button:hover {
   .form-row {
     flex-direction: column;
   }
+}
+
+input, textarea, select {
+  border: none !important;
+  border-bottom: 2px solid #6e6e6e !important;
+  background: transparent !important;
+  color: #000 !important;
+  padding: 8px 4px !important;
+  width: 100% !important;
+  transition: border-color 0.3s ease !important;
+  outline: none !important;
+  font-size: 18px !important; 
+  margin: 30px 00px !important;
+  border-radius: 0px !important;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-bottom: 2px solid #3a47d5 !important; /* Vibrant color on focus */
+  background: transparent !important;
 }

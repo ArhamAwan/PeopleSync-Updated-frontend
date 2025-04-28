@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
 import { Line } from "react-chartjs-2";
+import {Paper} from '@mui/material';
+import bgIcon from "../utilities/bg-icon.svg";
 import "chart.js/auto";
 import axios from "axios";
 
@@ -100,19 +102,21 @@ const Dashboard = () => {
             <p className="employee-count">{employees.length} Employees</p>
           </div>
 
-          {/* Online Employees Count */}
           <div className="column online-section">
             <h2>Online Employees</h2>
             <p className="online-count">
-              Currently Active: {activeEmployees.length}
+             {activeEmployees.length}
             </p>
+            <img src={bgIcon} height="100px"/>
           </div>
         </div>
+
       </div>
 
       {/* Table for Online Employees */}
       <div className="row-table-section">
-        <h2>Active Employees</h2>
+      <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
+      Active Employees</h4>
         <table>
           <thead>
             <tr>
@@ -129,7 +133,7 @@ const Dashboard = () => {
                 <td>{employee.email}</td>
                 <td>{employee.dateTime}</td>
                 <td className="status active">
-                  {employee.start && employee.pause ? "On Break" : "Active"}
+                 <span> {employee.start && employee.pause ? "On Break" : "Active"}</span>
                 </td>
               </tr>
             ))}
