@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
 import { Line } from "react-chartjs-2";
-import {Paper} from '@mui/material';
+import { Paper } from "@mui/material";
 import bgIcon from "../utilities/bg-icon.svg";
 import "chart.js/auto";
 import axios from "axios";
@@ -16,7 +16,7 @@ const Dashboard = () => {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
     datasets: [
       {
-        label: "Total Employees",
+        label: "Employee Graph",
         data: [1, 3, 4, employees.length],
         backgroundColor: "rgba(37, 99, 235, 0.2)",
         borderColor: "#2563eb",
@@ -98,25 +98,25 @@ const Dashboard = () => {
         <div className="col-md-6">
           <div className="column graph-section">
             <h2>Total Employees</h2>
-            <Line data={employeeData} />
             <p className="employee-count">{employees.length} Employees</p>
+            <Line data={employeeData} />
           </div>
 
           <div className="column online-section">
-            <h2>Online Employees</h2>
-            <p className="online-count">
-             {activeEmployees.length}
-            </p>
-            <img src={bgIcon} height="100px"/>
+          <img src={bgIcon} height="150px" />
+            <p className="online-count">{activeEmployees.length}</p>
+            <div style={{display:"flex", justifyContent:"space-between"}}>
+              <h2>Online Employees</h2>
+            </div>
           </div>
         </div>
-
       </div>
 
       {/* Table for Online Employees */}
       <div className="row-table-section">
-      <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
-      Active Employees</h4>
+        <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
+          Active Employees
+        </h4>
         <table>
           <thead>
             <tr>
@@ -133,7 +133,10 @@ const Dashboard = () => {
                 <td>{employee.email}</td>
                 <td>{employee.dateTime}</td>
                 <td className="status active">
-                 <span> {employee.start && employee.pause ? "On Break" : "Active"}</span>
+                  <span>
+                    {" "}
+                    {employee.start && employee.pause ? "On Break" : "Active"}
+                  </span>
                 </td>
               </tr>
             ))}

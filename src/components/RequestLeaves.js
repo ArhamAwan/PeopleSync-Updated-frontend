@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./RequestLeave.css";
 import axios from "axios";
+import bgIcon from "../utilities/leavess.jpg";
 
 const RequestLeave = () => {
   const [user, setUser] = useState({});
@@ -10,7 +11,6 @@ const RequestLeave = () => {
   const [endDate, setEndDate] = useState("");
   const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(true);
-
   const fetchLeaveRequests = async (email) => {
     try {
       const res = await axios.get(
@@ -84,43 +84,69 @@ const RequestLeave = () => {
       }
     }, 500);
   }, []);
+  const approvedLeavesTotal = leaveRequests
+    .filter((req) => req.status === "APPROVED")
+    .reduce((sum, req) => sum + req.totalLeaves, 0);
 
   return (
     <div className="request-leave">
-      <h2>Request Leave</h2>
+      <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
+        Request Leave
+      </h4>
+      <div className="row">
+        {/* Graph Section */}
+        <div className="col-md-6">
+          <div className="column leave-section">
+            <img src={bgIcon} height="250px" style={{borderRadius:"20px"}}/>
+            <div>
+              <p className="online-count">{approvedLeavesTotal}</p>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <h2>Total Leaves Credited</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <form className="requestleaveform" onSubmit={handleSubmit}>
-        <label>Leave Type:</label>
-        <select
-          value={leaveType}
-          onChange={(e) => setLeaveType(e.target.value)}
-          required
-        >
-          <option value="">Select Leave Type</option>
-          <option value="Sick Leave">Sick Leave</option>
-          <option value="Annual Leave">Annual Leave</option>
-          <option value="Casual Leave">Casual Leave</option>
-          <option value="Maternity Leave">Maternity Leave</option>
-        </select>
-
-        <label>Start Date:</label>
-        <input
-          type="date"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
-          required
-        />
-
-        <label>End Date:</label>
-        <input
-          type="date"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
-          required
-        />
+        <div className="sRow">
+          <label>Leave Type:</label>
+          <select
+            value={leaveType}
+            onChange={(e) => setLeaveType(e.target.value)}
+            required
+          >
+            <option value="">Select Leave Type</option>
+            <option value="Sick Leave">Sick Leave</option>
+            <option value="Annual Leave">Annual Leave</option>
+            <option value="Casual Leave">Casual Leave</option>
+            <option value="Maternity Leave">Maternity Leave</option>
+          </select>
+        </div>
+        <div className="oneRow">
+          <div>
+            <label>Start Date:</label>
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              required
+            />
+          </div>
+          <div>
+            <label>End Date:</label>
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              required
+            />
+          </div>
+        </div>
 
         <label>Reason:</label>
-        <textarea
+        <input
+          type="text"
           value={reason}
           onChange={(e) => setReason(e.target.value)}
           required

@@ -204,22 +204,40 @@ const Timer = () => {
     return () => clearInterval(timerInterval);
   }, [isRunning, isPaused]);
 
-  const formatTime = (seconds) => {
-    const hrs = Math.floor(seconds / 3600)
+  const formatTime = (totalSeconds) => {
+    const hrs = Math.floor(totalSeconds / 3600)
+      .toString()
+      .padStart(1, "0"); 
+    const mins = Math.floor((totalSeconds % 3600) / 60)
       .toString()
       .padStart(2, "0");
-    const mins = Math.floor((seconds % 3600) / 60)
-      .toString()
-      .padStart(2, "0");
-    const secs = (seconds % 60).toString().padStart(2, "0");
-    return `${hrs}:${mins}:${secs}`;
+    const secs = (totalSeconds % 60).toString().padStart(2, "0");
+    return { hrs, mins, secs };
   };
+  const { hrs, mins, secs } = formatTime(time);
+
 
   return (
     <>
       <div className="timer-container">
-        <h1>Timer</h1>
-        <div className="timer-display">{formatTime(time)}</div>
+      <h1 style={{ textAlign: "center", letterSpacing: "10px" }}>THE COUNTDOWN</h1>
+<div className="timer-display">
+  <div>
+    <div className="time-box">{hrs}</div>
+    <div className="label">HRS</div>
+  </div>
+  <div className="colon">:</div>
+  <div>
+    <div className="time-box">{mins}</div>
+    <div className="label">MIN</div>
+  </div>
+  <div className="colon">:</div>
+  <div>
+    <div className="time-box">{secs}</div>
+    <div className="label">SEC</div>
+  </div>
+</div>
+
 
         <div className="button-group">
           <button

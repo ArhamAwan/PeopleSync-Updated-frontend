@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./EmployeeDetails.css";
 import axios from "axios";
 import { Button, Dialog, DialogTitle, DialogActions } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
+import EditIcon from '@mui/icons-material/Edit';
 
 const EmployeeDetails = () => {
   const [employeesD, setEmployeesD] = useState([
@@ -204,12 +206,13 @@ const EmployeeDetails = () => {
     <div>
       <div className="search-row">
         <div className="heading-em">
-        <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
-        Employee Details</h4>
+          <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
+            Employee Details
+          </h4>
         </div>
 
-        {/* Search Bar */}
         <div className="search-bar">
+          <SearchIcon />
           <input
             type="text"
             placeholder="Search Employee"
@@ -267,14 +270,15 @@ const EmployeeDetails = () => {
             >
               X
             </button>
-            <div className="popup-header">
-              <h3>{selectedEmployee.name}</h3>
-            </div>
-            <div className="profile-container">
+            <div className="profile-container2">
               <div className="profile-circle">
                 {selectedEmployee.name?.charAt(0).toUpperCase()}
               </div>
             </div>
+            <div className="popup-header">
+              <h1 style={{textAlign:"center"}}>{selectedEmployee.name}</h1>
+            </div>
+
             <table className="employee-details">
               <thead>
                 <tr>
@@ -290,9 +294,7 @@ const EmployeeDetails = () => {
                       {field === "role" ? (
                         <strong>Department</strong>
                       ) : (
-                        <strong>
-                          {field.toUpperCase()}
-                        </strong>
+                        <strong>{field.toUpperCase()}</strong>
                       )}
                     </td>
                     <td>
@@ -308,9 +310,9 @@ const EmployeeDetails = () => {
                     </td>
                     <td>
                       {editField === field ? (
-                        <button onClick={updateHandler}>✔</button>
+                        <button className="btn1" onClick={updateHandler} style={{color:'#007bff'}}>✔</button>
                       ) : (
-                        <button onClick={() => handleEdit(field)}>✎</button>
+                        <button className="btn1" onClick={() => handleEdit(field)}><EditIcon style={{color:'#007bff'}}/></button>
                       )}
                     </td>
                   </tr>
@@ -321,7 +323,7 @@ const EmployeeDetails = () => {
               variant="contained"
               color="error"
               onClick={handleDeleteClick}
-              style={{ marginTop: "20px" }}
+              style={{ margin:"auto" , marginTop: "20px" }}
             >
               Delete
             </Button>

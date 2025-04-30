@@ -23,6 +23,7 @@ th {
   background: #000000;
 }
 .graph-section,.online-section{
+  /* height: 250px; */
   width:45%;
 padding-inline: 30px;
 display: flex;
@@ -52,17 +53,9 @@ justify-content: center;
   color: black; /* Updated to Black */
 }
 
-.online-count {
-  font-size: 28px;
-  font-weight: bold;
-  color: black; /* Updated to Black */
-  background: #f0f0f0;
-  padding: 10px 15px;
-  border-radius: 8px;
-  display: inline-block;
-  margin-top: 10px;
+.online-section {
+  justify-content: left !important;
 }
-
 /* Responsive */
 @media (max-width: 768px) {
   .online-section {
@@ -112,12 +105,6 @@ justify-content: center;
   color: black; /* Updated to Black */
   font-size: 20px;
   font-weight: 600;
-}
-
-.online-count {
-  font-size: 20px;
-  font-weight: bold;
-  color: black; /* Updated to Black */
 }
 
 /* Table Section */
@@ -287,7 +274,7 @@ th{
   }
 }
 
-.employee-count, .online-count {
+.employee-count {
   background: linear-gradient(135deg, #6e8efb, #a777e3);
   color: #fff;
   padding: 0.4em 1em;
@@ -305,24 +292,16 @@ th{
 .employee-count:hover {
   transform: scale(1.05);
 }
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500&display=swap');
 
 .online-count{
-  border-radius: 5px;
-  font-size: 2rem;
-  font-family: 'Space Grotesk', sans-serif;
-
-}
-/* .online-count {
-  background: #6e8efb;
-  padding: 0.2em 0.6em;
-  font-size: x-large !important;
-  border-radius: 3px;
   font-weight: bold;
-  margin-left: 0.5em;
-  font-size: 1.1rem;
-  transition: transform 0.2s ease;
-} */
+  font-size: 5rem;
+  margin: 0px;
+  margin-top: auto;
+  font-family: "SF Mono", "Roboto Mono", "Courier New", monospace;
+  text-align: left;
+}
+
 
 .myTableHeader {
   text-align: left;

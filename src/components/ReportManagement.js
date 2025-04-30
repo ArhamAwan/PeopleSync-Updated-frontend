@@ -38,7 +38,7 @@ const ReportManagement = () => {
             <th>Employee</th>
             <th>Email</th>
             <th>Date & Time</th>
-            <th>Actions</th>
+            <th style={{ textAlign: "center" }}>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -56,8 +56,11 @@ const ReportManagement = () => {
                 <td>{report.name}</td>
                 <td>{report.email}</td>
                 <td>{report.dateTime}</td>
-                <td>
-                  <button onClick={() => setSelectedReport(report)}>
+                <td style={{ textAlign: "center" }}>
+                  <button
+                    className="r_btn"
+                    onClick={() => setSelectedReport(report)}
+                  >
                     View Report
                   </button>
                 </td>
@@ -70,7 +73,7 @@ const ReportManagement = () => {
       {/* Report Popup */}
       {selectedReport && (
         <div className="popup">
-          <div className="popup-content">
+          <div className="popup-contentR">
             <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
               Report Details
             </h4>
@@ -90,6 +93,7 @@ const ReportManagement = () => {
               <div className="report-field">
                 <h3>Report</h3>
                 <TextField
+                  className="r_show"
                   value={selectedReport.report}
                   multiline
                   rows={4}

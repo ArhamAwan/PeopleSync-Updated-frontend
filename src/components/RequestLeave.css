@@ -17,9 +17,10 @@
     margin: auto;
   }
   
-  label {
+  .requestleaveform label {
     font-weight: bold;
     margin-top: 10px;
+    margin-bottom: -10px;
   }
   
   input, select, textarea {
@@ -80,4 +81,47 @@
   .status.pending {
     color: orange;
   }
+  .oneRow {
+    display: flex;
+    gap: 40px;
+    margin: 20px 0;
+  }
   
+  .oneRow > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .sRow {
+    max-width: 530px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .oneRow label {
+    font-weight: 500;
+  }
+  
+  .oneRow input {
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  .column.leave-section{
+      background: white !important;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      margin: 20px;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      padding-right: 50px;
+    }

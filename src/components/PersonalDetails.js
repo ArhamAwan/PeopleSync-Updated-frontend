@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "./PersonalDetails.css";
 import axios from "axios";
+import EditIcon from '@mui/icons-material/Edit';
+
 
 const PersonalDetails = () => {
   const [user, setUser] = useState({});
@@ -181,9 +183,9 @@ const PersonalDetails = () => {
                 </td>
                 <td>
                   {editField === key ? (
-                    <button onClick={() => handleSave(key)}>✔</button>
+                    <button className="btn1" onClick={() => handleSave(key)} style={{color:'#007bff'}}>✔</button>
                   ) : (
-                    <button onClick={() => handleEdit(key)}>✎</button>
+                    <button className="btn1" onClick={() => handleEdit(key)}><EditIcon style={{color:'#007bff'}}/></button>
                   )}
                 </td>
               </tr>

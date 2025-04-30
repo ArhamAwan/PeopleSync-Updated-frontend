@@ -108,3 +108,38 @@ button:disabled {
     background: transparent;
     box-shadow: none;
 }
+
+
+.timer-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin-top: 30px;
+}
+
+.time-box {
+  background-color: #4e89ff;
+  color: black;
+  font-size: 80px;
+  font-weight: 400;
+  padding: 20px 40px;
+  border-radius: 15px;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.label {
+  text-align: center;
+  margin-top: 10px;
+  font-size: 18px;
+  letter-spacing: 1px;
+  color: #111;
+}
+
+.colon {
+  font-size: 60px;
+  margin: 0 10px;
+  color: #333;
+}

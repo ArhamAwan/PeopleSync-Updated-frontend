@@ -35,13 +35,22 @@ h2 {
 .search-bar {
   margin-bottom: 20px;
   text-align: right;
-  width: 50%;
+  width: 35%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center ;
+  border: 1px solid black;
+  border-radius: 20px;
+  background-color: white;
+  height: 60px;
+  padding-left: 20px;
 }
 
 .search-bar input {
   width: 80%;
   padding: 10px;
-  border: 2px solid #ddd;
+  border-bottom: none !important;
   border-radius: 8px;
   font-size: 16px;
   transition: border-color 0.3s ease;
@@ -64,7 +73,7 @@ h2 {
 .employee-card {
   width: 250px;
   padding: 20px;
-  background-color: #f7fafc;
+  background: linear-gradient(to bottom, #FFAD3E 35%, white 35%);
   border-radius: 10px;
   text-align: center;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
@@ -111,8 +120,8 @@ h2 {
 }
 
 .popup-content {
-  background-color: #ffffff;
-  padding: 20px;
+  padding: 0px;
+  background-color: white;
   border-radius: 10px;
   max-width: 650px;
   max-height: 90vh;
@@ -124,6 +133,7 @@ h2 {
   /* flex-direction: column; */
   justify-content: center;
   align-items: center;
+  text-align: center;
   /* width: 100%; */
   margin-bottom: 10px;
   position: relative;
@@ -138,11 +148,14 @@ h2 {
   margin-bottom: 15px;
 }
 
-.profile-container {
+.profile-container, .profile-container2 {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 10px;
+}
+.profile-container2{
+  background-color: #FFAD3E;
 }
 
 .profile-circle {
@@ -159,10 +172,10 @@ h2 {
   text-transform: uppercase;
 }
 
-button {
+.btn1 {
   margin-top: 15px;
   padding: 10px 20px;
-  background-color: #3182ce;
+  background-color: transparent !important;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -171,8 +184,8 @@ button {
   transition: background-color 0.3s ease;
 }
 
-button:hover {
-  background-color: #2b6cb0;
+.btn1:hover {
+  background-color: #82beff45 !important;
 }
 @keyframes fadeIn {
   from {

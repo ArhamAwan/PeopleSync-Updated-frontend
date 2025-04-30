@@ -115,7 +115,7 @@ nav ul li a:hover, .logout:hover {
 /* Main Content Styling */
 .container-main {
   background-color: #f0f0f0; 
-  background: linear-gradient(135deg, #e7c0be, #e0e3fa) !important;
+  background: linear-gradient(135deg, #adc9ff, #e0e3fa) !important;
 
   height: calc(100vh - 80px); /* Subtract the header height */
   overflow-y: auto; /* Enable scrolling for the main content */
