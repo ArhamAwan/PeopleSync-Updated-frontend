@@ -7,6 +7,7 @@ const ReportManagement = () => {
   const [reports, setReports] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedReport, setSelectedReport] = useState(null);
+  const [monthlyTotals, setMonthlyTotals] = useState({});
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -17,7 +18,30 @@ const ReportManagement = () => {
         const data = res.data
           ? Object.entries(res.data).map(([id, obj]) => ({ id, ...obj }))
           : [];
+
+        const currentMonth = new Date().getMonth();
+        const currentYear = new Date().getFullYear();
+
+        const monthlyTotalss = {};
+
+        data.forEach((report) => {
+          const reportDate = report.timestamp
+            ? new Date(report.timestamp)
+            : null;
+          if (
+            reportDate &&
+            reportDate.getMonth() === currentMonth &&
+            reportDate.getFullYear() === currentYear
+          ) {
+            if (!monthlyTotalss[report.email]) monthlyTotalss[report.email] = 0;
+            monthlyTotalss[report.email] += report.totalTimeMinutes || 0;
+          }
+        });
+
         setReports(data);
+        setMonthlyTotals(monthlyTotalss); // ⬅️ You'll need to define this in state
+        setLoading(false);
+
         setLoading(false);
       } catch (error) {
         console.error("Error fetching reports:", error);
@@ -25,6 +49,14 @@ const ReportManagement = () => {
     };
     fetchReports();
   }, []);
+
+  const formatMinutesToHHMM = (minutes) => {
+    const hrs = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    return `${hrs.toString().padStart(2, "0")}:${mins
+      .toString()
+      .padStart(2, "0")}`;
+  };
 
   return (
     <div className="report-management">
@@ -38,6 +70,8 @@ const ReportManagement = () => {
             <th>Employee</th>
             <th>Email</th>
             <th>Date & Time</th>
+            <th>Active Time</th>
+            <th>Monthly Active Time</th>
             <th style={{ textAlign: "center" }}>Actions</th>
           </tr>
         </thead>
@@ -56,6 +90,23 @@ const ReportManagement = () => {
                 <td>{report.name}</td>
                 <td>{report.email}</td>
                 <td>{report.dateTime}</td>
+                <td
+                  style={{
+                    backgroundColor: "#f0f8ff",
+                    fontWeight: "500",
+                  }}
+                >
+                  {formatMinutesToHHMM(report.totalTimeMinutes || 0)}
+                </td>
+                <td
+                  style={{
+                    backgroundColor: "#e6ffe6",
+                    fontWeight: "500",
+                  }}
+                >
+                  {formatMinutesToHHMM(monthlyTotals[report.email] || 0)}
+                </td>
+
                 <td style={{ textAlign: "center" }}>
                   <button
                     className="r_btn"

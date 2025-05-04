@@ -3,7 +3,7 @@ import "./EmployeeDetails.css";
 import axios from "axios";
 import { Button, Dialog, DialogTitle, DialogActions } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
-import EditIcon from '@mui/icons-material/Edit';
+import EditIcon from "@mui/icons-material/Edit";
 
 const EmployeeDetails = () => {
   const [employeesD, setEmployeesD] = useState([
@@ -39,6 +39,8 @@ const EmployeeDetails = () => {
     },
   ]);
   const [employees, setEmployees] = useState([]);
+  const [archives, setArchives] = useState([]);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -47,6 +49,7 @@ const EmployeeDetails = () => {
   const [editField, setEditField] = useState(null);
   const [editValue, setEditValue] = useState("");
   const [openConfirm, setOpenConfirm] = useState(false);
+  const [showArchives, setShowArchives] = useState(false);
 
   const fields = [
     "name",
@@ -98,7 +101,7 @@ const EmployeeDetails = () => {
   };
   const deleteHandler = async (email) => {
     try {
-      // 1. Delete from employees
+      // 1. Move employee to archives
       const empRes = await axios.get(
         "https://people-sync-33225-default-rtdb.firebaseio.com/employees.json"
       );
@@ -108,10 +111,20 @@ const EmployeeDetails = () => {
       );
 
       if (empKey) {
+        const employee = empData[empKey];
+
+        // Save to archives
+        await axios.post(
+          "https://people-sync-33225-default-rtdb.firebaseio.com/archives.json",
+          employee
+        );
+
+        // Delete from employees
         await axios.delete(
           `https://people-sync-33225-default-rtdb.firebaseio.com/employees/${empKey}.json`
         );
-        console.log("Employee deleted");
+
+        console.log("Employee moved to archives");
       } else {
         console.log("Employee not found");
       }
@@ -198,8 +211,24 @@ const EmployeeDetails = () => {
         console.error("Error fetching employees:", error);
       }
     };
+    const fetchArchives = async () => {
+      try {
+        const res = await axios.get(
+          "https://people-sync-33225-default-rtdb.firebaseio.com/archives.json"
+        );
+        const data = res.data;
+        const formatted = Object.keys(data || {}).map((key) => ({
+          id: key,
+          ...data[key],
+        }));
+        setArchives(formatted);
+      } catch (error) {
+        console.error("Error fetching archives:", error);
+      }
+    };
 
     fetchEmployees();
+    fetchArchives();
   }, []);
   // console.log(employees);
   return (
@@ -223,18 +252,13 @@ const EmployeeDetails = () => {
       </div>
 
       {/* List of Employee Profiles */}
-      <div className="employee-cards">
+      {/* <div className="employee-cards">
         {filteredEmployees.map((employee) => (
           <div
             key={employee.id}
             className="employee-card"
             onClick={() => setSelectedEmployee(employee)}
           >
-            {/* <img
-              src={`${process.env.PUBLIC_URL}/pexels-mart-production-7709149.jpg`}
-              alt="Employee"
-              className="profile-image"
-            /> */}
             <div className="profile-container">
               <div className="profile-circle">
                 {employee.name?.charAt(0).toUpperCase()}
@@ -245,6 +269,87 @@ const EmployeeDetails = () => {
             <p>{employee.role}</p>
           </div>
         ))}
+      </div>
+      <div className="employee-cards">
+        {archives.map((employee) => (
+          <div
+            key={employee.id}
+            className="employee-card archived"
+            onClick={() => setSelectedEmployee(employee)}
+          >
+            <div className="profile-container">
+              <div className="profile-circle">
+                {employee.name?.charAt(0).toUpperCase()}
+              </div>
+            </div>
+
+            <h3>{employee.name}</h3>
+            <p>{employee.role}</p>
+          </div>
+        ))}
+      </div> */}
+
+      <div>
+        {/* Toggle Switch */}
+        <div
+          style={{ display: "flex", alignItems: "center", marginBottom: 20 }}
+        >
+          <label style={{ marginRight: 10 }}>
+            {showArchives ? "Archives" : "Actives" + "\u00A0" + "\u00A0"}
+          </label>
+          <div
+            onClick={() => setShowArchives(!showArchives)}
+            style={{
+              width: 50,
+              height: 25,
+              background: !showArchives ? "#4caf50" : "#ccc",
+              borderRadius: 20,
+              position: "relative",
+              cursor: "pointer",
+              transition: "0.3s",
+            }}
+          >
+            <div
+              style={{
+                width: 22,
+                height: 22,
+                background: "#fff",
+                borderRadius: "50%",
+                position: "absolute",
+                top: 1.5,
+                left: !showArchives ? 26 : 2,
+                transition: "0.3s",
+              }}
+            ></div>
+          </div>
+        </div>
+
+        {/* Display Cards */}
+        <div className="employee-cards">
+          {(showArchives ? archives : filteredEmployees).length === 0 ? (
+            <h2
+              style={{ textAlign: "center", marginTop: "50px", color: "#888" }}
+            >
+              🧘‍♂️ So empty, it's peaceful.!
+            </h2>
+          ) : (
+            (showArchives ? archives : filteredEmployees).map((employee) => (
+              <div
+                key={employee.id}
+                className="employee-card"
+                onClick={() => setSelectedEmployee(employee)}
+              >
+                <div className="profile-container">
+                  <div className="profile-circle">
+                    {employee.name?.charAt(0).toUpperCase()}
+                  </div>
+                </div>
+                <h3>{employee.name}</h3>
+                <p>{employee.role}</p>
+              </div>
+            ))
+          )}
+        </div>
       </div>
 
       {/* Popup for Employee Details */}
@@ -276,7 +381,7 @@ const EmployeeDetails = () => {
               </div>
             </div>
             <div className="popup-header">
-              <h1 style={{textAlign:"center"}}>{selectedEmployee.name}</h1>
+              <h1 style={{ textAlign: "center" }}>{selectedEmployee.name}</h1>
             </div>
 
             <table className="employee-details">
@@ -284,7 +389,7 @@ const EmployeeDetails = () => {
                 <tr>
                   <th>Field</th>
                   <th>Value</th>
-                  <th>Edit</th>
+                  {!showArchives && <th>Edit</th>}
                 </tr>
               </thead>
               <tbody>
@@ -308,25 +413,40 @@ const EmployeeDetails = () => {
                         selectedEmployee[field]
                       )}
                     </td>
-                    <td>
-                      {editField === field ? (
-                        <button className="btn1" onClick={updateHandler} style={{color:'#007bff'}}>✔</button>
-                      ) : (
-                        <button className="btn1" onClick={() => handleEdit(field)}><EditIcon style={{color:'#007bff'}}/></button>
-                      )}
-                    </td>
+                    {!showArchives && (
+                      <td>
+                        {editField === field ? (
+                          <button
+                            className="btn1"
+                            onClick={updateHandler}
+                            style={{ color: "#007bff" }}
+                          >
+                            ✔
+                          </button>
+                        ) : (
+                          <button
+                            className="btn1"
+                            onClick={() => handleEdit(field)}
+                          >
+                            <EditIcon style={{ color: "#007bff" }} />
+                          </button>
+                        )}
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
             </table>
-            <Button
-              variant="contained"
-              color="error"
-              onClick={handleDeleteClick}
-              style={{ margin:"auto" , marginTop: "20px" }}
-            >
-              Delete
-            </Button>
+            {!showArchives && (
+              <Button
+                variant="contained"
+                color="error"
+                onClick={handleDeleteClick}
+                style={{ margin: "auto", marginTop: "20px" }}
+              >
+                Delete
+              </Button>
+            )}
 
             <Dialog open={openConfirm} onClose={() => setOpenConfirm(false)}>
               <DialogTitle>Are you sure you want to delete?</DialogTitle>

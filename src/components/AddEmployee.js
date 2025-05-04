@@ -173,33 +173,6 @@ const AddEmployee = () => {
                 title="National ID Number must be in the format: XXXXX-XXXXXXX-X"
               />
             </div>
-
-            <div className="form-group">
-              <input
-                type="number"
-                id="salary"
-                value={salary}
-                onChange={(e) => setSalary(e.target.value)}
-                placeholder="Salary"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="form-row">
-            <div className="form-group">
-              <input
-                type="text"
-                id="bank-details"
-                value={bankDetails}
-                onChange={(e) => setBankDetails(e.target.value)}
-                placeholder="Bank Account Details"
-                required
-              />
-            </div>
-          </div>
-
-          <div className="form-row">
             <div className="form-group">
               <input
                 type="email"
@@ -210,7 +183,36 @@ const AddEmployee = () => {
                 required
               />
             </div>
+          </div>
+
+          <div className="form-row">
             <div className="form-group">
+              <input
+                type="number"
+                id="salary"
+                value={salary}
+                onChange={(e) => setSalary(e.target.value)}
+                placeholder="Salary"
+                required
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="text"
+                id="bank-details"
+                value={bankDetails}
+                onChange={(e) => setBankDetails(e.target.value)}
+                placeholder="Bank Account Details"
+                required
+                pattern="^[A-Za-z\s&.]+-\s*\d{14}$"
+                title="Format: Bank Name - Account Number (e.g., Bank Name - 14-digit-number)"
+              />
+            </div>
+          </div>
+
+          {/* <div className="form-row"> */}
+
+          {/* <div className="form-group">
               <input
                 type="password"
                 id="password"
@@ -219,8 +221,8 @@ const AddEmployee = () => {
                 placeholder="Auto Generated Password"
                 disabled
               />
-            </div>
-          </div>
+            </div> */}
+          {/* </div> */}
         </div>
 
         {/* Job Details */}

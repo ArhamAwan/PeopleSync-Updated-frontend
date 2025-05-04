@@ -9,6 +9,9 @@ const Timer = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [report, setReport] = useState("");
 
+  // Utility function (optional, for cleaner code)
+  const getNumberFromLS = (key) => Number(localStorage.getItem(key)) || 0;
+
   useEffect(() => {
     const interval = setInterval(() => {
       const u = localStorage.getItem("user");
@@ -26,6 +29,9 @@ const Timer = () => {
       localStorage.removeItem("isPaused");
 
       const now = new Date();
+      localStorage.setItem("startTimestamp", now.getTime());
+      localStorage.setItem("totalPausedDuration", "0");
+
       const timerData = {
         name: user.name,
         email: user.email,
@@ -33,6 +39,7 @@ const Timer = () => {
         timestamp: now.getTime(),
         start: true,
         pause: false,
+        totalTimeMinutes: 0,
       };
 
       try {
@@ -54,6 +61,7 @@ const Timer = () => {
     setIsRunning(false);
     localStorage.setItem("isPaused", "true");
     localStorage.setItem("isRunning", "false");
+    localStorage.setItem("pauseStartTimestamp", Date.now().toString());
 
     try {
       const res = await axios.get(
@@ -76,7 +84,6 @@ const Timer = () => {
           );
           console.log("Timer paused successfully");
           alert("Timer paused successfully.");
-
         }
       }
     } catch (error) {
@@ -85,11 +92,20 @@ const Timer = () => {
   };
 
   const resumeTimer = async () => {
-    if (isRunning || !isPaused) return; // Prevent if already running or not paused
+    if (isRunning || !isPaused) return;
 
     setIsRunning(true);
     setIsPaused(false);
     localStorage.removeItem("isPaused");
+
+    const pauseStart = getNumberFromLS("pauseStartTimestamp");
+    if (pauseStart) {
+      const now = Date.now();
+      const pausedTime = now - pauseStart;
+      const totalPaused = getNumberFromLS("totalPausedDuration") + pausedTime;
+      localStorage.setItem("totalPausedDuration", totalPaused.toString());
+      localStorage.removeItem("pauseStartTimestamp");
+    }
 
     try {
       const res = await axios.get(
@@ -111,7 +127,6 @@ const Timer = () => {
           );
           console.log("Timer resumed successfully");
           alert("Timer resumed successfully.");
-
         }
       }
     } catch (error) {
@@ -138,18 +153,26 @@ const Timer = () => {
           .filter((entry) => entry.email === user.email)
           .pop();
 
+        const stopTime = Date.now();
+        const startTimestamp = getNumberFromLS("startTimestamp");
+        const totalPausedDuration = getNumberFromLS("totalPausedDuration");
+        const totalTimeMs = stopTime - startTimestamp - totalPausedDuration;
+        const totalTimeMinutes = Math.floor(totalTimeMs / 60000);
+        console.log(`Total Time Worked: ${totalTimeMinutes} minutes`);
+
         if (latestEntry) {
           await axios.patch(
             `https://people-sync-33225-default-rtdb.firebaseio.com/timerdata/${latestEntry.id}.json`,
-            { start: false }
+            { start: false, totalTimeMinutes: totalTimeMinutes }
           );
 
           const reportData = {
-            name: user.name,
-            email: user.email,
+            ...latestEntry,
             report: report,
-            dateTime: new Date().toLocaleString(),
+            totalTimeMinutes: totalTimeMinutes,
+            stopTime: new Date().toLocaleString(),
           };
+
           await axios.post(
             "https://people-sync-33225-default-rtdb.firebaseio.com/reports.json",
             reportData
@@ -164,6 +187,9 @@ const Timer = () => {
           localStorage.removeItem("timerStart");
           localStorage.removeItem("isRunning");
           localStorage.removeItem("isPaused");
+          localStorage.removeItem("startTimestamp");
+          localStorage.removeItem("pauseStartTimestamp");
+          localStorage.removeItem("totalPausedDuration");
         }
       }
     } catch (error) {
@@ -207,7 +233,7 @@ const Timer = () => {
   const formatTime = (totalSeconds) => {
     const hrs = Math.floor(totalSeconds / 3600)
       .toString()
-      .padStart(1, "0"); 
+      .padStart(1, "0");
     const mins = Math.floor((totalSeconds % 3600) / 60)
       .toString()
       .padStart(2, "0");
@@ -216,28 +242,28 @@ const Timer = () => {
   };
   const { hrs, mins, secs } = formatTime(time);
 
-
   return (
     <>
       <div className="timer-container">
-      <h1 style={{ textAlign: "center", letterSpacing: "10px" }}>THE COUNTDOWN</h1>
-<div className="timer-display">
-  <div>
-    <div className="time-box">{hrs}</div>
-    <div className="label">HRS</div>
-  </div>
-  <div className="colon">:</div>
-  <div>
-    <div className="time-box">{mins}</div>
-    <div className="label">MIN</div>
-  </div>
-  <div className="colon">:</div>
-  <div>
-    <div className="time-box">{secs}</div>
-    <div className="label">SEC</div>
-  </div>
-</div>
-
+        <h1 style={{ textAlign: "center", letterSpacing: "10px" }}>
+          THE COUNTDOWN
+        </h1>
+        <div className="timer-display">
+          <div>
+            <div className="time-box">{hrs}</div>
+            <div className="label">HRS</div>
+          </div>
+          <div className="colon">:</div>
+          <div>
+            <div className="time-box">{mins}</div>
+            <div className="label">MIN</div>
+          </div>
+          <div className="colon">:</div>
+          <div>
+            <div className="time-box">{secs}</div>
+            <div className="label">SEC</div>
+          </div>
+        </div>
 
         <div className="button-group">
           <button
@@ -269,10 +295,9 @@ const Timer = () => {
             Stop
           </button>
         </div>
-        <h1 style={{textAlign:'left'}}>Your Report</h1>
+        <h1 style={{ textAlign: "left" }}>Your Report</h1>
 
         <div className="report-container">
-
           <textarea
             placeholder="Write your report here..."
             value={report}
