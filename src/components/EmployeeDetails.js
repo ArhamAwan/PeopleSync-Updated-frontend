@@ -232,7 +232,7 @@ const EmployeeDetails = () => {
   }, []);
   // console.log(employees);
   return (
-    <div>
+    <div style={{padding:"30px"}}>
       <div className="search-row">
         <div className="heading-em">
           <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">

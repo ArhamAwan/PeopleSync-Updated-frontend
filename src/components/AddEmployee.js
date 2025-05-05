@@ -75,7 +75,7 @@ const AddEmployee = () => {
         userData
       );
       console.log("New User Added.");
-      sendEmail();
+      sendEmail(email, randomPassword);
 
       alert("New Employee Added Successfuly !");
 

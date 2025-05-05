@@ -98,7 +98,8 @@ console.log(users);
   }, []);
 
   return (
-    <Container fluid className="d-flex vh-100" style={{ padding: "0px" }}>
+    <div className="container-main2">
+ <Container fluid className="d-flex vh-100" style={{ padding: "0px" }}>
       <Row
         className="w-100"
         style={{
@@ -161,20 +162,6 @@ console.log(users);
             />
           </Form.Group>
 
-          {/* <FormControl fullWidth style={{ width: "200px" }}>
-            <InputLabel id="demo-simple-select-label">Role</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={role}
-              label="Age"
-              onChange={handleRole}
-            >
-              <MenuItem value={"hr"}>HR</MenuItem>
-              <MenuItem value={"emp"}>Employee</MenuItem>
-            </Select>
-          </FormControl> */}
-
           <h5 className="heading1">{msg}</h5>
 
           <div
@@ -220,6 +207,8 @@ console.log(users);
         </Snackbar>
       </Row>
     </Container>
+    </div>
+   
   );
 };
 
