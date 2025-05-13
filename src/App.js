@@ -24,6 +24,7 @@ import PersonalDetails from "./components/PersonalDetails";
 import Login from "./components/login";
 import { Button } from "@mui/material";
 import RequestedChanges from "./components/RequestedChanges";
+import ScheduleMeeting from "./components/ScheduleMeeting";
 
 const logo = "/assets/gg.png";
 
@@ -154,6 +155,9 @@ function Layout() {
                 <li>
                   <a href="/personal-details">Personal Details</a>
                 </li>
+                <li>
+                  <a href="/schedule-meeting">Schedule Meeting</a>
+                </li>
               </ul>
             </nav>
           ) : user?.role === "marketing team" ||
@@ -170,6 +174,9 @@ function Layout() {
                 </li>
                 <li>
                   <a href="/personal-details">Personal Details</a>
+                </li>
+                <li>
+                  <a href="/schedule-meeting">Schedule Meeting</a>
                 </li>
               </ul>
             </nav>
@@ -241,6 +248,10 @@ function Layout() {
             <Route
               path="/personal-details"
               element={<ProtectedRoute element={<PersonalDetails />} />}
+            />
+            <Route
+              path="/schedule-meeting"
+              element={<ProtectedRoute element={<ScheduleMeeting />} />}
             />
             {/* Catch-all route (redirect to login if no route matched) */}
             <Route path="*" element={<Navigate to="/login" replace />} />
