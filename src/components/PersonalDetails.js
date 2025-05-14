@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./PersonalDetails.css";
 import axios from "axios";
-import EditIcon from '@mui/icons-material/Edit';
-
+import EditIcon from "@mui/icons-material/Edit";
 
 const PersonalDetails = () => {
   const [user, setUser] = useState({});
@@ -154,8 +153,9 @@ const PersonalDetails = () => {
 
       <div>
         <div className="popup-header">
-        <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
-        Personal Information</h4>
+          <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
+            Personal Information
+          </h4>
         </div>
 
         <table className="employee-details-table">
@@ -167,14 +167,31 @@ const PersonalDetails = () => {
                 </td>
                 <td>
                   {editField === key ? (
-                    <input
-                      type={type}
-                      value={editValue}
-                      onChange={(e) => setEditValue(e.target.value)}
-                      pattern={pattern ? pattern.source : undefined}
-                      title={title || ""}
-                      required
-                    />
+                    key === "role" ? (
+                      <select
+                        value={editValue}
+                        onChange={(e) => setEditValue(e.target.value)}
+                        required
+                      >
+                        <option value="">Select Department</option>
+                        <option value="marketing team">Marketing Team</option>
+                        <option value="development team">
+                          Development Team
+                        </option>
+                        <option value="ai specialist">AI Specialist</option>
+                        <option value="sales team">Sales Team</option>
+                        <option value="hr">HR</option>
+                      </select>
+                    ) : (
+                      <input
+                        type={type}
+                        value={editValue}
+                        onChange={(e) => setEditValue(e.target.value)}
+                        pattern={pattern ? pattern.source : undefined}
+                        title={title || ""}
+                        required
+                      />
+                    )
                   ) : key === "role" ? (
                     employee[key]?.toUpperCase()
                   ) : (
@@ -182,10 +199,20 @@ const PersonalDetails = () => {
                   )}
                 </td>
                 <td>
-                  {editField === key ? (
-                    <button className="btn1" onClick={() => handleSave(key)} style={{color:'#007bff'}}>✔</button>
+                  {["gender", "salary"].includes(key) ? (
+                    <span style={{ visibility: "hidden" }}>—</span> // keeps row height consistent
+                  ) : editField === key ? (
+                    <button
+                      className="btn1"
+                      onClick={() => handleSave(key)}
+                      style={{ color: "#007bff" }}
+                    >
+                      ✔
+                    </button>
                   ) : (
-                    <button className="btn1" onClick={() => handleEdit(key)}><EditIcon style={{color:'#007bff'}}/></button>
+                    <button className="btn1" onClick={() => handleEdit(key)}>
+                      <EditIcon style={{ color: "#007bff" }} />
+                    </button>
                   )}
                 </td>
               </tr>

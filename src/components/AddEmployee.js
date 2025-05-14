@@ -135,15 +135,29 @@ const AddEmployee = () => {
           </div>
 
           <div className="form-row">
-            <div className="form-group">
+            <div className="form-group" style={{ position: "relative" }}>
               <input
                 type="date"
                 id="dob"
                 value={dob}
                 onChange={(e) => setDob(e.target.value)}
                 required
-                placeholder="Date of Birth"
+                min={new Date().toISOString().split("T")[0]}
               />
+              {!joiningDate && (
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "10px",
+                    left: "20px",
+                    fontSize: "12px",
+                    color: "#999",
+                    pointerEvents: "none",
+                  }}
+                >
+                  Date of Birth
+                </span>
+              )}
             </div>
             <div className="form-group">
               <select
@@ -257,15 +271,29 @@ const AddEmployee = () => {
           </div>
 
           <div className="form-row">
-            <div className="form-group">
+            <div className="form-group" style={{ position: "relative" }}>
               <input
                 type="date"
                 id="joining-date"
                 value={joiningDate}
                 onChange={(e) => setJoiningDate(e.target.value)}
                 required
-                placeholder="Joining Date"
+                min={new Date().toISOString().split("T")[0]}
               />
+              {!joiningDate && (
+                <span
+                  style={{
+                    position: "absolute",
+                    top: "10px",
+                    left: "20px",
+                    fontSize: "12px",
+                    color: "#999",
+                    pointerEvents: "none",
+                  }}
+                >
+                  Joining Date
+                </span>
+              )}
             </div>
             <div className="form-group">
               <select

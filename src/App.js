@@ -191,11 +191,14 @@ function Layout() {
         {!isLoginPage && (
           <div className="Nav-header-top">
             <h1>{user?.name}</h1>
-            <img
+            {/* <img
               src={`${process.env.PUBLIC_URL}/pexels-mart-production-7709149.jpg`}
               alt="Profile"
               className="profile-image"
-            />
+            /> */}
+             <div className="profile-circle-mini" style={{backgroundColor:"rgba(135, 135, 243, 0.2)"}}>
+                {user?.name?.charAt(0).toUpperCase()}
+              </div>
             <Button
               variant="contained"
               style={{ maxWidth: "min-content", marginLeft: "20px" }}

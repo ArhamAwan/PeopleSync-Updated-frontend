@@ -97,7 +97,7 @@ const RequestLeave = () => {
         {/* Graph Section */}
         <div className="col-md-6">
           <div className="column leave-section">
-            <img src={bgIcon} height="250px" style={{borderRadius:"20px"}}/>
+            <img src={bgIcon} height="250px" style={{ borderRadius: "20px" }} />
             <div>
               <p className="online-count">{approvedLeavesTotal}</p>
               <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -131,6 +131,7 @@ const RequestLeave = () => {
               value={startDate}
               onChange={(e) => setStartDate(e.target.value)}
               required
+              min={new Date().toISOString().split("T")[0]}
             />
           </div>
           <div>
@@ -140,6 +141,7 @@ const RequestLeave = () => {
               value={endDate}
               onChange={(e) => setEndDate(e.target.value)}
               required
+              min={new Date().toISOString().split("T")[0]}
             />
           </div>
         </div>

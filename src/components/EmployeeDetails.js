@@ -232,7 +232,7 @@ const EmployeeDetails = () => {
   }, []);
   // console.log(employees);
   return (
-    <div style={{padding:"30px"}}>
+    <div style={{ padding: "30px" }}>
       <div className="search-row">
         <div className="heading-em">
           <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
@@ -404,35 +404,55 @@ const EmployeeDetails = () => {
                     </td>
                     <td>
                       {editField === field ? (
-                        <input
-                          type="text"
-                          value={editValue}
-                          onChange={(e) => setEditValue(e.target.value)}
-                        />
+                        field === "role" ? (
+                          <select
+                            value={editValue}
+                            onChange={(e) => setEditValue(e.target.value)}
+                            required
+                          >
+                            <option value="">Select Department</option>
+                            <option value="marketing team">
+                              Marketing Team
+                            </option>
+                            <option value="development team">
+                              Development Team
+                            </option>
+                            <option value="ai specialist">AI Specialist</option>
+                            <option value="sales team">Sales Team</option>
+                            <option value="hr">HR</option>
+                          </select>
+                        ) : (
+                          <input
+                            type="text"
+                            value={editValue}
+                            onChange={(e) => setEditValue(e.target.value)}
+                          />
+                        )
                       ) : (
                         selectedEmployee[field]
                       )}
                     </td>
-                    {!showArchives && (
-                      <td>
-                        {editField === field ? (
-                          <button
-                            className="btn1"
-                            onClick={updateHandler}
-                            style={{ color: "#007bff" }}
-                          >
-                            ✔
-                          </button>
-                        ) : (
-                          <button
-                            className="btn1"
-                            onClick={() => handleEdit(field)}
-                          >
-                            <EditIcon style={{ color: "#007bff" }} />
-                          </button>
-                        )}
-                      </td>
-                    )}
+                    {!showArchives &&
+                      !["gender", "salary"].includes(field) && (
+                        <td>
+                          {editField === field ? (
+                            <button
+                              className="btn1"
+                              onClick={updateHandler}
+                              style={{ color: "#007bff" }}
+                            >
+                              ✔
+                            </button>
+                          ) : (
+                            <button
+                              className="btn1"
+                              onClick={() => handleEdit(field)}
+                            >
+                              <EditIcon style={{ color: "#007bff" }} />
+                            </button>
+                          )}
+                        </td>
+                      )}
                   </tr>
                 ))}
               </tbody>
