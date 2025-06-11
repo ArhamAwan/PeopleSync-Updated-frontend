@@ -16,13 +16,73 @@ const Dashboard = () => {
     labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
     datasets: [
       {
-        label: "Employee Graph",
+        label: "Employee Growth",
         data: [1, 3, 4, employees.length],
-        backgroundColor: "rgba(37, 99, 235, 0.2)",
-        borderColor: "#2563eb",
-        borderWidth: 2,
+        backgroundColor: "rgba(110, 142, 251, 0.2)",
+        borderColor: "#6e8efb",
+        borderWidth: 3,
+        tension: 0.4,
+        fill: true,
+        pointBackgroundColor: "#6e8efb",
+        pointBorderColor: "#fff",
+        pointBorderWidth: 2,
+        pointRadius: 6,
+        pointHoverRadius: 8
       },
     ],
+  };
+
+  const onlineData = {
+    labels: ["9AM", "10AM", "11AM", "12PM", "1PM", "2PM"],
+    datasets: [
+      {
+        label: "Active Employees",
+        data: [2, 3, 4, 3, 4, activeEmployees.length],
+        backgroundColor: "rgba(0, 210, 255, 0.2)",
+        borderColor: "#00d2ff",
+        borderWidth: 3,
+        tension: 0.4,
+        fill: true,
+        pointBackgroundColor: "#00d2ff",
+        pointBorderColor: "#fff",
+        pointBorderWidth: 2,
+        pointRadius: 6,
+        pointHoverRadius: 8
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        grid: {
+          color: 'rgba(255, 255, 255, 0.1)'
+        },
+        ticks: {
+          color: '#ffffff'
+        }
+      },
+      x: {
+        grid: {
+          color: 'rgba(255, 255, 255, 0.1)'
+        },
+        ticks: {
+          color: '#ffffff'
+        }
+      }
+    },
+    animation: {
+      duration: 2000,
+      easing: 'easeInOutQuart'
+    }
   };
 
   // Dummy Online Employees Data
@@ -96,34 +156,55 @@ const Dashboard = () => {
       <div className="row">
         {/* Graph Section */}
         <div className="col-md-6">
-          <div className="column graph-section">
-            <h2>Total Employees</h2>
-            <p className="employee-count">{employees.length} Employees</p>
-            <Line data={employeeData} />
+          <div className="column glass-card total-employees-card">
+            <div className="card-header">
+              <h2>Total Employees</h2>
+              <div className="employee-count-wrapper">
+                <p className="employee-count">{employees.length}</p>
+                <span className="employee-label">Employees</span>
+              </div>
+            </div>
+            <div className="chart-container">
+              <Line data={employeeData} options={chartOptions} />
+            </div>
           </div>
 
-          <div className="column online-section">
-          <img src={bgIcon} height="150px" />
-            <p className="online-count">{activeEmployees.length}</p>
-            <div style={{display:"flex", justifyContent:"space-between"}}>
+          <div className="column glass-card online-employees-card">
+            <div className="card-header">
               <h2>Online Employees</h2>
+              <div className="online-count-wrapper">
+                <p className="online-count">{activeEmployees.length}</p>
+                <span className="online-label">Active Now</span>
+              </div>
+            </div>
+            <div className="activity-indicators">
+              <div className="activity-dot active"></div>
+              <div className="activity-dot active"></div>
+              <div className="activity-dot active"></div>
+              <div className="activity-dot"></div>
+              <div className="activity-dot"></div>
+            </div>
+            <div className="status-message">
+              <span className="status-dot"></span>
+              System Active
             </div>
           </div>
         </div>
       </div>
 
       {/* Table for Online Employees */}
+      <div className="row">
       <div className="row-table-section">
-        <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
+        <h4 className="myTableHeader">
           Active Employees
         </h4>
         <table>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Checkin Time</th>
-              <th>Status</th>
+              <th className="fade-in-heading">Name</th>
+              <th className="fade-in-heading">Email</th>
+              <th className="fade-in-heading">Checkin Time</th>
+              <th className="fade-in-heading">Status</th>
             </tr>
           </thead>
           <tbody>
@@ -142,6 +223,7 @@ const Dashboard = () => {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

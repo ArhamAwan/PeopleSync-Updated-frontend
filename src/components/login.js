@@ -34,6 +34,7 @@ const Login = (props) => {
 
   const [showAlert, setShowAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState(null);
+  const [isLoggingIn, setIsLoggingIn] = useState(false);
   const navigate = useNavigate();
 
   const handlePass = (e) => {
@@ -59,20 +60,23 @@ const Login = (props) => {
       );
 
       const users = res.data
-  ? Object.values(res.data).filter(
-      (user) =>
-        user.email?.trim().toLowerCase() == email.trim().toLowerCase() &&
-        user.password == pass 
-    )
-  : [];
+        ? Object.values(res.data).filter(
+            (user) =>
+              user.email?.trim().toLowerCase() == email.trim().toLowerCase() &&
+              user.password == pass 
+          )
+        : [];
 
-console.log(users);
+      console.log(users);
 
       if (users.length > 0) {
-        const { password, ...userWithoutPassword } = users[0];
-        localStorage.setItem("user", JSON.stringify(userWithoutPassword));
-        if (userWithoutPassword.role === "hr") navigate("/dashboard");
-        else navigate("/timer");
+        setIsLoggingIn(true);
+        setTimeout(() => {
+          const { password, ...userWithoutPassword } = users[0];
+          localStorage.setItem("user", JSON.stringify(userWithoutPassword));
+          if (userWithoutPassword.role === "hr") navigate("/dashboard");
+          else navigate("/timer");
+        }, 600); // match exit animation duration
       } else {
         setAlertMessage("Invalid email or password.");
         setShowAlert(true);
@@ -97,118 +101,80 @@ console.log(users);
     }
   }, []);
 
+  useEffect(() => {
+    document.body.classList.add("login-page");
+    document.documentElement.classList.add("login-page");
+    return () => {
+      document.body.classList.remove("login-page");
+      document.documentElement.classList.remove("login-page");
+    };
+  }, []);
+
   return (
-    <div className="container-main2">
- <Container fluid className="d-flex vh-100" style={{ padding: "0px" }}>
-      <Row
-        className="w-100"
-        style={{
-          display: "flex",
-          gap: "0px",
-          justifyContent: "center",
-          alignItems: "center",
-          textAlign: "center",
-          width: "100%",
-        }}
-      >
-        <Col
-          md={7}
-          className="d-flex flex-column justify-content-center align-items-center"
-          style={{
-            height: "100vh",
-            backgroundColor: "#f8f9fa",
-            width: "60%",
-            textAlign: "center",
-          }}
-        >
-          <div className="text-center" style={{ textAlign: "center" }}>
-            <img
-              src={logo}
-              style={{ width: "190px", height: "200px" }}
-              alt="logo"
-            />
-            <h4 className="mt-1 mb-3 pb-1" style={{ fontWeight: "bold" }}>
-              Welcome To Growth Guild
-            </h4>
-          </div>
-
-          <p className="mb-9 pb-4">Please Enter Your Details</p>
-
-          <Form.Group style={{ width: "70%", margin: "auto" }}>
+    <div className="login-background">
+      <div className="container-main2">
+        <div className={`login-glass-card${isLoggingIn ? " login-glass-card-exit" : ""}`}>
+          <img
+            src={logo}
+            alt="PeopleSync Logo"
+            className="login-logo"
+          />
+          <h4>Welcome to PeopleSync</h4>
+          <p>Please enter your credentials to continue</p>
+          
+          <Form.Group style={{ width: "100%", marginBottom: "30px" }}>
             <Form.Control
-              style={{
-                paddingTop: "15px",
-                paddingBottom: "15px",
-                backgroundColor: "#EAE2E2",
-              }}
               type="email"
               placeholder="Email"
               value={email}
               onChange={handleEmail}
+              style={{ marginBottom: "30px" }}
             />
           </Form.Group>
-
-          <Form.Group style={{ width: "70%", margin: "auto" }}>
+          
+          <Form.Group style={{ width: "100%", marginBottom: "30px" }}>
             <Form.Control
-              style={{
-                paddingTop: "15px",
-                paddingBottom: "15px",
-                backgroundColor: "#EAE2E2",
-              }}
               type="password"
               placeholder="Password"
               value={pass}
               onChange={handlePass}
             />
           </Form.Group>
-
-          <h5 className="heading1">{msg}</h5>
-
-          <div
-            className="text-center pt-1 mb-5 mt-4 pb-1"
-            style={{ width: "60%", margin: "auto" }}
-          >
+          
+          {msg && <h5 className="heading1">{msg}</h5>}
+          
+          <div className="text-center pt-1 mb-4 pb-1" style={{ width: "100%" }}>
             <Button
-              className="sign-in-btn mb-4 gradient-custom-2"
+              className="sign-in-btn"
               onClick={handleLogin}
-              style={{
-                width: "80%",
-                outline: "none",
-                border: "none",
-                paddingTop: "10px",
-                paddingBottom: "10px",
-              }}
             >
               Sign In
             </Button>
           </div>
-        </Col>
-
-        <Col
-          md={5}
-          className="d-flex flex-column justify-content-center align-items-center text-white gradient-custom-3"
-          style={{ height: "100%", overflow: "hidden", width: "40%" }}
-        >
-          <img
-            src={loginImg}
-            alt="logo"
-            style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          />
-        </Col>
-        <Snackbar
-          open={showAlert}
-          autoHideDuration={15000}
-          onClose={() => setShowAlert(false)}
-          anchorOrigin={{ vertical: "top", horizontal: "center" }}
-        >
-          <Alert onClose={() => setShowAlert(false)} severity="error">
-            {alertMessage}
-          </Alert>
-        </Snackbar>
-      </Row>
-    </Container>
+          
+          <Snackbar
+            open={showAlert}
+            autoHideDuration={6000}
+            onClose={() => setShowAlert(false)}
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          >
+            <Alert 
+              onClose={() => setShowAlert(false)} 
+              severity="error"
+              sx={{
+                backgroundColor: 'rgba(211, 47, 47, 0.9)',
+                color: '#fff',
+                '& .MuiAlert-icon': {
+                  color: '#fff'
+                }
+              }}
+            >
+              {alertMessage}
+            </Alert>
+          </Snackbar>
+        </div>
+      </div>
     </div>
-   
   );
 };
 
