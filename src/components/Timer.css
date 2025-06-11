@@ -5,111 +5,28 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
-/* Timer Display */
-.timer-display {
-  font-size: 2.5rem;
-  font-weight: 600;
-  margin-bottom: 20px;
-  background: rgba(255, 255, 255, 0.2);
-  padding: 10px;
-  border-radius: 8px;
-  text-align: center;
-}
-
-/* Buttons in one row */
-.button-group {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 20px;
-}
-
-/* Button Styling */
-button {
-  flex: 1;
-  padding: 12px;
-  font-size: 16px;
-  font-weight: 600;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.3s ease-in-out;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #fff;
-}
-
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Button Colors */
-.start-btn {
-  background: #22c55e;
-}
-.start-btn:hover {
-  background: #16a34a;
-}
-
-.pause-btn {
-  background: #fbbf24;
-}
-.pause-btn:hover {
-  background: #d97706;
-}
-
-.resume-btn {
-  background: #3b82f6;
-}
-.resume-btn:hover {
-  background: #1e40af;
-}
-
-.stop-btn {
-  background: #ef4444;
-}
-.stop-btn:hover {
-  background: #b91c1c;
-}
-
-/* Report Input */
-.report-container {
-  margin-top: 20px;
-  padding: 10px;
-  border: 2px solid rgb(212, 242, 255);
-  background-color: white ;
+/* Timer Container - Glassmorphism style matching Dashboard/AddEmployee */
+.timer-container {
+  padding: 30px;
+  background: rgba(17, 17, 17, 0.7);
   border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  transition: all 0.3s ease;
+  margin: 0;
+  color: #fff;
+  animation: simpleFade 0.6s ease-out forwards;
+  opacity: 0;
 }
 
-.report-input {
-  width: 100%;
-  height: 100px;
-  padding: 12px;
-  font-size: 16px;
-  border: none;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.2);
-  color: #000;
-  outline: none;
-  resize: vertical;
+@keyframes simpleFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
-.report-input::placeholder {
-  color: rgba(0, 0, 0, 0.6);
-}
-
-.report-input:focus {
-  border: 2px solid #3b82f6;
-  background: rgba(255, 255, 255, 0.3);
-}
-.timer-container{
-    padding: 40px;
-    background: transparent;
-    box-shadow: none;
-}
-
-
+/* Timer Display */
 .timer-display {
   display: flex;
   justify-content: center;
@@ -117,29 +34,231 @@ button:disabled {
   gap: 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   margin-top: 30px;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+/* Time Boxes */
 .time-box {
-  background-color: #4e89ff;
-  color: black;
-  font-size: 80px;
-  font-weight: 400;
-  padding: 20px 40px;
+  background: rgba(20, 20, 20, 0.6);
+  color: #fff;
+  font-size: 70px;
+  font-weight: 600;
+  padding: 15px 30px;
   border-radius: 15px;
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
   text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  min-width: 120px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .label {
   text-align: center;
   margin-top: 10px;
-  font-size: 18px;
+  font-size: 16px;
+  font-weight: 500;
   letter-spacing: 1px;
-  color: #111;
+  color: #e0e6ed;
+  text-transform: uppercase;
 }
 
 .colon {
   font-size: 60px;
-  margin: 0 10px;
-  color: #333;
+  margin: 0 5px;
+  color: rgba(255, 255, 255, 0.7);
+  align-self: center;
+  font-weight: 300;
+}
+
+/* Buttons in one row */
+.button-group {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+/* Button Styling */
+button {
+  flex: 1;
+  padding: 14px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  background: rgba(20, 20, 20, 0.6);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Button Colors - Professional style matching the application */
+.start-btn {
+  background: rgba(20, 20, 20, 0.6);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+.start-btn:hover:not(:disabled) {
+  background: rgba(30, 30, 30, 0.7);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.pause-btn {
+  background: rgba(20, 20, 20, 0.6);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+.pause-btn:hover:not(:disabled) {
+  background: rgba(30, 30, 30, 0.7);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.resume-btn {
+  background: rgba(20, 20, 20, 0.6);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+.resume-btn:hover:not(:disabled) {
+  background: rgba(30, 30, 30, 0.7);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.stop-btn {
+  background: rgba(20, 20, 20, 0.6);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+.stop-btn:hover:not(:disabled) {
+  background: rgba(30, 30, 30, 0.7);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Section title - matching AddEmployee style */
+.section-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 16px;
+  position: relative;
+  padding-left: 8px;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.section-divider {
+  height: 1px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0;
+  margin: 0 0 15px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Report Input - matching AddEmployee input style */
+.report-container {
+  margin-top: 20px;
+  padding: 15px;
+  background: transparent;
+  border-radius: 16px;
+}
+
+.report-input {
+  width: 100%;
+  height: 120px;
+  padding: 15px;
+  font-size: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(20, 20, 20, 0.6);
+  color: #fff;
+  outline: none;
+  resize: vertical;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.report-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.report-input:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(30, 30, 30, 0.7);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+/* Status indicator animation */
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .timer-display {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .time-box {
+    font-size: 50px;
+    padding: 10px 20px;
+  }
+  
+  .colon {
+    display: none;
+  }
+  
+  .button-group {
+    flex-wrap: wrap;
+  }
+  
+  button {
+    min-width: 45%;
+  }
 }

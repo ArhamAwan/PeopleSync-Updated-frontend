@@ -242,26 +242,71 @@ const Timer = () => {
   };
   const { hrs, mins, secs } = formatTime(time);
 
+  // Status text based on timer state
+  const getStatusText = () => {
+    if (isRunning) return "Timer running";
+    if (isPaused) return "Timer paused";
+    return "Timer ready";
+  };
+
   return (
     <>
       <div className="timer-container">
-        <h1 style={{ textAlign: "center", letterSpacing: "10px" }}>
-          THE COUNTDOWN
-        </h1>
+        <h2 style={{ 
+          fontSize: '1.75rem', 
+          marginBottom: '20px', 
+          fontWeight: '500', 
+          color: '#fff', 
+          textAlign: 'center',
+          position: 'relative',
+          display: 'inline-block',
+          padding: '0 15px',
+          width: '100%'
+        }}>
+          Time Tracker
+        </h2>
+        
+        {/* Status indicator matching Dashboard style */}
+        <div className="status-message" style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "8px",
+          fontSize: "0.875rem",
+          color: "#a0aec0",
+          padding: "8px 16px",
+          background: "rgba(255, 255, 255, 0.05)",
+          borderRadius: "20px",
+          width: "fit-content",
+          marginLeft: "auto",
+          marginRight: "auto",
+          marginBottom: "20px"
+        }}>
+          <span className="status-dot" style={{
+            width: "6px",
+            height: "6px",
+            borderRadius: "50%",
+            background: isRunning ? "#00d2ff" : isPaused ? "#fbbf24" : "#a0aec0",
+            boxShadow: isRunning ? "0 0 10px #00d2ff" : "none",
+            animation: isRunning ? "blink 2s infinite" : "none"
+          }}></span>
+          {getStatusText()}
+        </div>
+        
         <div className="timer-display">
           <div>
             <div className="time-box">{hrs}</div>
-            <div className="label">HRS</div>
+            <div className="label">HOURS</div>
           </div>
           <div className="colon">:</div>
           <div>
             <div className="time-box">{mins}</div>
-            <div className="label">MIN</div>
+            <div className="label">MINUTES</div>
           </div>
           <div className="colon">:</div>
           <div>
             <div className="time-box">{secs}</div>
-            <div className="label">SEC</div>
+            <div className="label">SECONDS</div>
           </div>
         </div>
 
@@ -295,16 +340,31 @@ const Timer = () => {
             Stop
           </button>
         </div>
-        <h1 style={{ textAlign: "left" }}>Your Report</h1>
+        
+        <div className="section-title">Activity Report</div>
+        <div className="section-divider"></div>
 
         <div className="report-container">
           <textarea
-            placeholder="Write your report here..."
+            placeholder="Describe your activities during this time period..."
             value={report}
             onChange={(e) => setReport(e.target.value)}
             className="report-input"
           />
         </div>
+        
+        {/* User info */}
+        {user && user.name && (
+          <div style={{ 
+            marginTop: "20px", 
+            textAlign: "right", 
+            fontSize: "0.9rem", 
+            color: "rgba(255, 255, 255, 0.6)",
+            fontStyle: "italic"
+          }}>
+            Logged in as: {user.name}
+          </div>
+        )}
       </div>
     </>
   );
