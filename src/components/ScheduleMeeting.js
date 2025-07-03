@@ -15,7 +15,7 @@ const ScheduleMeeting = () => {
 
   return (
     <div  style={{marginLeft:"20px", marginRight:"20px"}}>
-      <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
+      <h4 className="myTableHeader">
       Schedule Meeting
       </h4>
       <iframe

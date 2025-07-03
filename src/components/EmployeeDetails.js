@@ -1,55 +1,118 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import ReactDOM from "react-dom";
 import "./EmployeeDetails.css";
 import axios from "axios";
 import { Button, Dialog, DialogTitle, DialogActions } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 import EditIcon from "@mui/icons-material/Edit";
+import CloseIcon from "@mui/icons-material/Close";
+import { FaUser, FaPhone, FaCalendarAlt, FaIdCard, FaUserTie, FaUsers, FaUserClock, FaCalendarCheck, FaDollarSign, FaUniversity, FaEnvelope, FaKey, FaVenusMars } from "react-icons/fa";
+
+// Component for the employee details popup
+const EmployeeDetailsPopup = ({ selectedEmployee, setSelectedEmployee, editField, editValue, setEditField, setEditValue, updateHandler, handleDeleteClick, showArchives, fieldIcons, fields, getInitials }) => {
+  if (!selectedEmployee) return null;
+  
+  return ReactDOM.createPortal(
+    <div className="popup-overlay" onClick={() => setSelectedEmployee(null)}>
+      <div className="popup-content" onClick={(e) => e.stopPropagation()}>
+        <button 
+          className="close-button"
+          onClick={() => setSelectedEmployee(null)}
+        >
+          <CloseIcon />
+        </button>
+        
+        <div className="profile-container2">
+          {selectedEmployee.image ? (
+            <img 
+              src={selectedEmployee.image} 
+              alt={selectedEmployee.name} 
+              className="popup-image"
+            />
+          ) : (
+            <div className="profile-circle">
+              {getInitials(selectedEmployee.name)}
+            </div>
+          )}
+        </div>
+        
+        <div className="employee-details">
+          <h2>{selectedEmployee.name}</h2>
+          
+          {fields.map((field) => {
+            if (!selectedEmployee[field]) return null;
+            
+            return (
+              <p key={field}>
+                <span className="field-label">
+                  {fieldIcons[field]} <strong>{field.charAt(0).toUpperCase() + field.slice(1)}</strong>
+                </span>
+                
+                {editField === field ? (
+                  <div className="edit-field">
+                    <input
+                      type={field === "password" ? "password" : "text"}
+                      value={editValue}
+                      onChange={(e) => setEditValue(e.target.value)}
+                    />
+                    <div className="action-buttons">
+                      <button className="save-button" onClick={updateHandler}>
+                        Save
+                      </button>
+                      <button 
+                        className="cancel-button" 
+                        onClick={() => {
+                          setEditField(null);
+                          setEditValue("");
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="field-value">
+                    <span className="value">
+                      {field === "password" 
+                        ? "••••••••" 
+                        : selectedEmployee[field]}
+                    </span>
+                    <button 
+                      className="edit-button"
+                      onClick={() => setEditField(field)}
+                    >
+                      <EditIcon fontSize="small" />
+                    </button>
+                  </div>
+                )}
+              </p>
+            );
+          })}
+          
+          {!showArchives && (
+            <div className="action-buttons">
+              <button className="delete-button" onClick={handleDeleteClick}>
+                Delete Employee
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+};
 
 const EmployeeDetails = () => {
-  const [employeesD, setEmployeesD] = useState([
-    {
-      id: 1,
-      name: "John Doe",
-      position: "Software Engineer",
-      email: "john.doe@example.com",
-      phone: "123-456-7890",
-      address: "123 Elm Street, Cityville",
-      dob: "1990-01-15",
-      description: "Passionate about coding and solving complex problems.",
-      salary: 80000,
-      benefits: 5000,
-      deductions: 2000,
-      netSalary: 83000,
-      image: "https://via.placeholder.com/150",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      position: "UI/UX Designer",
-      email: "jane.smith@example.com",
-      phone: "987-654-3210",
-      address: "456 Oak Avenue, Townsville",
-      dob: "1992-03-22",
-      description: "Focused on creating user-friendly designs.",
-      salary: 75000,
-      benefits: 4000,
-      deductions: 1500,
-      netSalary: 77500,
-      image: "https://via.placeholder.com/150",
-    },
-  ]);
   const [employees, setEmployees] = useState([]);
   const [archives, setArchives] = useState([]);
-
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editForm, setEditForm] = useState(null);
-
   const [editField, setEditField] = useState(null);
   const [editValue, setEditValue] = useState("");
   const [openConfirm, setOpenConfirm] = useState(false);
   const [showArchives, setShowArchives] = useState(false);
+  const cardsContainerRef = useRef(null);
 
   const fields = [
     "name",
@@ -67,9 +130,20 @@ const EmployeeDetails = () => {
     "password",
   ];
 
-  const handleEdit = (field) => {
-    setEditField(field);
-    setEditValue(selectedEmployee[field]);
+  const fieldIcons = {
+    name: <FaUser />,
+    phone: <FaPhone />,
+    dob: <FaCalendarAlt />,
+    gender: <FaVenusMars />,
+    idCard: <FaIdCard />,
+    designation: <FaUserTie />,
+    role: <FaUsers />,
+    employeeType: <FaUserClock />,
+    joiningDate: <FaCalendarCheck />,
+    salary: <FaDollarSign />,
+    bankDetails: <FaUniversity />,
+    email: <FaEnvelope />,
+    password: <FaKey />,
   };
 
   const updateHandler = async () => {
@@ -99,6 +173,7 @@ const EmployeeDetails = () => {
       console.error("Error updating employee:", error);
     }
   };
+  
   const deleteHandler = async (email) => {
     try {
       // 1. Move employee to archives
@@ -157,37 +232,13 @@ const EmployeeDetails = () => {
   };
 
   const filteredEmployees = employees.filter((employee) =>
-    employee.name.toLowerCase().includes(searchTerm)
+    employee.name?.toLowerCase().includes(searchTerm)
   );
 
-  // const handleEdit = (employee) => {
-  //   setEditForm({ ...employee });
-  //   setIsEditing(true);
-  // };
-
-  const handleFormChange = (e) => {
-    const { name, value } = e.target;
-    setEditForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSave = () => {
-    setEmployees((prevEmployees) =>
-      prevEmployees.map((employee) =>
-        employee.id === editForm.id
-          ? { ...editForm, netSalary: calculateNetSalary(editForm) }
-          : employee
-      )
-    );
-    setIsEditing(false);
-    setSelectedEmployee(null);
-  };
-
-  const calculateNetSalary = (employee) => {
-    const salary = parseFloat(employee.salary) || 0;
-    const benefits = parseFloat(employee.benefits) || 0;
-    const deductions = parseFloat(employee.deductions) || 0;
-    return salary + benefits - deductions;
-  };
+  const filteredArchives = archives.filter((employee) =>
+    employee.name?.toLowerCase().includes(searchTerm)
+  );
+  
   const handleDeleteClick = () => {
     setOpenConfirm(true);
   };
@@ -195,6 +246,15 @@ const EmployeeDetails = () => {
   const handleConfirm = (email) => {
     deleteHandler(email);
     setOpenConfirm(false);
+  };
+
+  const getInitials = (name) => {
+    if (!name) return "?";
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase();
   };
 
   useEffect(() => {
@@ -211,6 +271,7 @@ const EmployeeDetails = () => {
         console.error("Error fetching employees:", error);
       }
     };
+    
     const fetchArchives = async () => {
       try {
         const res = await axios.get(
@@ -230,12 +291,19 @@ const EmployeeDetails = () => {
     fetchEmployees();
     fetchArchives();
   }, []);
-  // console.log(employees);
+
+  // Reset scroll position when switching tabs
+  useEffect(() => {
+    if (cardsContainerRef.current) {
+      cardsContainerRef.current.scrollTop = 0;
+    }
+  }, [showArchives]);
+
   return (
-    <div style={{ padding: "30px" }}>
+    <div className="employee-details-wrapper">
       <div className="search-row">
         <div className="heading-em">
-          <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
+          <h4 className="myTableHeader">
             Employee Details
           </h4>
         </div>
@@ -251,333 +319,86 @@ const EmployeeDetails = () => {
         </div>
       </div>
 
-      {/* List of Employee Profiles */}
-      {/* <div className="employee-cards">
-        {filteredEmployees.map((employee) => (
-          <div
-            key={employee.id}
-            className="employee-card"
-            onClick={() => setSelectedEmployee(employee)}
-          >
-            <div className="profile-container">
-              <div className="profile-circle">
-                {employee.name?.charAt(0).toUpperCase()}
-              </div>
-            </div>
-
-            <h3>{employee.name}</h3>
-            <p>{employee.role}</p>
-          </div>
-        ))}
-      </div>
-      <div className="employee-cards">
-        {archives.map((employee) => (
-          <div
-            key={employee.id}
-            className="employee-card archived"
-            onClick={() => setSelectedEmployee(employee)}
-          >
-            <div className="profile-container">
-              <div className="profile-circle">
-                {employee.name?.charAt(0).toUpperCase()}
-              </div>
-            </div>
-
-            <h3>{employee.name}</h3>
-            <p>{employee.role}</p>
-          </div>
-        ))}
-      </div> */}
-
-      <div>
-        {/* Toggle Switch */}
-        <div
-          style={{ display: "flex", alignItems: "center", marginBottom: 20 }}
+      <div className="tab-buttons">
+        <button 
+          className={`tab-button ${!showArchives ? 'active' : ''}`} 
+          onClick={() => setShowArchives(false)}
         >
-          <label style={{ marginRight: 10 }}>
-            {showArchives ? "Archives" : "Actives" + "\u00A0" + "\u00A0"}
-          </label>
-          <div
-            onClick={() => setShowArchives(!showArchives)}
-            style={{
-              width: 50,
-              height: 25,
-              background: !showArchives ? "#4caf50" : "#ccc",
-              borderRadius: 20,
-              position: "relative",
-              cursor: "pointer",
-              transition: "0.3s",
-            }}
-          >
-            <div
-              style={{
-                width: 22,
-                height: 22,
-                background: "#fff",
-                borderRadius: "50%",
-                position: "absolute",
-                top: 1.5,
-                left: !showArchives ? 26 : 2,
-                transition: "0.3s",
-              }}
-            ></div>
-          </div>
-        </div>
+          Active Employees
+        </button>
+        <button 
+          className={`tab-button ${showArchives ? 'active' : ''}`} 
+          onClick={() => setShowArchives(true)}
+        >
+          Archives
+        </button>
+      </div>
 
-        {/* Display Cards */}
-        <div className="employee-cards">
-          {(showArchives ? archives : filteredEmployees).length === 0 ? (
-            <h2
-              style={{ textAlign: "center", marginTop: "50px", color: "#888" }}
-            >
-              🧘‍♂️ So empty, it's peaceful.!
-            </h2>
-          ) : (
-            (showArchives ? archives : filteredEmployees).map((employee) => (
+      <div className="employee-cards-container">
+        <div className="employee-cards" ref={cardsContainerRef}>
+          {(showArchives ? filteredArchives : filteredEmployees).length > 0 ? (
+            (showArchives ? filteredArchives : filteredEmployees).map((employee, index) => (
               <div
-                key={employee.id}
+                key={employee.id || index}
                 className="employee-card"
                 onClick={() => setSelectedEmployee(employee)}
+                style={{ animationDelay: `${index * 0.05}s` }}
               >
-                <div className="profile-container">
+                {employee.image ? (
+                  <img src={employee.image} alt={employee.name} />
+                ) : (
                   <div className="profile-circle">
-                    {employee.name?.charAt(0).toUpperCase()}
+                    {getInitials(employee.name)}
                   </div>
-                </div>
-                <h3>{employee.name}</h3>
-                <p>{employee.role}</p>
+                )}
+                <h3>{employee.name || "Unknown"}</h3>
+                <p>{employee.designation || employee.role || "No designation"}</p>
+                <p>{employee.email || "No email"}</p>
               </div>
             ))
+          ) : (
+            <div className="no-employees-message">
+              <p>No {showArchives ? "archived" : "active"} employees found</p>
+            </div>
           )}
         </div>
       </div>
 
-      {/* Popup for Employee Details */}
-      {selectedEmployee && (
-        <div
-          className="popup-overlay"
-          onClick={() => setSelectedEmployee(null)}
-        >
-          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-            <button
-              onClick={() => setSelectedEmployee(null)}
-              style={{
-                backgroundColor: "transparent",
-                color: "red",
-                padding: "15px",
-                border: "none",
-                cursor: "pointer",
-                width: "min-content",
-                position: "absolute",
-                right: "10px",
-                top: "0",
-              }}
-            >
-              X
-            </button>
-            <div className="profile-container2">
-              <div className="profile-circle">
-                {selectedEmployee.name?.charAt(0).toUpperCase()}
-              </div>
-            </div>
-            <div className="popup-header">
-              <h1 style={{ textAlign: "center" }}>{selectedEmployee.name}</h1>
-            </div>
+      {/* Render popup using portal */}
+      <EmployeeDetailsPopup 
+        selectedEmployee={selectedEmployee}
+        setSelectedEmployee={setSelectedEmployee}
+        editField={editField}
+        editValue={editValue}
+        setEditField={setEditField}
+        setEditValue={setEditValue}
+        updateHandler={updateHandler}
+        handleDeleteClick={handleDeleteClick}
+        showArchives={showArchives}
+        fieldIcons={fieldIcons}
+        fields={fields}
+        getInitials={getInitials}
+      />
 
-            <table className="employee-details">
-              <thead>
-                <tr>
-                  <th>Field</th>
-                  <th>Value</th>
-                  {!showArchives && <th>Edit</th>}
-                </tr>
-              </thead>
-              <tbody>
-                {fields.map((field) => (
-                  <tr key={field}>
-                    <td>
-                      {field === "role" ? (
-                        <strong>Department</strong>
-                      ) : (
-                        <strong>{field.toUpperCase()}</strong>
-                      )}
-                    </td>
-                    <td>
-                      {editField === field ? (
-                        field === "role" ? (
-                          <select
-                            value={editValue}
-                            onChange={(e) => setEditValue(e.target.value)}
-                            required
-                          >
-                            <option value="">Select Department</option>
-                            <option value="marketing team">
-                              Marketing Team
-                            </option>
-                            <option value="development team">
-                              Development Team
-                            </option>
-                            <option value="ai specialist">AI Specialist</option>
-                            <option value="sales team">Sales Team</option>
-                            <option value="hr">HR</option>
-                          </select>
-                        ) : (
-                          <input
-                            type="text"
-                            value={editValue}
-                            onChange={(e) => setEditValue(e.target.value)}
-                          />
-                        )
-                      ) : (
-                        selectedEmployee[field]
-                      )}
-                    </td>
-                    {!showArchives &&
-                      !["gender", "salary"].includes(field) && (
-                        <td>
-                          {editField === field ? (
-                            <button
-                              className="btn1"
-                              onClick={updateHandler}
-                              style={{ color: "#007bff" }}
-                            >
-                              ✔
-                            </button>
-                          ) : (
-                            <button
-                              className="btn1"
-                              onClick={() => handleEdit(field)}
-                            >
-                              <EditIcon style={{ color: "#007bff" }} />
-                            </button>
-                          )}
-                        </td>
-                      )}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            {!showArchives && (
-              <Button
-                variant="contained"
-                color="error"
-                onClick={handleDeleteClick}
-                style={{ margin: "auto", marginTop: "20px" }}
-              >
-                Delete
-              </Button>
-            )}
-
-            <Dialog open={openConfirm} onClose={() => setOpenConfirm(false)}>
-              <DialogTitle>Are you sure you want to delete?</DialogTitle>
-              <DialogActions>
-                <Button onClick={() => setOpenConfirm(false)}>Cancel</Button>
-                <Button
-                  onClick={() => handleConfirm(selectedEmployee.email)}
-                  color="error"
-                  variant="contained"
-                >
-                  Confirm
-                </Button>
-              </DialogActions>
-            </Dialog>
-          </div>
-        </div>
-      )}
-
-      {isEditing && (
-        <div className="popup-overlay" onClick={() => setIsEditing(false)}>
-          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-            <h3>Edit Employee Details</h3>
-            <form>
-              <label>
-                Full Name:
-                <input
-                  type="text"
-                  name="name"
-                  value={editForm.name}
-                  onChange={handleFormChange}
-                />
-              </label>
-              <label>
-                Position:
-                <input
-                  type="text"
-                  name="position"
-                  value={editForm.position}
-                  onChange={handleFormChange}
-                />
-              </label>
-              <label>
-                Email:
-                <input
-                  type="email"
-                  name="email"
-                  value={editForm.email}
-                  onChange={handleFormChange}
-                />
-              </label>
-              <label>
-                Phone:
-                <input
-                  type="tel"
-                  name="phone"
-                  value={editForm.phone}
-                  onChange={handleFormChange}
-                />
-              </label>
-              <label>
-                Address:
-                <input
-                  type="text"
-                  name="address"
-                  value={editForm.address}
-                  onChange={handleFormChange}
-                />
-              </label>
-              <label>
-                Date of Birth:
-                <input
-                  type="date"
-                  name="dob"
-                  value={editForm.dob}
-                  onChange={handleFormChange}
-                />
-              </label>
-              <label>
-                Salary:
-                <input
-                  type="number"
-                  name="salary"
-                  value={editForm.salary}
-                  onChange={handleFormChange}
-                />
-              </label>
-              <label>
-                Benefits:
-                <input
-                  type="number"
-                  name="benefits"
-                  value={editForm.benefits}
-                  onChange={handleFormChange}
-                />
-              </label>
-              <label>
-                Deductions:
-                <input
-                  type="number"
-                  name="deductions"
-                  value={editForm.deductions}
-                  onChange={handleFormChange}
-                />
-              </label>
-              <button type="button" onClick={handleSave}>
-                Save
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
+      <Dialog
+        open={openConfirm}
+        onClose={() => setOpenConfirm(false)}
+        aria-labelledby="alert-dialog-title"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Are you sure you want to delete this employee?"}
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={() => setOpenConfirm(false)}>Cancel</Button>
+          <Button
+            onClick={() => handleConfirm(selectedEmployee?.email)}
+            autoFocus
+            color="error"
+          >
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };

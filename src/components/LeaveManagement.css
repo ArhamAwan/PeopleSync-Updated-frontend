@@ -1,73 +1,401 @@
-.leave-management {
-    width: 90%;
-    margin: auto;
-    padding: 20px;
-    background: transparent;
-  }
+/* Import Poppins font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+/* Leave Management Container */
+.dashboard-container.leave-management {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.dashboard-container.leave-management::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar track styles as they're not needed */
+.dashboard-container.leave-management::-webkit-scrollbar-track {
+  display: none;
+}
+
+/* Hide scrollbar thumb styles as they're not needed */
+.dashboard-container.leave-management::-webkit-scrollbar-thumb {
+  display: none;
+}
+
+.dashboard-container.leave-management::-webkit-scrollbar-thumb:hover {
+  display: none;
+}
+
+/* Table Section */
+.row-table-section {
+  background: rgba(17, 17, 17, 0.7);
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  transition: all 0.3s ease;
+  padding: 32px 24px;
+  margin: 0;
+  position: relative;
+  width: 100%;
+  opacity: 0;
+  animation: simpleFade 0.6s ease-out forwards;
+  animation-delay: 0.25s;
+}
+
+/* Animation for fade in */
+@keyframes simpleFade {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.myTableHeader {
+  color: white;
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  display: inline-block;
+  position: relative;
+  padding-bottom: 8px;
+}
+
+.myTableHeader:after {
+  content: '';
+  position: absolute;
+  width: 60px;
+  height: 3px;
+  background: #6e8efb;
+  bottom: 0;
+  left: 0;
+  border-radius: 10px;
+}
+
+/* Report Table Container */
+.report-table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 20px;
+  border-radius: 10px;
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  -ms-overflow-style: none; /* Hide scrollbar for IE and Edge */
+  max-height: calc(100vh - 250px);
+  overflow-y: auto;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.report-table-container::-webkit-scrollbar {
+  display: none;
+}
+
+.report-table-container::-webkit-scrollbar-track {
+  display: none;
+}
+
+.report-table-container::-webkit-scrollbar-thumb {
+  display: none;
+}
+
+.report-table-container::-webkit-scrollbar-thumb:hover {
+  display: none;
+}
+
+/* Table Styling */
+.employee-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  margin-top: 0;
+  border: none;
+  background: transparent;
+  table-layout: fixed;
+}
+
+/* Reset background for all table elements */
+tr, th, td {
+  background: transparent !important;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+/* Row styling */
+tbody tr {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  margin-bottom: 8px;
+}
+
+tbody tr:not(:last-child) {
+  margin-bottom: 8px;
+}
+
+tbody tr:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Header styling */
+th {
+  color: #a0aec0;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  text-align: left;
+  background: transparent !important;
+}
+
+/* Column widths */
+th:nth-child(1), td:nth-child(1) { width: 20%; } /* Employee */
+th:nth-child(2), td:nth-child(2) { width: 22%; } /* Leave Type */
+th:nth-child(3), td:nth-child(3) { width: 22%; } /* Dates */
+th:nth-child(4), td:nth-child(4) { width: 22%; } /* Days */
+th:nth-child(5), td:nth-child(5) { width: 18%; } /* Status */
+th:nth-child(6), td:nth-child(6) { width: 20%; } /* Actions */
+
+/* Sortable header */
+.sortable-header {
   
-  h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sortable-header:hover {
+  color: #ffffff;
+}
+
+.header-icon {
+  font-size: 0.75rem;
+  opacity: 0.7;
+}
+
+/* Animation for table headers */
+.fade-in-heading {
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.fade-in-heading:nth-child(1) { animation-delay: 0.1s; }
+.fade-in-heading:nth-child(2) { animation-delay: 0.2s; }
+.fade-in-heading:nth-child(3) { animation-delay: 0.3s; }
+.fade-in-heading:nth-child(4) { animation-delay: 0.4s; }
+.fade-in-heading:nth-child(5) { animation-delay: 0.5s; }
+.fade-in-heading:nth-child(6) { animation-delay: 0.6s; }
+
+/* Cell styling */
+td {
+  padding: 16px 20px;
+  color: #fff;
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+/* Employee name and email */
+.employee-name {
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.employee-email {
+  font-size: 0.8rem;
+  color: #a0aec0;
+}
+
+/* Leave type styling */
+.leave-type-cell {
+  font-weight: 500;
+}
+
+/* Date range styling */
+.date-range-cell {
+  white-space: nowrap;
+}
+
+.date-range {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.date-separator {
+  color: #a0aec0;
+  font-size: 0.8rem;
+}
+
+/* Days cell styling */
+.days-cell {
+  font-weight: 500;
+}
+
+/* Status badge styling */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  min-width: 100px;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+
+.status-badge.approved {
+  background-color: rgba(76, 175, 80, 0.2);
+  color: #4CAF50;
+}
+
+.status-badge.rejected {
+  background-color: rgba(231, 76, 60, 0.2);
+  color: #e74c3c;
+}
+
+.status-badge.pending {
+  background-color: rgba(255, 152, 0, 0.2);
+  color: #FF9800;
+}
+
+.status-icon {
+  font-size: 0.9rem;
+}
+
+/* Action buttons styling */
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.approve-btn, .reject-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 110px;
+  letter-spacing: 0.5px;
+  width: 100%;
+}
+
+.approve-btn {
+  background: rgba(76, 175, 80, 0.9);
+  color: white;
+  box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+}
+
+.reject-btn {
+  background: rgba(231, 76, 60, 0.9);
+  color: white;
+  box-shadow: 0 2px 8px rgba(231, 76, 60, 0.4);
+}
+
+.approve-btn:hover {
+  background: #4CAF50;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.5);
+}
+
+.reject-btn:hover {
+  background: #e74c3c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.5);
+}
+
+.processed-label {
+  color: #a0aec0;
+  font-size: 0.9rem;
+}
+
+/* Loading and no data states */
+.loading-indicator, .no-data-message {
+  padding: 20px;
+  text-align: center;
+  color: #a0aec0;
+  font-size: 0.9rem;
+}
+
+/* Animation keyframes */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive styles */
+@media (max-width: 900px) {
+  .row-table-section {
+    padding: 20px 16px;
   }
   
   th, td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
+    padding: 12px 10px;
+    font-size: 0.85rem;
   }
   
-  th {
-    background: #f4f4f4;
-  }
-  
-  .status {
-    font-weight: bold;
-    text-transform: uppercase;
-    text-align: left;
-
-  }
-  
-  .status.approved {
-    color: green;
-  }
-  
-  .status.rejected {
-    color: red;
-  }
-  
-  .status.pending {
-    color: orange;
+  .action-buttons {
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
   }
   
   .approve-btn, .reject-btn {
-    padding: 8px 12px;
-    margin: 5px;
-    border: none;
-    cursor: pointer;
-    border-radius: 4px;
+    padding: 8px 10px;
+    font-size: 0.75rem;
+    min-width: 90px;
+    width: 100%;
   }
   
-  .approve-btn {
-    background: #4CAF50;
-    color: white;
+  .employee-name {
+    font-size: 0.85rem;
   }
   
-  .reject-btn {
-    background: #e74c3c;
-    color: white;
+  .employee-email {
+    font-size: 0.75rem;
   }
-  
-  .approve-btn:hover {
-    background: #45a049;
+
+  .status-badge {
+    padding: 4px 8px;
+    font-size: 0.7rem;
+    min-width: 80px;
+    letter-spacing: 0.2px;
   }
-  
-  .reject-btn:hover {
-    background: #c0392b;
+
+  .status-icon {
+    font-size: 0.8rem;
   }
+
+  /* Adjust column widths for mobile */
+  th:nth-child(1), td:nth-child(1) { width: 25%; } /* Employee */
+  th:nth-child(2), td:nth-child(2) { width: 12%; } /* Leave Type */
+  th:nth-child(3), td:nth-child(3) { width: 18%; } /* Dates */
+  th:nth-child(4), td:nth-child(4) { width: 17%; } /* Days */
+  th:nth-child(5), td:nth-child(5) { width: 17%; } /* Status */
+  th:nth-child(6), td:nth-child(6) { width: 20%; } /* Actions */
+}
   

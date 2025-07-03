@@ -50,8 +50,9 @@
   flex: 1;
   min-width: 300px;
   display: flex;
-  gap: 20px;
-  justify-content: space-between;
+  gap: 20px; /* Match the .row gap and table spacing */
+  justify-content: center;
+  width: 100%;
 }
 
 th {
@@ -316,6 +317,7 @@ th {
   letter-spacing: 1px;
   border: none;
   transition: background 0.2s, color 0.2s;
+  white-space: nowrap;
 }
 .status.active span {
   background: linear-gradient(90deg, #00d2ff 0%, #6e8efb 100%);
@@ -428,13 +430,14 @@ th {
 }
 
 .employee-count {
-  background: linear-gradient(135deg, #6e8efb, #a777e3);
-  color: #fff;
+  background: linear-gradient(135deg, rgba(25, 118, 210, 0.15), rgba(25, 118, 210, 0.25));
+  color: #1976d2;
   padding: 0.4em 1em;
   border-radius: 2em;
   font-weight: 600;
   font-size: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(25, 118, 210, 0.2);
+  border: 1px solid rgba(25, 118, 210, 0.3);
   display: inline-block;
   letter-spacing: 0.5px;
   transition: transform 0.2s ease;
@@ -513,11 +516,11 @@ th {
 .employee-count, .online-count {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #ffffff;
+  color: #1976d2;
   margin: 0;
   line-height: 1;
   font-family: "SF Mono", "Roboto Mono", "Courier New", monospace;
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  text-shadow: 0 0 20px rgba(25, 118, 210, 0.3);
 }
 
 .employee-label, .online-label {
@@ -550,12 +553,12 @@ th {
 }
 
 .total-employees-card {
-  border-left: 4px solid #6e8efb;
+  border-left: 4px solid #1976d2;
   animation-delay: 0.05s;
 }
 
 .online-employees-card {
-  border-left: 4px solid #00d2ff;
+  border-left: 4px solid #1976d2;
   animation-delay: 0.15s;
 }
 
@@ -584,11 +587,11 @@ th {
 .online-count {
   font-size: 4rem;
   font-weight: 700;
-  color: #00d2ff;
+  color: #1976d2;
   margin: 0 0 0 30px;
   line-height: 1;
   font-family: "SF Mono", "Roboto Mono", "Courier New", monospace;
-  text-shadow: 0 0 20px rgba(0, 210, 255, 0.3);
+  text-shadow: 0 0 20px rgba(25, 118, 210, 0.3);
   animation: pulse 2s infinite;
 }
 
@@ -617,13 +620,13 @@ th {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: rgba(0, 210, 255, 0.2);
+  background: rgba(25, 118, 210, 0.2);
   transition: all 0.3s ease;
 }
 
 .activity-dot.active {
-  background: #00d2ff;
-  box-shadow: 0 0 10px #00d2ff;
+  background: #1976d2;
+  box-shadow: 0 0 10px #1976d2;
   animation: pulse-dot 1.5s infinite;
 }
 
@@ -663,8 +666,8 @@ th {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #00d2ff;
-  box-shadow: 0 0 10px #00d2ff;
+  background: #1976d2;
+  box-shadow: 0 0 10px #1976d2;
   animation: blink 2s infinite;
 }
 
@@ -700,4 +703,18 @@ th {
 @keyframes simpleFade {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+.glass-card.total-employees-card,
+.glass-card.online-employees-card {
+  flex: 1 1 0;
+  max-width: 100%;
+  min-width: 0;
+}
+
+th:last-child, td:last-child, th.status, td.status {
+  min-width: 120px;
+  max-width: 200px;
+  overflow: visible;
+  word-break: keep-all;
 }

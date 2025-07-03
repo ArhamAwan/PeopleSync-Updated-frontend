@@ -51,14 +51,15 @@ const wallpapers = [
 
 function WallpapersBg() {
   return (
-    <div className="wallpapers-bg">
-      <Silk
-        speed={7}
-        scale={1}
-        color="#C4C4C4"
-        noiseIntensity={1.5}
-        rotation={0}
-      />
+    <div className="wallpapers-bg" style={{
+      position: 'fixed',
+      top: 0,
+      left: 0,
+      width: '100%',
+      height: '100%',
+      background: 'url(/walls/bg2.jpeg) center center / cover no-repeat',
+      zIndex: 0
+    }}>
     </div>
   );
 }
@@ -128,7 +129,9 @@ function Layout() {
         <>
           <div className="top-navbar">
             <div className="navbar-profile">
-              <span>{user?.name}</span>
+              <span>
+                Hi, {user?.name}
+              </span>
               <div className="profile-circle-mini">
                 {user?.name?.charAt(0).toUpperCase()}
               </div>
@@ -142,7 +145,6 @@ function Layout() {
             </div>
           </div>
           <div className="left-container">
-            <img id="logom" src={logo} alt="Logo" />
             {user?.role === "hr" ? (
               <nav>
                 <div className="sidebar-category">Main</div>
@@ -198,6 +200,9 @@ function Layout() {
       {!isLoginPage ? (
         <div className="container">
           <div className={`right-container`}>
+            <div className="logo-container">
+              <img id="logom" src={logo} alt="Logo" />
+            </div>
             <div className="container-main">
               <Routes>
                 {/* Routes that are always accessible */}

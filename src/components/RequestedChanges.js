@@ -81,66 +81,72 @@ const RequestedChanges = () => {
 
   return (
     <div className="leave-management">
-      <h4 className="myTableHeader animate__animated animate__lightSpeedInLeft">
-        Requested Changes
-      </h4>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Employee</th>
-            <th>Email</th>
-            <th>Field</th>
-            <th>Requested Value</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {loading ? (
+      <div className="row-table-section">
+        <h4 className="myTableHeader">
+          Requested Changes
+        </h4>
+        <table className="employee-table">
+          <thead>
             <tr>
-              <td colSpan="6">Loading leave requests...</td>
+              <th>Employee</th>
+              <th>Email</th>
+              <th>Field</th>
+              <th>Requested Value</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
-          ) : requests.length === 0 ? (
-            <tr>
-              <td colSpan="6">No leave requests found</td>
-            </tr>
-          ) : (
-            [...requests].reverse().map((request) => (
-              <tr key={request.id}>
-                <td>{request.name}</td>
-                <td>{request.email}</td>
-                <td>{request.fieldName}</td>
-                <td>{request.fieldValue}</td>
-                {/* <td>{request.leaveBalance} days</td> */}
-                <td className={`status ${request.status.toLowerCase()}`}>
-                  {request.status}
-                </td>
-                <td>
-                  {request.status === "pending" ? (
-                    <>
-                      <button
-                        className="approve-btn"
-                        onClick={() => handleApproval(request, "approve")}
-                      >
-                        Approve
-                      </button>
-                      <button
-                        className="reject-btn"
-                        onClick={() => handleApproval(request, "reject")}
-                      >
-                        Reject
-                      </button>
-                    </>
-                  ) : (
-                    <span>Processed</span>
-                  )}
-                </td>
+          </thead>
+          <tbody>
+            {loading ? (
+              <tr>
+                <td colSpan="6" className="loading-indicator">Loading leave requests...</td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : requests.length === 0 ? (
+              <tr>
+                <td colSpan="6" className="no-data-message">No leave requests found</td>
+              </tr>
+            ) : (
+              [...requests].reverse().map((request) => (
+                <tr key={request.id}>
+                  <td>{request.name}</td>
+                  <td>{request.email}</td>
+                  <td>{request.fieldName}</td>
+                  <td>
+                    {request.fieldName && request.fieldName.toLowerCase() === "password"
+                      ? "••••••••"
+                      : request.fieldValue}
+                  </td>
+                  <td>
+                    <span className={`status-badge ${request.status.toLowerCase()}`}>
+                      {request.status}
+                    </span>
+                  </td>
+                  <td>
+                    {request.status === "pending" ? (
+                      <div className="action-buttons">
+                        <button
+                          className="approve-btn"
+                          onClick={() => handleApproval(request, "approve")}
+                        >
+                          Approve
+                        </button>
+                        <button
+                          className="reject-btn"
+                          onClick={() => handleApproval(request, "reject")}
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    ) : (
+                      <span className="processed-label">Processed</span>
+                    )}
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

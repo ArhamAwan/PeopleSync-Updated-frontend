@@ -122,17 +122,16 @@ const Login = (props) => {
           <h4>Welcome to PeopleSync</h4>
           <p>Please enter your credentials to continue</p>
           
-          <Form.Group style={{ width: "100%", marginBottom: "30px" }}>
+          <Form.Group style={{ width: "100%", marginBottom: "20px" }}>
             <Form.Control
               type="email"
               placeholder="Email"
               value={email}
               onChange={handleEmail}
-              style={{ marginBottom: "30px" }}
             />
           </Form.Group>
           
-          <Form.Group style={{ width: "100%", marginBottom: "30px" }}>
+          <Form.Group style={{ width: "100%", marginBottom: "20px" }}>
             <Form.Control
               type="password"
               placeholder="Password"
