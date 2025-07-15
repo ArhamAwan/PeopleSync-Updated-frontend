@@ -112,14 +112,13 @@
 
 /* Table Styling */
 .employee-table {
-  width: 100%;
-  border-collapse: separate;
-  border-spacing: 0 8px;
-  margin-top: 0;
-  border: none;
-  background: transparent;
-  table-layout: fixed;
+  width: 100% !important;
+  table-layout: auto !important;
+  overflow-x: visible !important;
+  display: table !important;
 }
+
+
 
 /* Reset background for all table elements */
 tr, th, td {

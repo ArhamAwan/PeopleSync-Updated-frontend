@@ -272,6 +272,7 @@ const AddEmployee = () => {
                 <select className="add-employee-input" value={role} onChange={e => setRole(e.target.value)} required>
                   <option value="">Select Role</option>
                   <option value="hr">HR</option>
+                  <option value="executive">Executive</option>
                   <option value="development team">Development Team</option>
                   <option value="sales team">Sales Team</option>
                   <option value="ai specialist">AI Specialist</option>

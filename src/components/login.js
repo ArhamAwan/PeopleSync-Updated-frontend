@@ -74,7 +74,7 @@ const Login = (props) => {
         setTimeout(() => {
           const { password, ...userWithoutPassword } = users[0];
           localStorage.setItem("user", JSON.stringify(userWithoutPassword));
-          if (userWithoutPassword.role === "hr") navigate("/dashboard");
+          if (userWithoutPassword.role === "hr" || userWithoutPassword.role === "executive") navigate("/dashboard");
           else navigate("/timer");
         }, 600); // match exit animation duration
       } else {
@@ -91,7 +91,7 @@ const Login = (props) => {
   useEffect(() => {
     const u = localStorage.getItem("user");
     if (u != null) {
-      if (u?.role === "hr") {
+      if (u?.role === "hr" || u?.role ==="executive") {
         setUser(JSON.parse(u));
         navigate("/dashboard");
       } else {

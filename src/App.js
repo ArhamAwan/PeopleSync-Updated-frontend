@@ -145,7 +145,7 @@ function Layout() {
             </div>
           </div>
           <div className="left-container">
-            {user?.role === "hr" ? (
+            {(user?.role === "hr" || user?.role ==="executive") ? (
               <nav>
                 <div className="sidebar-category">Main</div>
                 <ul>
@@ -153,7 +153,7 @@ function Layout() {
                   <li><Link to="/add-employee"><span className="sidebar-icon"><PersonAddIcon fontSize="inherit" /></span>Add Employee</Link></li>
                   <li><Link to="/report-management"><span className="sidebar-icon"><AssessmentIcon fontSize="inherit" /></span>Report Management</Link></li>
                 </ul>
-                <div className="sidebar-category">HR Actions</div>
+                <div className="sidebar-category">{user?.role.toUpperCase()} Actions</div>
                 <ul>
                   <li style={{ position: "relative" }}>
                     <Link to="/leave-management"><span className="sidebar-icon"><CalendarMonthIcon fontSize="inherit" /></span>Leave Management</Link>

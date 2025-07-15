@@ -4,9 +4,21 @@ import axios from "axios";
 import { FaCalendarAlt, FaUserClock, FaCheck, FaTimes } from "react-icons/fa";
 
 const LeaveManagement = () => {
+  const [user, setUser] = useState({});
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [displayRequests, setDisplayRequests] = useState([]);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const u = localStorage.getItem("user");
+      if (u != null) {
+        const userObject = JSON.parse(u);
+        setUser(userObject);
+        clearInterval(interval);
+      }
+    }, 500);
+  }, []);
 
   useEffect(() => {
     const fetchLeaveRequests = async () => {
@@ -17,7 +29,7 @@ const LeaveManagement = () => {
         const data = res.data
           ? Object.entries(res.data).map(([id, obj]) => ({ id, ...obj }))
           : [];
-        
+
         setLeaveRequests(data);
         setDisplayRequests([...data].reverse());
         setLoading(false);
@@ -32,10 +44,13 @@ const LeaveManagement = () => {
     try {
       const status = action === "APPROVED" ? "APPROVED" : "REJECTED";
 
+      const fieldToUpdate = user.role === "hr" ? "statusHr" : "statusExec";
+
       await axios.patch(
         `https://people-sync-33225-default-rtdb.firebaseio.com/leaves/${id}.json`,
-        { status }
+        { [fieldToUpdate]: status }
       );
+
       console.log(`Leave request ${status.toLowerCase()}`);
 
       // Fetch fresh leave data after approval/rejection
@@ -45,7 +60,7 @@ const LeaveManagement = () => {
       const data = res.data
         ? Object.entries(res.data).map(([id, obj]) => ({ id, ...obj }))
         : [];
-      
+
       setLeaveRequests(data);
       setDisplayRequests([...data].reverse());
     } catch (error) {
@@ -59,7 +74,7 @@ const LeaveManagement = () => {
   };
 
   const getStatusIcon = (status) => {
-    switch(status) {
+    switch (status) {
       case "APPROVED":
         return <FaCheck className="status-icon approved" />;
       case "REJECTED":
@@ -73,9 +88,7 @@ const LeaveManagement = () => {
     <div className="dashboard-container leave-management">
       {/* Table Section */}
       <div className="row-table-section">
-        <h4 className="myTableHeader">
-          Leave Management
-        </h4>
+        <h4 className="myTableHeader">Leave Management</h4>
 
         <div className="report-table-container">
           <table className="employee-table">
@@ -90,7 +103,8 @@ const LeaveManagement = () => {
                   </div>
                 </th>
                 <th className="fade-in-heading">Days</th>
-                <th className="fade-in-heading">Status</th>
+                <th className="fade-in-heading">HR Status</th>
+                <th className="fade-in-heading">Exec Status</th>
                 <th className="fade-in-heading">Actions</th>
               </tr>
             </thead>
@@ -98,21 +112,29 @@ const LeaveManagement = () => {
               {loading ? (
                 <tr>
                   <td colSpan="6">
-                    <div className="loading-indicator">Loading leave requests...</div>
+                    <div className="loading-indicator">
+                      Loading leave requests...
+                    </div>
                   </td>
                 </tr>
               ) : displayRequests.length === 0 ? (
                 <tr>
                   <td colSpan="6">
-                    <div className="no-data-message">No leave requests found</div>
+                    <div className="no-data-message">
+                      No leave requests found
+                    </div>
                   </td>
                 </tr>
               ) : (
                 displayRequests.map((request) => (
                   <tr key={request.id}>
                     <td>
-                      <div className="employee-name">{request.employeeName}</div>
-                      <div className="employee-email">{request.employeeEmail}</div>
+                      <div className="employee-name">
+                        {request.employeeName}
+                      </div>
+                      <div className="employee-email">
+                        {request.employeeEmail}
+                      </div>
                     </td>
                     <td className="leave-type-cell">{request.leaveType}</td>
                     <td className="date-range-cell">
@@ -123,31 +145,76 @@ const LeaveManagement = () => {
                       </div>
                     </td>
                     <td className="days-cell">{request.totalLeaves} days</td>
+                    {/* HR Status */}
                     <td>
-                      {request.status === "PENDING" ? (
+                      {request.statusHr === "PENDING" ? (
                         <div className="status-badge pending">
-                          {getStatusIcon(request.status)}
-                          <span>{request.status}</span>
+                          {getStatusIcon(request.statusHr)}
+                          <span>{request.statusHr}</span>
                         </div>
                       ) : (
-                        <div className={`status-badge ${request.status.toLowerCase()}`}>
-                          {getStatusIcon(request.status)}
-                          <span>{request.status}</span>
+                        <div
+                          className={`status-badge ${request.statusHr.toLowerCase()}`}
+                        >
+                          {getStatusIcon(request.statusHr)}
+                          <span>{request.statusHr}</span>
                         </div>
                       )}
                     </td>
+
+                    {/* EXEC Status */}
                     <td>
-                      {request.status === "PENDING" ? (
+                      {request.statusExec === "PENDING" ? (
+                        <div className="status-badge pending">
+                          {getStatusIcon(request.statusExec)}
+                          <span>{request.statusExec}</span>
+                        </div>
+                      ) : (
+                        <div
+                          className={`status-badge ${request.statusExec.toLowerCase()}`}
+                        >
+                          {getStatusIcon(request.statusExec)}
+                          <span>{request.statusExec}</span>
+                        </div>
+                      )}
+                    </td>
+
+                    <td>
+                      {user.role === "hr" && request.statusHr === "PENDING" ? (
                         <div className="action-buttons">
                           <button
                             className="approve-btn"
-                            onClick={() => handleApproval(request.id, "APPROVED")}
+                            onClick={() =>
+                              handleApproval(request.id, "APPROVED")
+                            }
                           >
                             <FaCheck /> APPROVE
                           </button>
                           <button
                             className="reject-btn"
-                            onClick={() => handleApproval(request.id, "REJECTED")}
+                            onClick={() =>
+                              handleApproval(request.id, "REJECTED")
+                            }
+                          >
+                            <FaTimes /> REJECT
+                          </button>
+                        </div>
+                      ) : user.role === "executive" &&
+                        request.statusExec === "PENDING" ? (
+                        <div className="action-buttons">
+                          <button
+                            className="approve-btn"
+                            onClick={() =>
+                              handleApproval(request.id, "APPROVED")
+                            }
+                          >
+                            <FaCheck /> APPROVE
+                          </button>
+                          <button
+                            className="reject-btn"
+                            onClick={() =>
+                              handleApproval(request.id, "REJECTED")
+                            }
                           >
                             <FaTimes /> REJECT
                           </button>

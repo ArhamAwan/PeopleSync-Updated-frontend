@@ -44,7 +44,8 @@ const RequestLeave = () => {
       endDate,
       reason,
       totalLeaves,
-      status: "PENDING",
+      statusHr: "PENDING",
+      statusExec: "PENDING",
     };
 
     try {
@@ -59,7 +60,7 @@ const RequestLeave = () => {
       setEndDate("");
       setReason("");
       alert("Leave Request Submitted Successfully!");
-      
+
       // Refresh the leave requests list
       fetchLeaveRequests(user.email);
     } catch (error) {
@@ -78,17 +79,16 @@ const RequestLeave = () => {
       }
     }, 500);
   }, []);
-  
+
   const approvedLeavesTotal = leaveRequests
-    .filter((req) => req.status === "APPROVED")
-    .reduce((sum, req) => sum + req.totalLeaves, 0);
+  .filter((req) => req.statusHr === "APPROVED" && req.statusExec === "APPROVED")
+  .reduce((sum, req) => sum + req.totalLeaves, 0);
+
 
   return (
     <div className="request-leave">
-      <h4 className="myTableHeader">
-        Request Leave
-      </h4>
-      
+      <h4 className="myTableHeader">Request Leave</h4>
+
       {/* Leave Stats Card */}
       <div className="glass-card">
         <div className="card-header">
@@ -125,7 +125,7 @@ const RequestLeave = () => {
               <option value="Maternity Leave">Maternity Leave</option>
             </select>
           </div>
-          
+
           <div className="form-row">
             <div className="form-group">
               <label>Start Date</label>
@@ -163,7 +163,9 @@ const RequestLeave = () => {
             />
           </div>
 
-          <button type="submit" className="submit-btn">Submit Request</button>
+          <button type="submit" className="submit-btn">
+            Submit Request
+          </button>
         </form>
       </div>
 
@@ -200,8 +202,27 @@ const RequestLeave = () => {
                     <td>{request.endDate}</td>
                     <td>{request.reason}</td>
                     <td>
-                      <span className={`status ${request.status.toLowerCase()}`}>
-                        {request.status}
+                      <span
+                        className={`status ${
+                          request.statusHr === "PENDING" ||
+                          request.statusExec === "PENDING"
+                            ? "pending"
+                            : request.statusHr === "REJECTED" ||
+                              request.statusExec === "REJECTED"
+                            ? "rejected"
+                            : "approved"
+                        }`}
+                      >
+                        {request.statusHr === "PENDING" ||
+                        request.statusExec === "PENDING"
+                          ? "PENDING"
+                          : request.statusHr === "REJECTED" ||
+                            request.statusExec === "REJECTED"
+                          ? "REJECTED"
+                          : request.statusHr === "APPROVED" &&
+                            request.statusExec === "APPROVED"
+                          ? "APPROVED"
+                          : ""}
                       </span>
                     </td>
                   </tr>

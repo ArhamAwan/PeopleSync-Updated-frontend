@@ -103,7 +103,7 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    if (user?.role === "hr") {
+    if (user?.role === "hr" || user?.role ==="executive") {
       // console.log("user" ,user)
 
       const fetchEmployees = async () => {
@@ -125,7 +125,7 @@ const Dashboard = () => {
   }, [user]);
 
   useEffect(() => {
-    if (user?.role === "hr") {
+    if (user?.role === "hr" || user?.role ==="executive") {
       const fetchActiveEmployees = async () => {
         try {
           const res = await axios.get(
