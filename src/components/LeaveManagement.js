@@ -51,7 +51,7 @@ const LeaveManagement = () => {
         { [fieldToUpdate]: status }
       );
 
-      console.log(`Leave request ${status.toLowerCase()}`);
+      console.log(`Leave request ${status?.toLowerCase()}`);
 
       // Fetch fresh leave data after approval/rejection
       const res = await axios.get(
@@ -154,7 +154,7 @@ const LeaveManagement = () => {
                         </div>
                       ) : (
                         <div
-                          className={`status-badge ${request.statusHr.toLowerCase()}`}
+                          className={`status-badge ${request?.statusHr?.toLowerCase()}`}
                         >
                           {getStatusIcon(request.statusHr)}
                           <span>{request.statusHr}</span>
@@ -171,7 +171,7 @@ const LeaveManagement = () => {
                         </div>
                       ) : (
                         <div
-                          className={`status-badge ${request.statusExec.toLowerCase()}`}
+                          className={`status-badge ${request?.statusExec?.toLowerCase()}`}
                         >
                           {getStatusIcon(request.statusExec)}
                           <span>{request.statusExec}</span>

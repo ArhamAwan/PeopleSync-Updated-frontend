@@ -383,6 +383,7 @@ const EmployeeDetails = () => {
       <Dialog
         open={openConfirm}
         onClose={() => setOpenConfirm(false)}
+        style={{zIndex:"10000000"}}
         aria-labelledby="alert-dialog-title"
       >
         <DialogTitle id="alert-dialog-title">
