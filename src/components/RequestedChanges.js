@@ -85,54 +85,72 @@ const RequestedChanges = () => {
         <h4 className="myTableHeader">
           Requested Changes
         </h4>
-        <table className="employee-table">
-          <thead>
-            <tr>
-              <th>Employee</th>
-              <th>Email</th>
-              <th>Field</th>
-              <th>Requested Value</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
+                <div className="report-table-container">
+          <table className="employee-table" style={{ width: '100%', tableLayout: 'fixed' }}>
+            <thead style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>
+              <tr>
+                <th style={{ width: '15%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>Employee</th>
+                <th style={{ width: '20%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>Email</th>
+                <th style={{ width: '12%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>Field</th>
+                <th style={{ width: '20%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>Requested Value</th>
+                <th style={{ width: '12%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>Status</th>
+                <th style={{ width: '21%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>Actions</th>
+              </tr>
+            </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="6" className="loading-indicator">Loading leave requests...</td>
+                <td colSpan="6" className="loading-indicator" style={{ padding: '12px 8px', textAlign: 'center' }}>Loading leave requests...</td>
               </tr>
             ) : requests.length === 0 ? (
               <tr>
-                <td colSpan="6" className="no-data-message">No leave requests found</td>
+                <td colSpan="6" className="no-data-message" style={{ padding: '12px 8px', textAlign: 'center' }}>No leave requests found</td>
               </tr>
             ) : (
               [...requests].reverse().map((request) => (
                 <tr key={request.id}>
-                  <td>{request.name}</td>
-                  <td>{request.email}</td>
-                  <td>{request.fieldName}</td>
-                  <td>
+                  <td style={{ padding: '12px 8px', wordWrap: 'break-word', overflowWrap: 'break-word' }}>{request.name}</td>
+                  <td style={{ padding: '12px 8px', wordWrap: 'break-word', overflowWrap: 'break-word' }}>{request.email}</td>
+                  <td style={{ padding: '12px 8px', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
+                    {request.fieldName === 'employeeType' ? 'Employee Type' :
+                     request.fieldName === 'name' ? 'Name' :
+                     request.fieldName === 'phone' ? 'Phone' :
+                     request.fieldName === 'email' ? 'Email' :
+                     request.fieldName === 'designation' ? 'Designation' :
+                     request.fieldName === 'role' ? 'Role' :
+                     request.fieldName === 'salary' ? 'Salary' :
+                     request.fieldName === 'bankDetails' ? 'Bank Details' :
+                     request.fieldName === 'password' ? 'Password' :
+                     request.fieldName === 'dob' ? 'Date of Birth' :
+                     request.fieldName === 'gender' ? 'Gender' :
+                     request.fieldName === 'idCard' ? 'ID Card' :
+                     request.fieldName === 'joiningDate' ? 'Joining Date' :
+                     request.fieldName.charAt(0).toUpperCase() + request.fieldName.slice(1)}
+                  </td>
+                  <td style={{ padding: '12px 8px', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
                     {request.fieldName && request.fieldName.toLowerCase() === "password"
                       ? "••••••••"
                       : request.fieldValue}
                   </td>
-                  <td>
+                  <td style={{ padding: '12px 8px' }}>
                     <span className={`status-badge ${request.status.toLowerCase()}`}>
                       {request.status}
                     </span>
                   </td>
-                  <td>
+                  <td style={{ padding: '12px 8px' }}>
                     {request.status === "pending" ? (
-                      <div className="action-buttons">
+                      <div className="action-buttons" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                         <button
                           className="approve-btn"
                           onClick={() => handleApproval(request, "approve")}
+                          style={{ fontSize: '12px', padding: '6px 12px', whiteSpace: 'nowrap' }}
                         >
                           Approve
                         </button>
                         <button
                           className="reject-btn"
                           onClick={() => handleApproval(request, "reject")}
+                          style={{ fontSize: '12px', padding: '6px 12px', whiteSpace: 'nowrap' }}
                         >
                           Reject
                         </button>
@@ -146,6 +164,7 @@ const RequestedChanges = () => {
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );

@@ -37,7 +37,14 @@ const LeaveManagement = () => {
         console.error("Error fetching leave requests:", error);
       }
     };
+    
     fetchLeaveRequests();
+    
+    // Set up interval to refresh data every 5 seconds
+    const interval = setInterval(fetchLeaveRequests, 5000);
+    
+    // Cleanup interval on component unmount
+    return () => clearInterval(interval);
   }, []);
 
   const handleApproval = async (id, action) => {
@@ -91,27 +98,27 @@ const LeaveManagement = () => {
         <h4 className="myTableHeader">Leave Management</h4>
 
         <div className="report-table-container">
-          <table className="employee-table">
-            <thead>
+          <table className="employee-table" style={{ width: '100%', tableLayout: 'fixed' }}>
+            <thead style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>
               <tr>
-                <th className="fade-in-heading">Employee</th>
-                <th className="fade-in-heading">Leave Type</th>
-                <th className="fade-in-heading">
+                <th className="fade-in-heading" style={{ width: '20%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>Employee</th>
+                <th className="fade-in-heading" style={{ width: '12%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>Leave Type</th>
+                <th className="fade-in-heading" style={{ width: '20%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>
                   <div className="sortable-header">
                     <span>Dates</span>
                     <FaCalendarAlt className="header-icon" />
                   </div>
                 </th>
-                <th className="fade-in-heading">Days</th>
-                <th className="fade-in-heading">HR Status</th>
-                <th className="fade-in-heading">Exec Status</th>
-                <th className="fade-in-heading">Actions</th>
+                <th className="fade-in-heading" style={{ width: '10%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>Days</th>
+                <th className="fade-in-heading" style={{ width: '12%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>HR Status</th>
+                <th className="fade-in-heading" style={{ width: '12%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>Exec Status</th>
+                <th className="fade-in-heading" style={{ width: '14%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan="6">
+                  <td colSpan="7" style={{ padding: '12px 8px', textAlign: 'center' }}>
                     <div className="loading-indicator">
                       Loading leave requests...
                     </div>
@@ -119,7 +126,7 @@ const LeaveManagement = () => {
                 </tr>
               ) : displayRequests.length === 0 ? (
                 <tr>
-                  <td colSpan="6">
+                  <td colSpan="7" style={{ padding: '12px 8px', textAlign: 'center' }}>
                     <div className="no-data-message">
                       No leave requests found
                     </div>
@@ -128,7 +135,7 @@ const LeaveManagement = () => {
               ) : (
                 displayRequests.map((request) => (
                   <tr key={request.id}>
-                    <td>
+                    <td style={{ padding: '12px 8px', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
                       <div className="employee-name">
                         {request.employeeName}
                       </div>
@@ -136,17 +143,17 @@ const LeaveManagement = () => {
                         {request.employeeEmail}
                       </div>
                     </td>
-                    <td className="leave-type-cell">{request.leaveType}</td>
-                    <td className="date-range-cell">
+                    <td style={{ padding: '12px 8px', wordWrap: 'break-word', overflowWrap: 'break-word' }}>{request.leaveType}</td>
+                    <td style={{ padding: '12px 8px', wordWrap: 'break-word', overflowWrap: 'break-word' }}>
                       <div className="date-range">
                         <span className="start-date">{request.startDate}</span>
                         <span className="date-separator">to</span>
                         <span className="end-date">{request.endDate}</span>
                       </div>
                     </td>
-                    <td className="days-cell">{request.totalLeaves} days</td>
+                    <td style={{ padding: '12px 8px', textAlign: 'center' }}>{request.totalLeaves} days</td>
                     {/* HR Status */}
-                    <td>
+                    <td style={{ padding: '12px 8px', textAlign: 'center' }}>
                       {request.statusHr === "PENDING" ? (
                         <div className="status-badge pending">
                           {getStatusIcon(request.statusHr)}
@@ -163,7 +170,7 @@ const LeaveManagement = () => {
                     </td>
 
                     {/* EXEC Status */}
-                    <td>
+                    <td style={{ padding: '12px 8px', textAlign: 'center' }}>
                       {request.statusExec === "PENDING" ? (
                         <div className="status-badge pending">
                           {getStatusIcon(request.statusExec)}
@@ -179,14 +186,15 @@ const LeaveManagement = () => {
                       )}
                     </td>
 
-                    <td>
+                    <td style={{ padding: '12px 8px', textAlign: 'center' }}>
                       {user.role === "hr" && request.statusHr === "PENDING" ? (
-                        <div className="action-buttons">
+                        <div className="action-buttons" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center' }}>
                           <button
                             className="approve-btn"
                             onClick={() =>
                               handleApproval(request.id, "APPROVED")
                             }
+                            style={{ fontSize: '12px', padding: '6px 12px', whiteSpace: 'nowrap' }}
                           >
                             <FaCheck /> APPROVE
                           </button>
@@ -195,18 +203,20 @@ const LeaveManagement = () => {
                             onClick={() =>
                               handleApproval(request.id, "REJECTED")
                             }
+                            style={{ fontSize: '12px', padding: '6px 12px', whiteSpace: 'nowrap' }}
                           >
                             <FaTimes /> REJECT
                           </button>
                         </div>
                       ) : user.role === "executive" &&
                         request.statusExec === "PENDING" ? (
-                        <div className="action-buttons">
+                        <div className="action-buttons" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'center' }}>
                           <button
                             className="approve-btn"
                             onClick={() =>
                               handleApproval(request.id, "APPROVED")
                             }
+                            style={{ fontSize: '12px', padding: '6px 12px', whiteSpace: 'nowrap' }}
                           >
                             <FaCheck /> APPROVE
                           </button>
@@ -215,6 +225,7 @@ const LeaveManagement = () => {
                             onClick={() =>
                               handleApproval(request.id, "REJECTED")
                             }
+                            style={{ fontSize: '12px', padding: '6px 12px', whiteSpace: 'nowrap' }}
                           >
                             <FaTimes /> REJECT
                           </button>

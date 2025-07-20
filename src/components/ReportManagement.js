@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ReactDOM from "react-dom";
 import "./ReportManagement.css";
 import axios from "axios";
 import { TextField, InputAdornment, Button, Pagination } from "@mui/material";
@@ -341,57 +342,58 @@ const ReportManagement = () => {
           </h4>
 
           <div className="report-table-container">
-            <table className="employee-table">
-              <thead>
+            <table className="employee-table" style={{ width: '100%', tableLayout: 'fixed' }}>
+              <thead style={{ position: 'sticky', top: 0, zIndex: 10, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>
                 <tr>
-                  <th onClick={() => handleSort('name')} className="sortable-header fade-in-heading">
+                  <th onClick={() => handleSort('name')} className="sortable-header fade-in-heading" style={{ width: '18%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>
                     <FaUser style={{ marginRight: "8px" }} />Employee
                     {getSortIcon('name')}
                   </th>
-                  <th onClick={() => handleSort('email')} className="sortable-header fade-in-heading">
+                  <th onClick={() => handleSort('email')} className="sortable-header fade-in-heading" style={{ width: '22%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>
                     <FaEnvelope style={{ marginRight: "8px" }} />Email
                     {getSortIcon('email')}
                   </th>
-                  <th onClick={() => handleSort('timestamp')} className="sortable-header fade-in-heading">
+                  <th onClick={() => handleSort('timestamp')} className="sortable-header fade-in-heading" style={{ width: '18%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>
                     <FaCalendarAlt style={{ marginRight: "8px" }} />Date & Time
                     {getSortIcon('timestamp')}
                   </th>
-                  <th onClick={() => handleSort('totalTimeMinutes')} className="sortable-header fade-in-heading">
+                  <th onClick={() => handleSort('totalTimeMinutes')} className="sortable-header fade-in-heading" style={{ width: '15%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>
                     <FaRegClock style={{ marginRight: "8px" }} />Active Time
                     {getSortIcon('totalTimeMinutes')}
                   </th>
-                  <th className="fade-in-heading">
+                  <th className="fade-in-heading" style={{ width: '18%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }}>
                     <FaRegClock style={{ marginRight: "8px" }} />Monthly Active Time
                   </th>
-                  <th style={{ textAlign: "center" }} className="fade-in-heading">Actions</th>
+                  <th style={{ textAlign: "center", width: '9%', padding: '12px 8px', position: 'sticky', top: 0, backgroundColor: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(35px)' }} className="fade-in-heading">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {loading ? (
                   <tr>
-                    <td colSpan="6">Loading reports...</td>
+                    <td colSpan="6" style={{ padding: '12px 8px', textAlign: 'center' }}>Loading reports...</td>
                   </tr>
                 ) : filteredReports.length === 0 ? (
                   <tr>
-                    <td colSpan="6">No reports found</td>
+                    <td colSpan="6" style={{ padding: '12px 8px', textAlign: 'center' }}>No reports found</td>
                   </tr>
                 ) : (
                   displayReports.map((report) => (
                     <tr key={report.id}>
-                      <td>{report.name}</td>
-                      <td>{report.email}</td>
-                      <td>{report.dateTime}</td>
-                      <td className="active-time-cell">
+                      <td style={{ padding: '12px 8px', wordWrap: 'break-word', overflowWrap: 'break-word' }}>{report.name}</td>
+                      <td style={{ padding: '12px 8px', wordWrap: 'break-word', overflowWrap: 'break-word' }}>{report.email}</td>
+                      <td style={{ padding: '12px 8px', wordWrap: 'break-word', overflowWrap: 'break-word' }}>{report.dateTime}</td>
+                      <td style={{ padding: '12px 8px', textAlign: 'center' }}>
                         {formatMinutesToHHMM(report.totalTimeMinutes || 0)}
                       </td>
-                      <td className="monthly-time-cell">
+                      <td style={{ padding: '12px 8px', textAlign: 'center' }}>
                         {formatMinutesToHHMM(monthlyTotals[report.email] || 0)}
                       </td>
 
-                      <td style={{ textAlign: "center" }}>
+                      <td style={{ textAlign: "center", padding: '12px 8px' }}>
                         <button
                           className="view-report-btn"
                           onClick={() => setSelectedReport(report)}
+                          style={{ fontSize: '12px', padding: '6px 12px', whiteSpace: 'nowrap' }}
                         >
                           <FaEye style={{ marginRight: "6px" }} /> View
                         </button>
@@ -433,7 +435,7 @@ const ReportManagement = () => {
       )}
 
       {/* Report Popup */}
-      {selectedReport && (
+      {selectedReport && ReactDOM.createPortal(
         <div className="popup">
           <div className="popup-contentR">
             <h4 className="popup-header">
@@ -471,7 +473,8 @@ const ReportManagement = () => {
               <FaTimes />
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

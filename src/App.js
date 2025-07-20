@@ -69,6 +69,13 @@ function Layout() {
   const [pendingCount, setPendingCount] = useState(0);
   const [pendingCount2, setPendingCount2] = useState(0);
 
+  // Function to get display name (first name only if full name is long)
+  const getDisplayName = (fullName) => {
+    if (!fullName) return "";
+    const firstName = fullName.split(' ')[0];
+    return fullName.length > 15 ? firstName : fullName;
+  };
+
   const location = useLocation();
   const navigate = useNavigate();
   const isLoginPage =
@@ -130,7 +137,7 @@ function Layout() {
           <div className="top-navbar">
             <div className="navbar-profile">
               <span>
-                Hi, {user?.name}
+                Hi, {getDisplayName(user?.name)}
               </span>
               <div className="profile-circle-mini">
                 {user?.name?.charAt(0).toUpperCase()}
