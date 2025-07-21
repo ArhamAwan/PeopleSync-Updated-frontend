@@ -33,6 +33,7 @@ import ReportManagement from "./components/ReportManagement";
 import LeaveManagement from "./components/LeaveManagement";
 import EmployeeDetails from "./components/EmployeeDetails";
 import Timer from "./components/Timer";
+import { pauseTimerForLogout } from "./components/Timer";
 import RequestLeaves from "./components/RequestLeaves";
 import PersonalDetails from "./components/PersonalDetails";
 import Login from "./components/login";
@@ -82,6 +83,7 @@ function Layout() {
     location.pathname === "/login" || location.pathname === "/";
 
   const logoutHandler = () => {
+    pauseTimerForLogout();
     localStorage.removeItem("user");
     setUser(null);
     setTimeout(() => navigate("/login"), 0); // Ensures navigation happens after state update

@@ -410,4 +410,40 @@ const Timer = () => {
   );
 };
 
+// Exportable pauseTimer for logout (localStorage only, no React state)
+export async function pauseTimerForLogout() {
+  const isRunning = localStorage.getItem("isRunning") === "true";
+  if (!isRunning) return;
+  localStorage.setItem("isPaused", "true");
+  localStorage.setItem("isRunning", "false");
+  localStorage.setItem("pauseStartTimestamp", Date.now().toString());
+  // Update Firebase to set pause: true for the latest timer entry
+  try {
+    const userStr = localStorage.getItem("user");
+    if (!userStr) return;
+    const user = JSON.parse(userStr);
+    const res = await axios.get(
+      "https://people-sync-33225-default-rtdb.firebaseio.com/timerdata.json"
+    );
+    if (res.data) {
+      const timerEntries = Object.entries(res.data).map(([id, obj]) => ({
+        id,
+        ...obj,
+      }));
+      const latestEntry = timerEntries
+        .filter((entry) => entry.email === user.email)
+        .pop();
+      if (latestEntry) {
+        await axios.patch(
+          `https://people-sync-33225-default-rtdb.firebaseio.com/timerdata/${latestEntry.id}.json`,
+          { pause: true }
+        );
+      }
+    }
+  } catch (error) {
+    // Optionally log error
+    // console.error("Error pausing timer on logout:", error);
+  }
+}
+
 export default Timer;
