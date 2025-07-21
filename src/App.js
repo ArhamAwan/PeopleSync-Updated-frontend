@@ -40,7 +40,7 @@ import { Button } from "@mui/material";
 import RequestedChanges from "./components/RequestedChanges";
 import ScheduleMeeting from "./components/ScheduleMeeting";
 
-const logo = "/assets/gg.png";
+const logo = "/assets/GG.png";
 
 const wallpapers = [
   process.env.PUBLIC_URL + '/walls/wall 1.jpg',
