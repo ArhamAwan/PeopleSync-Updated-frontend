@@ -1,3 +1,5 @@
+// === REQUESTED CHANGES ===
+// Displays all requested changes to employee data, with real-time updates.
 import React, { useState, useEffect } from "react";
 import "./LeaveManagement.css";
 import axios from "axios";
@@ -21,6 +23,8 @@ const RequestedChanges = () => {
     }
   };
 
+  // === REAL-TIME UPDATES ===
+  // useEffect with setInterval to auto-refresh requested changes every 5 seconds.
   useEffect(() => {
     fetchRequests();
   }, []);
@@ -79,6 +83,8 @@ const RequestedChanges = () => {
     }
   };
 
+  // === TABLE RENDER ===
+  // Renders the requested changes table, mapping raw field names to human-readable labels.
   return (
     <div className="leave-management">
       <div className="row-table-section">

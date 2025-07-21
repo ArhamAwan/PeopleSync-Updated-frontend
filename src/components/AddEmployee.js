@@ -1,3 +1,5 @@
+// === ADD EMPLOYEE ===
+// Form to add new employees to the system, with validation and Firebase integration.
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import emailjs from "emailjs-com";
@@ -45,6 +47,8 @@ const AddEmployee = () => {
 
   // Form navigation functions
 
+  // === FORM LOGIC ===
+  // Handles form state, input changes, and submission.
   // Form navigation
   const nextStep = () => {
     if (validateStep(step)) {
@@ -85,6 +89,8 @@ const AddEmployee = () => {
     emailjs.send(serviceID, templateID, templateParams, userID).catch(() => {});
   };
 
+  // === VALIDATION ===
+  // Validates input fields before submitting to Firebase.
   // Validation functions
   const validateStep = (step) => {
     const newErrors = {};

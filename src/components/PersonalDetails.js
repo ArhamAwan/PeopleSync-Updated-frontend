@@ -1,3 +1,5 @@
+// === PERSONAL DETAILS ===
+// Shows and allows editing of the logged-in user's personal information.
 import React, { useEffect, useState } from "react";
 import "./PersonalDetails.css";
 import axios from "axios";
@@ -176,6 +178,8 @@ const PersonalDetails = () => {
   // Helper to get field meta by key
   const getFieldMeta = (key) => fields.find((f) => f.key === key);
 
+  // === EDIT LOGIC ===
+  // Handles editing of personal fields, including validation and update requests.
   const handleEdit = (fieldKey) => {
     setEditField(fieldKey);
     setEditValue(employee[fieldKey]);
@@ -219,6 +223,8 @@ const PersonalDetails = () => {
     }
   };
 
+  // === MODAL/PORTAL ===
+  // Uses a modal popup for editing fields, styled to match the app's theme.
   return (
     <div className="personal-details-container">
       {/* Header Section */}

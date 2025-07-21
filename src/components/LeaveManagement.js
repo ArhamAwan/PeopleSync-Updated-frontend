@@ -1,3 +1,5 @@
+// === LEAVE MANAGEMENT ===
+// Displays and manages leave requests, with real-time updates and approval/rejection logic.
 import React, { useState, useEffect } from "react";
 import "./LeaveManagement.css";
 import axios from "axios";
@@ -20,6 +22,8 @@ const LeaveManagement = () => {
     }, 500);
   }, []);
 
+  // === REAL-TIME UPDATES ===
+  // useEffect with setInterval to auto-refresh leave requests every 5 seconds.
   useEffect(() => {
     const fetchLeaveRequests = async () => {
       try {
@@ -47,6 +51,8 @@ const LeaveManagement = () => {
     return () => clearInterval(interval);
   }, []);
 
+  // === APPROVAL LOGIC ===
+  // Handles approval/rejection of leave requests by HR/Exec roles, updates Firebase and refreshes data.
   const handleApproval = async (id, action) => {
     try {
       const status = action === "APPROVED" ? "APPROVED" : "REJECTED";
@@ -91,6 +97,8 @@ const LeaveManagement = () => {
     }
   };
 
+  // === TABLE RENDER ===
+  // Renders the leave requests table with sticky headers and no horizontal scroll.
   return (
     <div className="dashboard-container leave-management">
       {/* Table Section */}

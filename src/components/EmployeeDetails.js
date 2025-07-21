@@ -8,6 +8,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import CloseIcon from "@mui/icons-material/Close";
 import { FaUser, FaPhone, FaCalendarAlt, FaIdCard, FaUserTie, FaUsers, FaUserClock, FaCalendarCheck, FaDollarSign, FaUniversity, FaEnvelope, FaKey, FaVenusMars } from "react-icons/fa";
 
+// === EMPLOYEE DETAILS ===
+// Shows detailed info for each employee, allows editing and deleting, uses a modal popup.
+
 // Component for the employee details popup
 const EmployeeDetailsPopup = ({ selectedEmployee, setSelectedEmployee, editField, editValue, setEditField, setEditValue, updateHandler, handleDeleteClick, showArchives, fieldIcons, fields, getInitials }) => {
   if (!selectedEmployee) return null;
@@ -79,7 +82,10 @@ const EmployeeDetailsPopup = ({ selectedEmployee, setSelectedEmployee, editField
                     </span>
                     <button 
                       className="edit-button"
-                      onClick={() => setEditField(field)}
+                      onClick={() => {
+                        setEditField(field);
+                        setEditValue(selectedEmployee[field]);
+                      }}
                     >
                       <EditIcon fontSize="small" />
                     </button>
@@ -146,6 +152,8 @@ const EmployeeDetails = () => {
     password: <FaKey />,
   };
 
+  // === EDIT LOGIC ===
+  // Handles editing of employee fields, including setting editField and editValue, and updating Firebase.
   const updateHandler = async () => {
     if (!selectedEmployee || !editField) return;
     try {
@@ -174,6 +182,8 @@ const EmployeeDetails = () => {
     }
   };
   
+  // === DELETE LOGIC ===
+  // Handles deleting an employee (moves to archives, removes from users in Firebase).
   const deleteHandler = async (email) => {
     try {
       // 1. Move employee to archives
@@ -383,18 +393,36 @@ const EmployeeDetails = () => {
       <Dialog
         open={openConfirm}
         onClose={() => setOpenConfirm(false)}
+        PaperProps={{
+          style: {
+            background: 'rgba(25, 30, 45, 0.95)',
+            borderRadius: 20,
+            boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+            border: '1px solid rgba(255,255,255,0.18)',
+            padding: '32px 24px',
+            minWidth: 340,
+            maxWidth: 420,
+            color: '#fff',
+            textAlign: 'center',
+          }
+        }}
         style={{zIndex:"10000000"}}
         aria-labelledby="alert-dialog-title"
       >
-        <DialogTitle id="alert-dialog-title">
-          {"Are you sure you want to delete this employee?"}
-        </DialogTitle>
-        <DialogActions>
-          <Button onClick={() => setOpenConfirm(false)}>Cancel</Button>
+        <div style={{ color: '#f44336', fontWeight: 700, fontSize: '1.22rem', marginBottom: 18 }}>
+          Delete Employee
+        </div>
+        <div style={{ color: '#fff', marginBottom: 18, fontSize: '1.08rem' }}>
+          Are you sure you want to <b>permanently delete</b> this employee? This action cannot be undone.
+        </div>
+        <DialogActions style={{ justifyContent: 'center', gap: 16, marginTop: 18 }}>
+          <Button onClick={() => setOpenConfirm(false)} style={{ background: 'rgba(255,255,255,0.1)', color: '#fff', borderRadius: 8, fontWeight: 600, padding: '8px 22px' }}>
+            Cancel
+          </Button>
           <Button
             onClick={() => handleConfirm(selectedEmployee?.email)}
             autoFocus
-            color="error"
+            style={{ background: '#f44336', color: '#fff', borderRadius: 8, fontWeight: 700, padding: '8px 22px' }}
           >
             Delete
           </Button>

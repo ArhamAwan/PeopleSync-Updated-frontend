@@ -2,16 +2,37 @@ import React, { useState, useEffect } from "react";
 import "./Timer.css"; // Keep the CSS file
 import axios from "axios";
 
+// === NOTIFICATION LOGIC ===
+// Custom Toast Notification for timer actions (start, pause, resume, stop)
+const Toast = ({ message, onClose }) => {
+  if (!message) return null;
+  return (
+    <div className="custom-toast" onClick={onClose}>
+      {message}
+    </div>
+  );
+};
+
 const Timer = () => {
+  // === STATE MANAGEMENT ===
+  // user: current user info
+  // time: timer value in seconds
+  // isRunning: is the timer running?
+  // isPaused: is the timer paused?
+  // report: activity report text
+  // toast: notification message
   const [user, setUser] = useState({});
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [report, setReport] = useState("");
+  const [toast, setToast] = useState("");
 
-  // Utility function (optional, for cleaner code)
+  // === UTILITY FUNCTION ===
+  // Safely get a number from localStorage, or 0 if not set
   const getNumberFromLS = (key) => Number(localStorage.getItem(key)) || 0;
 
+  // === LOAD USER FROM LOCALSTORAGE ===
   useEffect(() => {
     const interval = setInterval(() => {
       const u = localStorage.getItem("user");
@@ -22,6 +43,15 @@ const Timer = () => {
     }, 500);
   }, []);
 
+  // === TOAST HELPER ===
+  // Shows a notification for 2.5 seconds
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(""), 2500);
+  };
+
+  // === TIMER LOGIC ===
+  // Start the timer and create a timer entry in Firebase
   const startTimer = async () => {
     if (!isRunning) {
       setIsRunning(true);
@@ -48,12 +78,14 @@ const Timer = () => {
           timerData
         );
         console.log("Timer data stored successfully");
+        showToast("Timer started!");
       } catch (error) {
         console.error("Error storing timer data:", error);
       }
     }
   };
 
+  // Pause the timer and update Firebase
   const pauseTimer = async () => {
     if (!isRunning) return;
 
@@ -83,7 +115,7 @@ const Timer = () => {
             { pause: true }
           );
           console.log("Timer paused successfully");
-          alert("Timer paused successfully.");
+          showToast("Timer paused.");
         }
       }
     } catch (error) {
@@ -91,6 +123,7 @@ const Timer = () => {
     }
   };
 
+  // Resume the timer and update Firebase
   const resumeTimer = async () => {
     if (isRunning || !isPaused) return;
 
@@ -126,7 +159,7 @@ const Timer = () => {
             { pause: false }
           );
           console.log("Timer resumed successfully");
-          alert("Timer resumed successfully.");
+          showToast("Timer resumed.");
         }
       }
     } catch (error) {
@@ -134,9 +167,10 @@ const Timer = () => {
     }
   };
 
+  // Stop the timer, require a report, and update Firebase
   const stopTimer = async () => {
     if (report.trim() === "") {
-      alert("Please submit your report to stop the timer.");
+      showToast("Please submit your report to stop the timer.");
       return;
     }
     try {
@@ -178,7 +212,7 @@ const Timer = () => {
             reportData
           );
 
-          alert("Timer stopped and report submitted.");
+          showToast("Timer stopped and report submitted.");
           setTime(0);
           setIsRunning(false);
           setIsPaused(false);
@@ -197,6 +231,8 @@ const Timer = () => {
     }
   };
 
+  // === TIMER STATE PERSISTENCE ===
+  // Loads timer state from localStorage and manages timer interval
   useEffect(() => {
     const savedTime = localStorage.getItem("timer");
     const savedStartTime = localStorage.getItem("timerStart");
@@ -230,6 +266,8 @@ const Timer = () => {
     return () => clearInterval(timerInterval);
   }, [isRunning, isPaused]);
 
+  // === TIMER DISPLAY FORMATTING ===
+  // Converts seconds to HH:MM:SS
   const formatTime = (totalSeconds) => {
     const hrs = Math.floor(totalSeconds / 3600)
       .toString()
@@ -242,7 +280,8 @@ const Timer = () => {
   };
   const { hrs, mins, secs } = formatTime(time);
 
-  // Status text based on timer state
+  // === STATUS TEXT ===
+  // Returns a string for the timer status
   const getStatusText = () => {
     if (isRunning) return "Timer running";
     if (isPaused) return "Timer paused";
@@ -251,22 +290,20 @@ const Timer = () => {
 
   return (
     <>
+      {/* === NOTIFICATION TOAST === */}
+      <Toast message={toast} onClose={() => setToast("")} />
       <div className="timer-container">
+        {/* === TIMER HEADING === */}
         <h2 style={{ 
           fontSize: '1.75rem', 
-          marginBottom: '20px', 
+          margin: '0 0 20px 0', 
           fontWeight: '500', 
           color: '#fff', 
-          textAlign: 'center',
-          position: 'relative',
-          display: 'inline-block',
-          padding: '0 15px',
-          width: '100%'
+          textAlign: 'center'
         }}>
           Time Tracker
         </h2>
-        
-        {/* Status indicator matching Dashboard style */}
+        {/* === STATUS INDICATOR === */}
         <div className="status-message" style={{
           display: "flex",
           alignItems: "center",
@@ -293,6 +330,7 @@ const Timer = () => {
           {getStatusText()}
         </div>
         
+        {/* === TIMER DISPLAY === */}
         <div className="timer-display">
           <div>
             <div className="time-box">{hrs}</div>
@@ -310,6 +348,7 @@ const Timer = () => {
           </div>
         </div>
 
+        {/* === TIMER BUTTONS === */}
         <div className="button-group">
           <button
             className="start-btn"
@@ -335,12 +374,13 @@ const Timer = () => {
           <button
             className="stop-btn"
             onClick={stopTimer}
-            disabled={!isRunning}
+            disabled={!isRunning && !isPaused}
           >
             Stop
           </button>
         </div>
         
+        {/* === ACTIVITY REPORT === */}
         <div className="section-title">Activity Report</div>
         <div className="section-divider"></div>
 
@@ -353,7 +393,7 @@ const Timer = () => {
           />
         </div>
         
-        {/* User info */}
+        {/* === USER INFO === */}
         {user && user.name && (
           <div style={{ 
             marginTop: "20px", 

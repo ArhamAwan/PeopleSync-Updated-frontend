@@ -1,3 +1,5 @@
+// === REPORT MANAGEMENT ===
+// Displays and manages employee reports, with a modal for report details.
 import React, { useState, useEffect } from "react";
 import ReactDOM from "react-dom";
 import "./ReportManagement.css";
