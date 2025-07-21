@@ -45,6 +45,11 @@ const AddEmployee = () => {
   // Progress bar width
   const progress = ((step + 1) / steps.length) * 100;
 
+  // Calculate the max date for 18 years ago
+  const today = new Date();
+  const maxDob = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate())
+    .toISOString().split('T')[0];
+
   // Form navigation functions
 
   // === FORM LOGIC ===
@@ -104,6 +109,14 @@ const AddEmployee = () => {
         else if (!/^0\d{10}$/.test(phone)) newErrors.phone = "Please use PK Phone number format (03XXXXXXXXX)";
         
         if (!dob) newErrors.dob = "Date of birth is required";
+        else {
+          const dobDate = new Date(dob);
+          const age = today.getFullYear() - dobDate.getFullYear();
+          const m = today.getMonth() - dobDate.getMonth();
+          if (age < 18 || (age === 18 && m < 0)) {
+            newErrors.dob = "User must be at least 18 years old.";
+          }
+        }
         
         if (!gender) newErrors.gender = "Gender is required";
         
@@ -212,7 +225,8 @@ const AddEmployee = () => {
                   type="date" 
                   value={dob} 
                   onChange={e => setDob(e.target.value)} 
-                    style={{paddingLeft: "40px"}}
+                  style={{paddingLeft: "40px"}}
+                  max={maxDob}
                 />
                 {errors.dob && <div className="error-message">{errors.dob}</div>}
               </div>

@@ -11,6 +11,7 @@ const RequestLeave = () => {
   const [endDate, setEndDate] = useState("");
   const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(true);
+  const [toast, setToast] = useState("");
 
   const fetchLeaveRequests = async (email) => {
     try {
@@ -29,12 +30,33 @@ const RequestLeave = () => {
     }
   };
 
+  // Helper to show toast
+  const showToast = (msg) => {
+    setToast(msg);
+    setTimeout(() => setToast(""), 2500);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const start = new Date(startDate);
     const end = new Date(endDate);
     const totalLeaves = Math.ceil((end - start) / (1000 * 60 * 60 * 24)) + 1;
+
+    // === ANNUAL LEAVE LIMIT LOGIC ===
+    const currentYear = new Date().getFullYear();
+    // Only count leaves in this year, and with status APPROVED or PENDING
+    const leavesThisYear = leaveRequests.filter(
+      (leave) =>
+        new Date(leave.startDate).getFullYear() === currentYear &&
+        (leave.statusHr === "APPROVED" && leave.statusExec === "APPROVED" ||
+         leave.statusHr === "PENDING" || leave.statusExec === "PENDING")
+    );
+    const usedDays = leavesThisYear.reduce((sum, leave) => sum + Number(leave.totalLeaves), 0);
+    if (usedDays + totalLeaves > 5) {
+      showToast("You have exceeded your annual leave limit of 15 days.");
+      return;
+    }
 
     const newLeaveRequest = {
       employeeName: user.name,
@@ -59,7 +81,7 @@ const RequestLeave = () => {
       setStartDate("");
       setEndDate("");
       setReason("");
-      alert("Leave Request Submitted Successfully!");
+      showToast("Leave Request Submitted Successfully!");
 
       // Refresh the leave requests list
       fetchLeaveRequests(user.email);
@@ -232,6 +254,11 @@ const RequestLeave = () => {
           </table>
         </div>
       </div>
+
+      {/* Toast Notification */}
+      {toast && (
+        <div className="custom-toast" onClick={() => setToast("")}>{toast}</div>
+      )}
     </div>
   );
 };

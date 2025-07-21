@@ -19,15 +19,14 @@ const ScheduleMeeting = () => {
       Schedule Meeting
       </h4>
       <iframe
-        src="https://api.leadconnectorhq.com/widget/booking/0BcwfsShutFpM5UxxYq2"
+        src="https://api.leadconnectorhq.com/widget/booking/1B79hzRIFpWEeyz9kXI0"
         style={{
           width: "100%",
-          height: "100vh",
           border: "none",
           overflow: "hidden",
         }}
         scrolling="no"
-        id="UAZYcOPVsbFC9vVtzVVD_1747161650293"
+        id="1B79hzRIFpWEeyz9kXI0_1753096505036"
         title="Schedule Meeting"
       ></iframe>
     </div>

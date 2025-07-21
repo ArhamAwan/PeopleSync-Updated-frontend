@@ -528,7 +528,7 @@ th {
   color: #a0aec0;
   display: block;
   margin-top: 4px;
-  margin-right: 15px;
+  margin-right: 0px;
 }
 
 .chart-container {
@@ -585,24 +585,17 @@ th {
 }
 
 .online-count {
-  font-size: 4rem;
-  font-weight: 700;
-  color: #1976d2;
-  margin: 0 0 0 30px;
-  line-height: 1;
-  font-family: "SF Mono", "Roboto Mono", "Courier New", monospace;
-  text-shadow: 0 0 20px rgba(25, 118, 210, 0.3);
-  animation: pulse 2s infinite;
+  font-size: 1.7rem;
+  margin: 0 auto;
+  line-height: 1.1;
+  text-align: center;
+  display: block;
 }
 
 .online-label {
-  font-size: 0.875rem;
-  color: #718096;
+  text-align: center;
+  margin: 4px auto 0 auto;
   display: block;
-  margin-top: 4px;
-  margin-right: 15px;
-  font-weight: 500;
-  letter-spacing: 1px;
 }
 
 /* Activity Indicators */
@@ -710,6 +703,14 @@ th {
   flex: 1 1 0;
   max-width: 100%;
   min-width: 0;
+  padding-top: 18px;
+  padding-bottom: 18px;
+}
+
+.employee-count, .online-count {
+  font-size: 1.7rem;
+  margin: 0 0 0 10px;
+  line-height: 1.1;
 }
 
 th:last-child, td:last-child, th.status, td.status {

@@ -129,6 +129,7 @@ body, html {
   transform: translateZ(0);
   perspective: 1000px;
   animation: slideInFromLeft 0.8s cubic-bezier(0.4, 0, 0.2, 1) 0.1s both;
+  padding-top: 20px;
 }
 
 /* Logo container styling */
@@ -522,6 +523,7 @@ nav ul li a[aria-current="page"] .sidebar-icon {
   padding-bottom: 2px;
   opacity: 0.95;
   text-shadow: 0 1px 4px rgba(255,255,255,0.25);
+  margin-top: 36px;
 }
 
 .sidebar-notification-badge {

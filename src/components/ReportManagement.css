@@ -319,6 +319,7 @@
 
 /* Table Wrapper for scrolling */
 .report-table-container {
+  overflow-x: hidden;
   overflow-y: auto;
   max-height: 400px;
   margin-top: 15px;
@@ -357,14 +358,15 @@
   overflow: hidden;
   margin-bottom: 10px;
   table-layout: fixed;
+  min-width: 0;
 }
 
 tr, th, td {
-  padding: 20px;
-  text-align: left;
-  overflow: hidden;
-  text-overflow: auto;
-  white-space: nowrap;
+  padding: 10px 6px;
+  font-size: 0.95rem;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  /* white-space: normal; */
 }
 
 tbody tr {
@@ -399,7 +401,14 @@ th {
 
 /* Column widths */
 th:nth-child(1), td:nth-child(1) { width: 18%; } /* Employee */
-th:nth-child(2), td:nth-child(2) { width: 22%; } /* Email */
+th:nth-child(2), td:nth-child(2) {
+  width: 22%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 12px;
+  padding-right: 12px;
+} /* Email */
 th:nth-child(3), td:nth-child(3) { width: 20%; } /* Date & Time */
 th:nth-child(4), td:nth-child(4) { width: 15%; } /* Active Time */
 th:nth-child(5), td:nth-child(5) { width: 15%; } /* Monthly Active Time */

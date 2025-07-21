@@ -53,11 +53,26 @@ const EmployeeDetailsPopup = ({ selectedEmployee, setSelectedEmployee, editField
                 
                 {editField === field ? (
                   <div className="edit-field">
-                    <input
-                      type={field === "password" ? "password" : "text"}
-                      value={editValue}
-                      onChange={(e) => setEditValue(e.target.value)}
-                    />
+                    {field === "role" ? (
+                      <select
+                        value={editValue}
+                        onChange={e => setEditValue(e.target.value)}
+                        required
+                      >
+                        <option value="">Select Role</option>
+                        <option value="hr">HR</option>
+                        <option value="executive">Executive</option>
+                        <option value="development team">Development Team</option>
+                        <option value="sales team">Sales Team</option>
+                        <option value="ai specialist">AI Specialist</option>
+                      </select>
+                    ) : (
+                      <input
+                        type={field === "password" ? "password" : "text"}
+                        value={editValue}
+                        onChange={e => setEditValue(e.target.value)}
+                      />
+                    )}
                     <div className="action-buttons">
                       <button className="save-button" onClick={updateHandler}>
                         Save

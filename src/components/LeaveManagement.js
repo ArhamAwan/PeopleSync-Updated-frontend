@@ -76,6 +76,7 @@ const LeaveManagement = () => {
 
       setLeaveRequests(data);
       setDisplayRequests([...data].reverse());
+      if (window.fetchLeaves) window.fetchLeaves();
     } catch (error) {
       console.error(
         `Error ${

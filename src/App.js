@@ -91,11 +91,13 @@ function Layout() {
       "https://people-sync-33225-default-rtdb.firebaseio.com/leaves.json"
     );
     const data = res.data || {};
+    // Count leaves where either statusHr or statusExec is PENDING
     const pending = Object.values(data).filter(
-      (leave) => leave.status === "PENDING"
+      (leave) => leave.statusHr === "PENDING" || leave.statusExec === "PENDING"
     );
     setPendingCount(pending.length);
   };
+  window.fetchLeaves = fetchLeaves;
   const fetchRequests = async () => {
     const res = await axios.get(
       "https://people-sync-33225-default-rtdb.firebaseio.com/requests.json"
@@ -282,6 +284,36 @@ const ProtectedRoute = ({ element }) => {
 };
 
 function App() {
+  const [isMobile, setIsMobile] = React.useState(false);
+
+  React.useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 900);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  if (isMobile) {
+    return (
+      <div style={{
+        width: '100vw',
+        height: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        background: '#111',
+        color: '#fff',
+        fontSize: '1.5rem',
+        zIndex: 99999,
+        position: 'fixed',
+        top: 0,
+        left: 0
+      }}>
+        This site is not supported on mobile devices. Please use a desktop browser.
+      </div>
+    );
+  }
+
   return (
     <Router>
       <Layout />
